@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pa">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>JAPSF Admin Panel</title>
+<style>
+:root{--navy:#101d35;--gold:#d8ad55;--cream:#f7f2e8}*{box-sizing:border-box}body{margin:0;font:16px Arial,sans-serif;background:var(--cream);color:#202532}header{background:var(--navy);color:white;padding:20px;border-bottom:4px solid var(--gold)}header h1{margin:0;color:var(--gold);font-size:24px}.wrap{max-width:1100px;margin:25px auto;padding:0 16px}.notice{background:#fff1ce;border-left:5px solid #bd8425;padding:15px;margin-bottom:20px;line-height:1.5}.layout{display:grid;grid-template-columns:220px 1fr;gap:18px}.side,.panel{background:white;border-radius:12px;padding:18px;box-shadow:0 3px 14px #00000010}.side button{display:block;width:100%;text-align:left;margin:5px 0;padding:12px;border:0;border-radius:7px;background:#f3f0e8;color:var(--navy);font-weight:bold;cursor:pointer}.side button.active,.side button:hover{background:var(--navy);color:var(--gold)}.panel h2{margin-top:0;color:var(--navy)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{background:#f7f2e8;padding:18px;border-radius:9px}.stat strong{display:block;color:var(--navy);font-size:23px}.muted{color:#657080;line-height:1.6}.hidden{display:none}footer{text-align:center;color:#667;padding:25px}@media(max-width:700px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:5px}.side button{font-size:13px}.stats{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><h1>Jathedar Akali Phula Singh Federation</h1><div>Admin Panel Preview</div></header>
+<main class="wrap">
+<div class="notice"><b>Security notice:</b> ਇਹ ਸਿਰਫ਼ static preview ਹੈ, ਸੁਰੱਖਿਅਤ Admin Login ਨਹੀਂ। GitHub Pages ਉੱਤੇ HTML ਫਾਈਲ ਨੂੰ ਲੁਕਾ ਕੇ ਸੁਰੱਖਿਆ ਨਹੀਂ ਮਿਲਦੀ। Live ਵਰਤੋਂ ਤੋਂ ਪਹਿਲਾਂ server-side authentication, role permissions ਅਤੇ database access controls ਲਾਜ਼ਮੀ ਹਨ।</div>
+<div class="layout"><nav class="side" aria-label="Admin sections">
+<button class="active" data-tab="dashboard">Dashboard</button><button data-tab="members">Members</button><button data-tab="events">Events</button><button data-tab="problems">Problems</button><button data-tab="funds">Donations & Crowdfunding</button><button data-tab="team">Team Members</button><button data-tab="ai">AI Assistant Security</button><button data-tab="settings">Security Settings</button>
+</nav><section class="panel">
+<div id="dashboard"><h2>Dashboard</h2><p class="muted">Federation administration overview. ਅਸਲ ਅੰਕੜੇ backend ਜੋੜਨ ਤੋਂ ਬਾਅਦ ਹੀ ਦਿਖਾਏ ਜਾਣਗੇ।</p><div class="stats"><div class="stat"><strong>—</strong>Members</div><div class="stat"><strong>—</strong>Events</div><div class="stat"><strong>—</strong>Requests</div></div></div>
+<div id="members" class="hidden"><h2>Members</h2><p class="muted">Member records ਇੱਥੇ ਸਿਰਫ਼ authenticated ਅਤੇ authorized staff ਲਈ server-side access ਨਾਲ ਉਪਲਬਧ ਹੋਣੇ ਚਾਹੀਦੇ ਹਨ।</p></div>
+<div id="events" class="hidden"><h2>Events</h2><p class="muted">Events management ਲਈ secure backend ਅਤੇ role-based permissions ਜੋੜੋ।</p></div>
+<div id="problems" class="hidden"><h2>Public Help Requests</h2><p class="muted">ਨਿੱਜੀ ਸਮੱਸਿਆਵਾਂ ਦੇ ਰਿਕਾਰਡ public AI ਜਾਂ public pages ਨੂੰ ਕਦੇ ਨਾ ਦਿਓ।</p></div>
+<div id="funds" class="hidden"><h2>Donations & Crowdfunding</h2><p class="muted">Payment records, donor details ਅਤੇ financial reports ਸਿਰਫ਼ ਸੀਮਿਤ ਅਧਿਕਾਰਤ roles ਲਈ ਹੋਣ। Payment gateway server-side verification ਵਰਤੋ।</p></div>
+<div id="team" class="hidden"><h2>Team Members</h2><p class="muted">ਸਿਰਫ਼ ਮਨਜ਼ੂਰਸ਼ੁਦਾ public team information ਪ੍ਰਕਾਸ਼ਿਤ ਕਰੋ।</p></div>
+<div id="ai" class="hidden"><h2>AI Assistant Security Policy</h2><ul><li>AI ਨੂੰ Admin Panel ਜਾਂ admin APIs ਦੀ ਪਹੁੰਚ ਨਾ ਹੋਵੇ।</li><li>AI ਸਿਰਫ਼ public website content ਅਤੇ admin-approved public FAQs ਪੜ੍ਹੇ।</li><li>Member, donor, payment ਅਤੇ problem records AI ਨੂੰ ਨਾ ਭੇਜੋ।</li><li>Passwords, API keys, database secrets ਅਤੇ private exports ਕਦੇ expose ਨਾ ਕਰੋ।</li><li>ਇਹ ਨਿਯਮ backend authorization ਨਾਲ ਲਾਗੂ ਕਰੋ; ਸਿਰਫ਼ prompt ਨਾਲ ਨਹੀਂ।</li></ul></div>
+<div id="settings" class="hidden"><h2>Security Settings</h2><ul><li>Server-side authentication ਅਤੇ MFA ਲਾਜ਼ਮੀ ਕਰੋ।</li><li>Role-based access control (RBAC) ਲਾਗੂ ਕਰੋ।</li><li>Database row-level security ਅਤੇ least-privilege policies ਵਰਤੋ।</li><li>Secrets ਨੂੰ server environment ਵਿੱਚ ਰੱਖੋ, HTML/JavaScript ਵਿੱਚ ਨਹੀਂ।</li><li>Audit logs ਅਤੇ session expiry ਲਾਗੂ ਕਰੋ।</li></ul></div>
+</section></div></main><footer>© 2026 Jathedar Akali Phula Singh Federation · Preview only</footer>
+<script>
+const buttons=[...document.querySelectorAll('[data-tab]')];buttons.forEach(b=>b.addEventListener('click',()=>{buttons.forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel>div').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.tab));}));
+</script></body></html>
