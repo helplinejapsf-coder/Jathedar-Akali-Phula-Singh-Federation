@@ -1,0 +1,12 @@
+Add these links inside your homepage footer (before </footer>):
+<nav class="policy-links">
+  <a href="terms-and-conditions.html">Terms &amp; Conditions</a>
+  <a href="privacy-policy.html">Privacy Policy</a>
+  <a href="disclaimer.html">Disclaimer</a>
+  <a href="refund-policy.html">Refund Policy</a>
+</nav>
+
+All four HTML pages must be uploaded beside index.html in the repository root.
+Keep your logo file named logo.png in that same folder.
+The policy texts are general drafts, not legal advice. Review them against the
+organisation's actual practices and applicable Indian law before publishing.
