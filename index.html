@@ -46,7 +46,7 @@ footer{padding:38px 18px}
 <header><div class="container header-inner">
 <a class="brand" href="./"><img src="logo.png" alt="Federation Logo" class="logo"><span>Jathedar Akali Phula Singh Federation</span></a>
 <nav><a href="./">Home</a><a href="?page=about-us">About</a><a href="?page=team-members">Team</a><a href="?page=contact-us">Contact</a></nav>
-<button class="language-button" id="languageToggle" type="button">ਪੰਜਾਬੀ / English</button>
+
 <div class="menu-wrap"><button class="menu-button" id="menuButton" aria-label="Open menu" aria-expanded="false" type="button"><span></span><span></span><span></span></button>
 <nav class="menu-panel" id="menuPanel"><div class="menu-label">FEDERATION MENU</div>
 <a href="./" data-page="home">Home / ਮੁੱਖ ਪੰਨਾ</a>
@@ -177,10 +177,8 @@ function applyTranslations(){
  const title=document.title;document.title=map[title]||title;
 }
 
-const languageToggle=document.getElementById('languageToggle');
-function setLanguage(english){document.body.classList.toggle('en-mode',english);document.documentElement.lang=english?'en':'pa';document.documentElement.setAttribute('data-language',english?'en':'pa');languageToggle.setAttribute('aria-pressed',String(english));languageToggle.setAttribute('aria-label',english?'Switch website to Punjabi':'Switch website to English');languageToggle.textContent=english?'ਪੰਜਾਬੀ ਵਿੱਚ ਵੇਖੋ':'View in English';applyTranslations();}
-languageToggle.addEventListener('click',()=>setLanguage(!document.body.classList.contains('en-mode')));
-setLanguage(false);
+function setLanguage(english){document.body.classList.toggle('en-mode',english);document.documentElement.lang=english?'en':'pa';document.documentElement.setAttribute('data-language',english?'en':'pa');applyTranslations();}
+setLanguage(true);
 const leaders=[
 {name:'Bhai Gurnam Singh Khalsa',role:'CEO & Founder',place:'Timmowal, Sri Amritsar Sahib, Punjab, India',image:'gurnam-singh.jpg'},
 {name:'Bhai Harmanjot Singh Khalsa',role:'Director',place:'Timmowal, Sri Amritsar Sahib, Punjab, India',image:'harmanjot-singh.jpg'},
