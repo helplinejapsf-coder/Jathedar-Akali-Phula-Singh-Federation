@@ -62,8 +62,71 @@ footer{padding:38px 18px}
 const menuButton=document.getElementById('menuButton'),menuPanel=document.getElementById('menuPanel');
 menuButton.addEventListener('click',()=>{const open=menuPanel.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));});
 document.addEventListener('click',e=>{if(!e.target.closest('.menu-wrap')){menuPanel.classList.remove('open');menuButton.setAttribute('aria-expanded','false');}});
+
+/* Complete Punjabi-English text translation layer for static and dynamically rendered pages */
+const translationPairs = {
+"Home":"ਮੁੱਖ ਪੰਨਾ","About":"ਸਾਡੇ ਬਾਰੇ","Team":"ਟੀਮ","Contact":"ਸੰਪਰਕ","FEDERATION MENU":"ਫੈਡਰੇਸ਼ਨ ਮੀਨੂ",
+"Member Registration":"ਮੈਂਬਰ ਰਜਿਸਟ੍ਰੇਸ਼ਨ","Latest Event":"ਤਾਜ਼ਾ ਸਮਾਗਮ","Your Problem":"ਤੁਹਾਡੀ ਸਮੱਸਿਆ","Our Solutions":"ਸਾਡੇ ਹੱਲ","Donation":"ਦਾਨ","Crowdfunding":"ਲੋਕ ਸਹਿਯੋਗ ਫੰਡ","ID Card Print":"ਪਛਾਣ ਪੱਤਰ ਪ੍ਰਿੰਟ","Coordinator Login":"ਕੋਆਰਡੀਨੇਟਰ ਲੌਗਇਨ","Team Members":"ਟੀਮ ਮੈਂਬਰ","Management Team":"ਪ੍ਰਬੰਧਕੀ ਟੀਮ","Gallery":"ਤਸਵੀਰਾਂ","List Donors":"ਦਾਨੀਆਂ ਦੀ ਸੂਚੀ","Contact Us":"ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ","About Us":"ਸਾਡੇ ਬਾਰੇ","User Signup":"ਯੂਜ਼ਰ ਰਜਿਸਟ੍ਰੇਸ਼ਨ","User Login":"ਯੂਜ਼ਰ ਲੌਗਇਨ",
+"Home / ਮੁੱਖ ਪੰਨਾ":"ਮੁੱਖ ਪੰਨਾ","Discover More":"ਹੋਰ ਜਾਣੋ","OUR PURPOSE":"ਸਾਡਾ ਉਦੇਸ਼","Our Mission":"ਸਾਡਾ ਮਿਸ਼ਨ","Dedicated to Sikh Heritage, Seva, Unity and Chardi Kala.":"ਸਿੱਖ ਵਿਰਾਸਤ, ਸੇਵਾ, ਏਕਤਾ ਅਤੇ ਚੜ੍ਹਦੀ ਕਲਾ ਨੂੰ ਸਮਰਪਿਤ।",
+"Preserving Sikh heritage, encouraging positive values and serving humanity.":"ਸਿੱਖ ਵਿਰਾਸਤ ਦੀ ਸੰਭਾਲ, ਚੰਗੇ ਮੁੱਲਾਂ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ ਅਤੇ ਮਨੁੱਖਤਾ ਦੀ ਸੇਵਾ ਕਰਨਾ।",
+"Federation Leadership Team":"ਫੈਡਰੇਸ਼ਨ ਦੀ ਅਗਵਾਈ ਕਰਨ ਵਾਲੀ ਟੀਮ","Meet the leadership team of Jathedar Akali Phula Singh Federation.":"ਜੱਥੇਦਾਰ ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਫੈਡਰੇਸ਼ਨ ਦੀ ਅਗਵਾਈ ਕਰਨ ਵਾਲੀ ਟੀਮ ਨਾਲ ਜਾਣ-ਪਛਾਣ ਕਰੋ।",
+"CEO & Founder":"ਮੁੱਖ ਕਾਰਜਕਾਰੀ ਅਧਿਕਾਰੀ ਅਤੇ ਸੰਸਥਾਪਕ","Director":"ਡਾਇਰੈਕਟਰ","Vice President":"ਮੀਤ ਪ੍ਰਧਾਨ","Secretary":"ਸਕੱਤਰ",
+"Member Registration":"ਮੈਂਬਰਸ਼ਿਪ ਰਜਿਸਟ੍ਰੇਸ਼ਨ","Full Name":"ਪੂਰਾ ਨਾਮ","Father's Name":"ਪਿਤਾ ਦਾ ਨਾਮ","Mobile Number":"ਮੋਬਾਈਲ ਨੰਬਰ","Email Address":"ਈਮੇਲ ਪਤਾ","Full Address":"ਪੂਰਾ ਪਤਾ","Submit Registration":"ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਭੇਜੋ",
+"Submit Problem":"ਸਮੱਸਿਆ ਭੇਜੋ","Your Name":"ਤੁਹਾਡਾ ਨਾਮ","Problem Subject":"ਸਮੱਸਿਆ ਦਾ ਵਿਸ਼ਾ","Describe Your Problem":"ਆਪਣੀ ਸਮੱਸਿਆ ਬਾਰੇ ਦੱਸੋ",
+"Donor Name":"ਦਾਨੀ ਦਾ ਨਾਮ","Donation Amount":"ਦਾਨ ਦੀ ਰਕਮ","Message":"ਸੁਨੇਹਾ","Submit Donation Details":"ਦਾਨ ਦੀ ਜਾਣਕਾਰੀ ਭੇਜੋ",
+"Project Name":"ਪ੍ਰੋਜੈਕਟ ਦਾ ਨਾਮ","Required Amount":"ਲੋੜੀਂਦੀ ਰਕਮ","Project Details":"ਪ੍ਰੋਜੈਕਟ ਦਾ ਵੇਰਵਾ","Submit Campaign":"ਮੁਹਿੰਮ ਭੇਜੋ",
+"Your Message":"ਤੁਹਾਡਾ ਸੁਨੇਹਾ","Send Message":"ਸੁਨੇਹਾ ਭੇਜੋ","Federation membership ਲਈ ਆਪਣੀ ਜਾਣਕਾਰੀ ਭਰੋ। Membership fee ਅਤੇ payment instructions Federation ਤੋਂ verify ਕਰੋ।":"ਫੈਡਰੇਸ਼ਨ ਦੀ ਮੈਂਬਰਸ਼ਿਪ ਲਈ ਆਪਣੀ ਜਾਣਕਾਰੀ ਭਰੋ। ਮੈਂਬਰਸ਼ਿਪ ਫੀਸ ਅਤੇ ਭੁਗਤਾਨ ਦੀਆਂ ਹਦਾਇਤਾਂ ਫੈਡਰੇਸ਼ਨ ਤੋਂ ਪੱਕੀਆਂ ਕਰ ਲਵੋ।",
+"ਦਾਨ ਸਬੰਧੀ ਜਾਣਕਾਰੀ ਅਤੇ ਆਪਣਾ ਸੁਨੇਹਾ ਦਰਜ ਕਰੋ।":"Enter your donation details and message.",
+"ਸੇਵਾ ਪ੍ਰੋਜੈਕਟ ਲਈ ਸਹਾਇਤਾ ਦੀ ਬੇਨਤੀ ਭੇਜੋ।":"Submit a request for support for a seva project.",
+"ਆਪਣੀ ਸਮੱਸਿਆ ਅਤੇ ਸੰਪਰਕ ਵੇਰਵੇ ਦਰਜ ਕਰੋ।":"Enter your problem and contact details.",
+"ਸਾਨੂੰ ਆਪਣਾ ਸੁਨੇਹਾ ਭੇਜੋ।":"Send us your message.",
+"ਇਹ ਫਾਰਮ ਇਸ ਵੇਲੇ Frontend Demo ਹੈ। ਜਾਣਕਾਰੀ ਅਜੇ ਕਿਸੇ Database ਵਿੱਚ ਸੰਭਾਲੀ ਜਾਂ Federation ਨੂੰ ਭੇਜੀ ਨਹੀਂ ਜਾਂਦੀ। Membership fee, donation ਜਾਂ crowdfunding payment ਲਈ ਸਿਰਫ਼ Federation ਵੱਲੋਂ ਅਧਿਕਾਰਤ ਅਤੇ verify ਕੀਤੇ payment details ਹੀ ਵਰਤੋ।":"This form is currently a frontend demo. Information is not saved to a database or sent to the Federation. Use only payment details officially confirmed by the Federation for membership fees, donations or crowdfunding.",
+"ਇਹ Demo Form ਹੈ। ਜਾਣਕਾਰੀ ਭੇਜਣ ਲਈ Backend ਜੋੜਨਾ ਲਾਜ਼ਮੀ ਹੈ।":"This is a demo form. A backend must be connected before information can be submitted.",
+"ਇਸ ਵੇਲੇ ਕੋਈ Event Upload ਨਹੀਂ ਕੀਤਾ ਗਿਆ।":"No event has been uploaded yet.",
+"Gallery ਦੀਆਂ ਤਸਵੀਰਾਂ ਹਾਲੇ ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤੀਆਂ ਗਈਆਂ।":"Gallery photos have not been added yet.",
+"ਦਾਨੀਆਂ ਦੇ ਨਾਮ ਉਨ੍ਹਾਂ ਦੀ ਸਹਿਮਤੀ ਨਾਲ ਇੱਥੇ ਪ੍ਰਕਾਸ਼ਿਤ ਕੀਤੇ ਜਾਣਗੇ।":"Donors' names will be published here only with their consent.",
+"Federation ਦੇ ਤਾਜ਼ਾ ਸਮਾਗਮਾਂ ਅਤੇ ਸੇਵਾ ਕਾਰਜਾਂ ਦੀ ਜਾਣਕਾਰੀ ਇੱਥੇ ਪਾਈ ਜਾਵੇਗੀ।":"Information about the Federation's latest events and seva activities will be posted here.",
+"Federation ਮੈਂਬਰ ID Card ਲਈ ਬੇਨਤੀ ਕਰ ਸਕਦੇ ਹਨ।":"Federation members can request an ID card.",
+"ID Card ਦੀ ਅਸਲ ਜਾਂਚ ਅਤੇ Print ਲਈ Member Database ਅਤੇ Backend ਲੋੜੀਂਦਾ ਹੈ।":"A member database and backend are required to verify and print ID cards.",
+"ਸੁਰੱਖਿਆ ਲਈ ਇਸ Demo Website ਉੱਤੇ Password ਨਾ ਭਰੋ। ਕੋਈ Password ਇਕੱਠਾ ਜਾਂ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਰਿਹਾ।":"For your security, do not enter a password on this demo website. No password is being collected or stored.",
+"ਇਸ Demo ਪੇਜ ਉੱਤੇ ਆਪਣਾ Coordinator ID ਜਾਂ Password ਨਾ ਭਰੋ।":"Do not enter your Coordinator ID or password on this demo page.",
+"ਇਸ ਵੇਲੇ Password ਨਾ ਭਰੋ। ਇਹ ਪੇਜ Login ਜਾਂ Password verification ਨਹੀਂ ਕਰਦਾ।":"Do not enter a password here. This page does not perform login or password verification.",
+"Coordinator Login server-side authentication ਅਤੇ permission controls ਲਾਗੂ ਹੋਣ ਤੋਂ ਬਾਅਦ ਹੀ ਚਾਲੂ ਕੀਤਾ ਜਾਵੇਗਾ।":"Coordinator login will be enabled only after server-side authentication and permission controls are implemented.",
+"Member Login ਸੁਰੱਖਿਅਤ Authentication ਸਿਸਟਮ ਜੋੜਨ ਤੋਂ ਬਾਅਦ ਉਪਲਬਧ ਹੋਵੇਗਾ।":"Member login will be available after a secure authentication system is connected.",
+"ਨਵਾਂ ਖਾਤਾ ਬਣਾਉਣ ਦੀ ਸਹੂਲਤ ਸੁਰੱਖਿਅਤ Backend Authentication ਤਿਆਰ ਹੋਣ ਤੋਂ ਬਾਅਦ ਚਾਲੂ ਕੀਤੀ ਜਾਵੇਗੀ।":"Account registration will be enabled after secure backend authentication is ready.",
+"Federation ਦੇ ਸਮਾਗਮਾਂ ਅਤੇ ਸੇਵਾ ਕਾਰਜਾਂ ਦੀਆਂ ਤਸਵੀਰਾਂ ਇੱਥੇ ਦਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।":"Photos of Federation events and seva activities will appear here.",
+"ਸਾਨੂੰ ਆਪਣਾ ਸੁਨੇਹਾ ਭੇਜੋ।":"Send us your message.",
+"ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ, ਨੌਜਵਾਨਾਂ ਵਿੱਚ ਚੰਗੇ ਮੁੱਲਾਂ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ ਅਤੇ ਮਨੁੱਖਤਾ ਦੀ ਨਿਸ਼ਕਾਮ ਸੇਵਾ ਕਰਨਾ।":"Preserve Sikh history and heritage, encourage positive values among youth, and serve humanity selflessly.",
+"ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਰਵਾਇਤਾਂ ਦੀ ਸੰਭਾਲ।":"Preserving Sikh history and traditions.",
+"ਲੋੜਵੰਦਾਂ ਦੀ ਮਦਦ ਅਤੇ ਭਾਈਚਾਰਕ ਸਹਿਯੋਗ।":"Helping those in need and supporting the community.",
+"ਨੌਜਵਾਨਾਂ ਨੂੰ ਸੇਵਾ ਅਤੇ ਚੰਗੇ ਆਚਰਨ ਨਾਲ ਜੋੜਨਾ।":"Connecting young people with seva and good conduct.",
+"ਭਾਈਚਾਰਕ ਸਹਿਯੋਗ":"Community Support","ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ":"Preserving Heritage","ਮਨੁੱਖਤਾ ਦੀ ਸੇਵਾ":"Serving Humanity","ਨੌਜਵਾਨਾਂ ਦੀ ਪ੍ਰੇਰਣਾ":"Inspiring Youth",
+"ਸੇਵਾ ਅਤੇ ਭਾਈਚਾਰਾ":"Seva and Community","ਸੇਵਾ, ਸਾਂਝ ਅਤੇ ਮਨੁੱਖਤਾ ਦੇ ਸਤਿਕਾਰ ਨਾਲ ਸਮਾਜ ਵਿੱਚ ਯੋਗਦਾਨ।":"Contributing to society through seva, cooperation and respect for humanity.",
+"ਸਮਾਜਿਕ ਭਲਾਈ ਅਤੇ ਆਪਸੀ ਸਹਿਯੋਗ।":"Social welfare and mutual support.","ਇਤਿਹਾਸ ਅਤੇ ਵਿਰਸੇ ਬਾਰੇ ਜਾਗਰੂਕਤਾ।":"Awareness of history and heritage.","ਆਪਸੀ ਸਤਿਕਾਰ ਅਤੇ ਏਕਤਾ ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨਾ।":"Strengthening mutual respect and unity.",
+"ਸਿੱਖ ਇਤਿਹਾਸ ਦੀ ਇੱਕ ਪ੍ਰਸਿੱਧ ਨਿਹੰਗ ਸ਼ਖ਼ਸੀਅਤ ਅਤੇ ਬੁੱਢਾ ਦਲ ਦੇ ਮਹਾਨ ਜੱਥੇਦਾਰ ਸਨ। ਉਨ੍ਹਾਂ ਦਾ ਜੀਵਨ ਨਿਡਰਤਾ, ਸਿਦਕ ਅਤੇ ਪੰਥਕ ਸਮਰਪਣ ਦੀ ਪ੍ਰੇਰਣਾ ਦਿੰਦਾ ਹੈ।":"A renowned Nihang figure in Sikh history and a great Jathedar of Buddha Dal. His life inspires fearlessness, faith and dedication to the Panth.",
+"ਸੰਪਰਕ: +91 9501503080 ਜਾਂ +91 9779257727":"Contact: +91 9501503080 or +91 9779257727",
+"ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ! 🙏 Federation ਬਾਰੇ ਕੀ ਜਾਣਨਾ ਚਾਹੁੰਦੇ ਹੋ?":"Hello! 🙏 What would you like to know about the Federation?",
+"ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ...":"Type your question...","Send":"ਭੇਜੋ","AI Chat":"ਏਆਈ ਚੈਟ","Call Now":"ਹੁਣੇ ਕਾਲ ਕਰੋ","WhatsApp":"ਵਟਸਐਪ",
+"Contact Federation":"ਫੈਡਰੇਸ਼ਨ ਨਾਲ ਸੰਪਰਕ ਕਰੋ","Page Not Found":"ਪੇਜ ਨਹੀਂ ਮਿਲਿਆ","Latest Events":"ਤਾਜ਼ਾ ਸਮਾਗਮ","Our Solutions":"ਸਾਡੇ ਹੱਲ","List of Donors":"ਦਾਨੀਆਂ ਦੀ ਸੂਚੀ",
+"House No. 269, Village Timmowal, Jandiala, Amritsar, Punjab, 143149, India":"ਮਕਾਨ ਨੰਬਰ 269, ਪਿੰਡ ਟਿੰਮੋਵਾਲ, ਜੰਡਿਆਲਾ, ਅੰਮ੍ਰਿਤਸਰ, ਪੰਜਾਬ, 143149, ਭਾਰਤ",
+"Designed By New Granthi Singh Federation":"ਨਿਊ ਗ੍ਰੰਥੀ ਸਿੰਘ ਫੈਡਰੇਸ਼ਨ ਵੱਲੋਂ ਡਿਜ਼ਾਈਨ ਕੀਤਾ ਗਿਆ",
+"Terms & Conditions":"ਨਿਯਮ ਅਤੇ ਸ਼ਰਤਾਂ","Privacy Policy":"ਪਰਦੇਦਾਰੀ ਨੀਤੀ","Disclaimer":"ਬੇਦਾਅਵਾ","Refund Policy":"ਰਿਫੰਡ ਨੀਤੀ",
+"Federation membership ਲਈ ਆਪਣੀ ਜਾਣਕਾਰੀ ਭਰੋ।":"Enter your information for Federation membership.",
+"ਸੁਰੱਖਿਅਤ Backend Authentication ਤਿਆਰ ਹੋਣ ਤੋਂ ਬਾਅਦ ਚਾਲੂ ਕੀਤੀ ਜਾਵੇਗੀ।":"This feature will be enabled after secure backend authentication is ready."
+};
+const reverseTranslations={};Object.entries(translationPairs).forEach(([en,pa])=>{if(!(pa in reverseTranslations))reverseTranslations[pa]=en;});
+function applyTranslations(){
+ const english=document.body.classList.contains('en-mode');
+ const map=english?translationPairs:reverseTranslations;
+ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+ const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+ nodes.forEach(node=>{if(!node.__sourceText)node.__sourceText=node.nodeValue;const original=node.__sourceText.trim();if(!original)return;const translated=map[original];if(translated!==undefined){const lead=node.__sourceText.match(/^\s*/)?.[0]||'';const tail=node.__sourceText.match(/\s*$/)?.[0]||'';node.nodeValue=lead+translated+tail;}else node.nodeValue=node.__sourceText;});
+ document.querySelectorAll('input,textarea,button,a,img').forEach(el=>{['placeholder','aria-label','title','alt'].forEach(attr=>{if(!el.hasAttribute(attr))return;const key='data-original-'+attr;if(!el.hasAttribute(key))el.setAttribute(key,el.getAttribute(attr));const original=el.getAttribute(key);el.setAttribute(attr,map[original]||original);});});
+ const title=document.title;document.title=map[title]||title;
+}
+
 const languageToggle=document.getElementById('languageToggle');
-function setLanguage(english){document.body.classList.toggle('en-mode',english);document.documentElement.lang=english?'en':'pa';document.documentElement.setAttribute('data-language',english?'en':'pa');languageToggle.setAttribute('aria-pressed',String(english));languageToggle.setAttribute('aria-label',english?'Switch website to Punjabi':'Switch website to English');languageToggle.textContent=english?'ਪੰਜਾਬੀ ਵਿੱਚ ਵੇਖੋ':'View in English';}
+function setLanguage(english){document.body.classList.toggle('en-mode',english);document.documentElement.lang=english?'en':'pa';document.documentElement.setAttribute('data-language',english?'en':'pa');languageToggle.setAttribute('aria-pressed',String(english));languageToggle.setAttribute('aria-label',english?'Switch website to Punjabi':'Switch website to English');languageToggle.textContent=english?'ਪੰਜਾਬੀ ਵਿੱਚ ਵੇਖੋ':'View in English';applyTranslations();}
 languageToggle.addEventListener('click',()=>setLanguage(!document.body.classList.contains('en-mode')));
 setLanguage(false);
 const leaders=[
@@ -93,10 +156,10 @@ const pages={
 'gallery':`<div class="page-card"><h2>Gallery</h2><p>Federation ਦੇ ਸਮਾਗਮਾਂ ਅਤੇ ਸੇਵਾ ਕਾਰਜਾਂ ਦੀਆਂ ਤਸਵੀਰਾਂ ਇੱਥੇ ਦਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।</p><div class="notice">Gallery ਦੀਆਂ ਤਸਵੀਰਾਂ ਹਾਲੇ ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤੀਆਂ ਗਈਆਂ।</div></div>`,
 'list-donors':`<div class="page-card"><h2>List of Donors</h2><p>ਦਾਨੀਆਂ ਦੇ ਨਾਮ ਉਨ੍ਹਾਂ ਦੀ ਸਹਿਮਤੀ ਨਾਲ ਇੱਥੇ ਪ੍ਰਕਾਸ਼ਿਤ ਕੀਤੇ ਜਾਣਗੇ।</p></div>`,
 'about-us':`<div class="page-card"><h2>About Us</h2><p>Jathedar Akali Phula Singh Federation ਦਾ ਮਕਸਦ ਸਿੱਖ ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ, ਸਮਾਜਿਕ ਭਲਾਈ, ਮਨੁੱਖਤਾ ਦੀ ਸੇਵਾ ਅਤੇ ਭਾਈਚਾਰਕ ਏਕਤਾ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ ਹੈ।</p><p><strong>CIN:</strong> U88900PB2025NPL066430</p></div>`};
-function renderPage(){const slug=new URLSearchParams(location.search).get('page')||'home';const home=document.getElementById('homePage'),separate=document.getElementById('separatePage'),content=document.getElementById('pageContent');menuPanel.classList.remove('open');menuButton.setAttribute('aria-expanded','false');document.querySelectorAll('.menu-panel a[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===slug));if(slug==='home'||!pageNames[slug]){home.hidden=false;separate.hidden=true;document.title='Jathedar Akali Phula Singh Federation';return;}home.hidden=true;separate.hidden=false;document.title=pageNames[slug]+' | Jathedar Akali Phula Singh Federation';content.innerHTML=forms[slug]?forms[slug]():pages[slug]?pages[slug]():`<div class="page-card"><h2>Page Not Found</h2></div>`;const f=content.querySelector('.demo-form');if(f)f.addEventListener('submit',e=>{e.preventDefault();f.querySelector('.form-message').textContent='ਇਹ Demo Form ਹੈ। ਜਾਣਕਾਰੀ ਭੇਜਣ ਲਈ Backend ਜੋੜਨਾ ਲਾਜ਼ਮੀ ਹੈ।';});window.scrollTo(0,0);}
+function renderPage(){const slug=new URLSearchParams(location.search).get('page')||'home';const home=document.getElementById('homePage'),separate=document.getElementById('separatePage'),content=document.getElementById('pageContent');menuPanel.classList.remove('open');menuButton.setAttribute('aria-expanded','false');document.querySelectorAll('.menu-panel a[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===slug));if(slug==='home'||!pageNames[slug]){home.hidden=false;separate.hidden=true;document.title='Jathedar Akali Phula Singh Federation';return;}home.hidden=true;separate.hidden=false;document.title=pageNames[slug]+' | Jathedar Akali Phula Singh Federation';content.innerHTML=forms[slug]?forms[slug]():pages[slug]?pages[slug]():`<div class="page-card"><h2>Page Not Found</h2></div>`;const f=content.querySelector('.demo-form');if(f)f.addEventListener('submit',e=>{e.preventDefault();f.querySelector('.form-message').textContent='ਇਹ Demo Form ਹੈ। ਜਾਣਕਾਰੀ ਭੇਜਣ ਲਈ Backend ਜੋੜਨਾ ਲਾਜ਼ਮੀ ਹੈ।';});applyTranslations();window.scrollTo(0,0);}
 window.addEventListener('popstate',renderPage);document.addEventListener('click',e=>{const a=e.target.closest('a[href*="?page="]');if(!a)return;const u=new URL(a.href,location.href);if(u.origin!==location.origin)return;e.preventDefault();history.pushState({},'',u.pathname+u.search);renderPage();});renderPage();
 const chatBox=document.getElementById('chatBox'),chatMessages=document.getElementById('chatMessages'),chatInput=document.getElementById('chatInput');document.getElementById('openChat').addEventListener('click',()=>{chatBox.classList.add('open');chatInput.focus();});document.getElementById('closeChat').addEventListener('click',()=>chatBox.classList.remove('open'));
-function addMessage(t,type){const d=document.createElement('div');d.className='message '+type;d.textContent=t;chatMessages.appendChild(d);chatMessages.scrollTop=chatMessages.scrollHeight;}
+function addMessage(t,type){const d=document.createElement('div');d.className='message '+type;d.textContent=t;chatMessages.appendChild(d);applyTranslations();chatMessages.scrollTop=chatMessages.scrollHeight;}
 function reply(q){q=q.toLowerCase();if(q.includes('contact')||q.includes('phone')||q.includes('ਨੰਬਰ'))return 'ਸੰਪਰਕ: +91 9501503080 ਜਾਂ +91 9779257727';if(q.includes('email')||q.includes('ਈਮੇਲ'))return 'jathedarakaliphulasingh@gmail.com ਜਾਂ helpline.japsf@gmail.com';if(q.includes('address')||q.includes('ਪਤਾ'))return 'House No. 269, Village Timmowal, Jandiala, Amritsar, Punjab, 143149.';if(q.includes('donation')||q.includes('ਦਾਨ'))return 'ਦਾਨ ਭੇਜਣ ਤੋਂ ਪਹਿਲਾਂ Federation ਨਾਲ ਅਧਿਕਾਰਤ ਨੰਬਰ ਉੱਤੇ ਪੁਸ਼ਟੀ ਕਰੋ ਜੀ।';if(q.includes('team')||q.includes('ਟੀਮ'))return 'Menu ਵਿੱਚ Team Members ਜਾਂ Management Team ਖੋਲ੍ਹੋ ਜੀ।';return 'ਹੋਰ ਜਾਣਕਾਰੀ ਲਈ +91 9501503080 ਉੱਤੇ ਸੰਪਰਕ ਕਰੋ ਜੀ।';}
 document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefault();const q=chatInput.value.trim();if(!q)return;addMessage(q,'user-message');chatInput.value='';addMessage(reply(q),'bot-message');});
 </script></body></html>
