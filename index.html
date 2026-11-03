@@ -5,287 +5,451 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#101d35">
-  <meta name="description" content="Jathedar Akali Phula Singh Federation — Sikh heritage, seva, unity and community welfare.">
+  <meta name="description" content="Jathedar Akali Phula Singh Federation - Sikh Heritage, Seva, Unity and Community Welfare.">
+
   <title>Jathedar Akali Phula Singh Federation</title>
+
+  <link rel="icon" type="image/png" href="logo.png">
 
   <style>
     :root {
       --navy: #101d35;
-      --navy-deep: #091326;
+      --deep: #091326;
       --gold: #d8ad55;
       --cream: #f7f2e8;
-      --ink: #202532;
+      --white: #ffffff;
+      --text: #202532;
       --muted: #626b79;
-      --white: #fff;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     html {
       scroll-behavior: smooth;
-      scroll-padding-top: 90px;
+      scroll-padding-top: 110px;
     }
 
     body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--cream);
       font-family: Arial, "Noto Sans Gurmukhi", sans-serif;
+      background: var(--cream);
+      color: var(--text);
       line-height: 1.7;
     }
 
-    a { color: inherit; }
-
-    .container {
-      width: min(1100px, calc(100% - 40px));
-      margin: 0 auto;
+    img {
+      max-width: 100%;
+      display: block;
     }
 
-    .site-header {
+    a {
+      color: inherit;
+    }
+
+    .container {
+      width: min(1150px, calc(100% - 36px));
+      margin: auto;
+    }
+
+    /* LANGUAGE */
+
+    body:not(.en-mode) .en {
+      display: none !important;
+    }
+
+    body.en-mode .pa {
+      display: none !important;
+    }
+
+    /* HEADER */
+
+    header {
       position: sticky;
       top: 0;
-      z-index: 10;
-      background: rgba(16, 29, 53, .97);
-      color: var(--white);
+      z-index: 100;
+      background: var(--navy);
+      color: white;
       border-bottom: 3px solid var(--gold);
+      box-shadow: 0 4px 15px rgba(0,0,0,.15);
     }
 
     .header-inner {
-      min-height: 76px;
+      min-height: 88px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      padding: 12px 0;
+      gap: 16px;
+      padding: 10px 0;
     }
 
     .brand {
-      color: var(--gold);
-      font-size: 1.05rem;
-      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       text-decoration: none;
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 17px;
+      line-height: 1.35;
+      max-width: 360px;
     }
 
-    .brand-mark {
-      margin-right: 8px;
-      font-size: 1.35rem;
+    .logo {
+      width: 68px;
+      height: 68px;
+      object-fit: contain;
+      border-radius: 50%;
+      background: white;
+      flex-shrink: 0;
+      border: 2px solid var(--gold);
     }
 
     nav {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 17px;
     }
 
     nav a {
-      color: var(--white);
+      color: white;
       text-decoration: none;
-      font-size: .95rem;
+      font-size: 14px;
+      font-weight: bold;
+      transition: .2s;
     }
 
-    nav a:hover { color: var(--gold); }
+    nav a:hover {
+      color: var(--gold);
+    }
 
-    .language-button, .button {
-      display: inline-block;
+    .language-button {
       border: 0;
-      border-radius: 999px;
-      padding: 11px 18px;
+      border-radius: 30px;
       background: var(--gold);
       color: var(--navy);
-      font-weight: 800;
-      text-decoration: none;
+      padding: 11px 16px;
+      font-weight: bold;
       cursor: pointer;
+      white-space: nowrap;
     }
 
-    .language-button:hover, .button:hover {
-      background: #edc875;
+    .language-button:hover {
+      background: #f0cc79;
     }
+
+    /* HERO */
 
     .hero {
-      color: var(--white);
+      min-height: 580px;
+      padding: 65px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 100px 20px 90px;
-      background: radial-gradient(
-        circle at top,
-        #304768 0,
-        var(--navy) 62%,
-        var(--navy-deep) 100%
-      );
+      color: white;
+      background:
+        radial-gradient(circle at top, #304768, var(--navy) 65%, var(--deep));
     }
 
-    .hero-symbol {
-      color: var(--gold);
-      font-size: 2.4rem;
-      margin-bottom: 12px;
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero-logo {
+      width: 210px;
+      height: 210px;
+      object-fit: contain;
+      margin: 0 auto 24px;
+      background: white;
+      border-radius: 50%;
+      border: 4px solid var(--gold);
+      box-shadow: 0 8px 35px rgba(0,0,0,.3);
     }
 
     .hero h1 {
-      max-width: 900px;
-      margin: 0 auto 16px;
       color: var(--gold);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1.2;
+      font-size: clamp(27px, 5vw, 46px);
+      line-height: 1.3;
+      margin-bottom: 18px;
     }
 
     .hero p {
+      font-size: 18px;
       max-width: 720px;
       margin: 0 auto 28px;
-      color: #f2f4f8;
-      font-size: 1.12rem;
     }
 
-    .eyebrow {
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: .13em;
-      font-size: .78rem;
-      font-weight: 800;
+    .button {
+      display: inline-block;
+      padding: 13px 25px;
+      border-radius: 30px;
+      background: var(--gold);
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: bold;
+      transition: .2s;
     }
 
-    section { padding: 72px 0; }
+    .button:hover {
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    /* SECTIONS */
+
+    section {
+      padding: 75px 0;
+    }
 
     .section-heading {
-      margin: 0 0 12px;
       color: var(--navy);
-      font-size: clamp(1.7rem, 4vw, 2.35rem);
-      line-height: 1.25;
+      font-size: clamp(26px, 4vw, 36px);
+      margin-bottom: 15px;
+      line-height: 1.35;
     }
 
     .section-intro {
-      max-width: 760px;
       color: var(--muted);
-      margin: 0 0 28px;
+      max-width: 780px;
+      margin: 0 auto 35px;
+      font-size: 17px;
     }
 
-    .center { text-align: center; }
-
-    .center .section-intro {
-      margin-left: auto;
-      margin-right: auto;
+    .center {
+      text-align: center;
     }
+
+    .eyebrow {
+      color: #a77b27;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    /* CARDS */
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 35px;
     }
 
     .card {
-      height: 100%;
-      padding: 24px;
-      background: var(--white);
-      border: 1px solid rgba(16, 29, 53, .08);
-      border-top: 4px solid var(--gold);
+      background: white;
+      padding: 28px;
       border-radius: 14px;
-      box-shadow: 0 12px 32px rgba(9, 19, 38, .10);
+      border-top: 5px solid var(--gold);
+      box-shadow: 0 8px 25px rgba(0,0,0,.07);
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,.12);
     }
 
     .card h3 {
       color: var(--navy);
-      margin: 0 0 8px;
+      margin-bottom: 12px;
+      font-size: 21px;
     }
 
     .card p {
-      margin: 0;
       color: var(--muted);
     }
 
+    /* DARK SECTION */
+
     .dark-section {
       background: var(--navy);
-      color: var(--white);
+      color: white;
     }
 
-    .dark-section .section-heading { color: var(--gold); }
+    .dark-section .section-heading {
+      color: var(--gold);
+    }
 
-    .dark-section .section-intro { color: #d9e0eb; }
+    .dark-section .section-intro {
+      color: #e0e6ef;
+    }
 
     .history-panel {
       max-width: 850px;
-      margin: 0 auto;
-      padding: 30px;
-      border: 1px solid rgba(216, 173, 85, .45);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, .04);
+      margin: 25px auto 0;
+      padding: 35px;
+      border: 1px solid var(--gold);
+      border-radius: 15px;
+      background: rgba(255,255,255,.04);
+      font-size: 17px;
     }
 
-    .history-panel p {
-      margin: 0;
-      color: #edf0f5;
-    }
+    /* CONTACT */
 
     .contact-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      gap: 22px;
+      margin-top: 30px;
     }
 
     .contact-card {
-      background: var(--white);
+      background: white;
+      padding: 28px;
       border-radius: 14px;
-      padding: 24px;
-      box-shadow: 0 12px 32px rgba(9, 19, 38, .10);
-    }
-
-    .contact-card h3 {
-      margin-top: 0;
-      color: var(--navy);
-    }
-
-    .contact-card p {
-      margin: 8px 0;
+      border-top: 5px solid var(--gold);
+      box-shadow: 0 8px 25px rgba(0,0,0,.08);
       overflow-wrap: anywhere;
     }
 
+    .contact-card h3 {
+      color: var(--navy);
+      margin-bottom: 18px;
+      font-size: 22px;
+    }
+
+    .contact-card p {
+      margin: 12px 0;
+      color: var(--text);
+    }
+
     .contact-card a {
-      color: #173e70;
+      color: #174a83;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .contact-card a:hover {
+      text-decoration: underline;
+    }
+
+    .cin {
+      padding: 14px;
+      background: #f7f2e8;
+      border-radius: 8px;
+      margin-top: 18px;
+      overflow-wrap: anywhere;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: var(--deep);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 3px solid var(--gold);
+    }
+
+    .footer-logo {
+      width: 95px;
+      height: 95px;
+      object-fit: contain;
+      margin: 0 auto 15px;
+      background: white;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+    }
+
+    footer h3 {
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    footer p {
+      margin: 6px 0;
+    }
+
+    .footer-contact {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .footer-contact a {
+      color: var(--gold);
       text-decoration: none;
     }
 
-    .contact-card a:hover { text-decoration: underline; }
+    /* MOBILE */
 
-    .legal {
-      font-size: .95rem;
-      color: var(--muted);
-    }
-
-    .footer {
-      padding: 30px 20px;
-      text-align: center;
-      background: var(--navy-deep);
-      color: #e8edf5;
-    }
-
-    .footer strong { color: var(--gold); }
-    .footer p { margin: 5px 0; }
-
-    /* Language switching */
-    body.pa .en { display: none; }
-    body.en-mode .pa { display: none; }
-    body.en-mode .en { display: initial; }
-
-    @media (max-width: 800px) {
-      .header-inner { justify-content: center; }
-      nav {
-        order: 3;
-        width: 100%;
-        gap: 14px;
+    @media (max-width: 900px) {
+      .header-inner {
+        justify-content: center;
       }
-      .grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .hero { padding: 76px 18px; }
-      section { padding: 56px 0; }
+
+      .brand {
+        max-width: 100%;
+      }
+
+      nav {
+        width: 100%;
+        order: 3;
+      }
+
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
-    @media (max-width: 430px) {
-      .container { width: min(100% - 28px, 1100px); }
-      nav { gap: 10px; }
-      nav a { font-size: .88rem; }
-      .brand { font-size: .95rem; }
-      .history-panel, .card, .contact-card {
-        padding: 20px;
+    @media (max-width: 600px) {
+      .container {
+        width: calc(100% - 28px);
+      }
+
+      .header-inner {
+        gap: 12px;
+      }
+
+      .brand {
+        font-size: 14px;
+      }
+
+      .logo {
+        width: 55px;
+        height: 55px;
+      }
+
+      nav {
+        gap: 12px;
+      }
+
+      nav a {
+        font-size: 12px;
+      }
+
+      .hero {
+        min-height: 500px;
+        padding: 50px 15px;
+      }
+
+      .hero-logo {
+        width: 165px;
+        height: 165px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      section {
+        padding: 55px 0;
+      }
+
+      .grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card,
+      .contact-card,
+      .history-panel {
+        padding: 22px;
       }
     }
   </style>
@@ -293,12 +457,21 @@
 
 <body class="pa">
 
-  <header class="site-header">
+  <!-- HEADER -->
+
+  <header>
     <div class="container header-inner">
 
       <a class="brand" href="#home">
-        <span class="brand-mark">ੴ</span>
-        Jathedar Akali Phula Singh Federation
+        <img
+          src="logo.png"
+          alt="Jathedar Akali Phula Singh Federation Logo"
+          class="logo"
+        >
+
+        <span>
+          Jathedar Akali Phula Singh Federation
+        </span>
       </a>
 
       <nav aria-label="Main navigation">
@@ -332,8 +505,8 @@
         class="language-button"
         id="languageToggle"
         type="button"
-        aria-label="Switch language"
-        aria-pressed="false">
+        aria-pressed="false"
+      >
         English / ਪੰਜਾਬੀ
       </button>
 
@@ -343,35 +516,42 @@
   <main>
 
     <!-- HOME -->
+
     <section class="hero" id="home">
-      <div class="hero-symbol" aria-hidden="true">ੴ</div>
+      <div class="hero-content">
 
-      <p class="eyebrow">Sikh Heritage • Seva • Unity</p>
+        <img
+          src="logo.png"
+          alt="Federation Official Logo"
+          class="hero-logo"
+        >
 
-      <h1 class="pa">
-        ਜਥੇਦਾਰ ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਫੈਡਰੇਸ਼ਨ
-      </h1>
+        <h1 class="pa">
+          ਜਥੇਦਾਰ ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਫੈਡਰੇਸ਼ਨ
+        </h1>
 
-      <h1 class="en">
-        Jathedar Akali Phula Singh Federation
-      </h1>
+        <h1 class="en">
+          Jathedar Akali Phula Singh Federation
+        </h1>
 
-      <p class="pa">
-        ਸਿੱਖ ਵਿਰਾਸਤ, ਸੇਵਾ, ਏਕਤਾ ਅਤੇ ਚੜ੍ਹਦੀ ਕਲਾ ਨੂੰ ਸਮਰਪਿਤ।
-      </p>
+        <p class="pa">
+          ਸਿੱਖ ਵਿਰਾਸਤ, ਸੇਵਾ, ਏਕਤਾ ਅਤੇ ਚੜ੍ਹਦੀ ਕਲਾ ਨੂੰ ਸਮਰਪਿਤ।
+        </p>
 
-      <p class="en">
-        Dedicated to Sikh heritage, selfless service,
-        unity and Chardi Kala.
-      </p>
+        <p class="en">
+          Dedicated to Sikh Heritage, Seva, Unity and Chardi Kala.
+        </p>
 
-      <a class="button" href="#about">
-        <span class="pa">ਹੋਰ ਜਾਣੋ</span>
-        <span class="en">Discover More</span>
-      </a>
+        <a class="button" href="#about">
+          <span class="pa">ਹੋਰ ਜਾਣੋ</span>
+          <span class="en">Discover More</span>
+        </a>
+
+      </div>
     </section>
 
     <!-- ABOUT -->
+
     <section id="about">
       <div class="container center">
 
@@ -381,17 +561,16 @@
         <h2 class="section-heading en">Our Mission</h2>
 
         <p class="section-intro pa">
-          ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ, ਨੌਜਵਾਨਾਂ ਵਿੱਚ
-          ਚੰਗੇ ਮੁੱਲਾਂ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ ਅਤੇ ਮਨੁੱਖਤਾ ਦੀ
-          ਨਿਸ਼ਕਾਮ ਸੇਵਾ ਦੇ ਸੰਦੇਸ਼ ਨੂੰ ਅੱਗੇ ਵਧਾਉਣਾ ਸਾਡੀ
-          ਵਚਨਬੱਧਤਾ ਹੈ।
+          ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ,
+          ਨੌਜਵਾਨਾਂ ਵਿੱਚ ਚੰਗੇ ਮੁੱਲਾਂ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ
+          ਅਤੇ ਮਨੁੱਖਤਾ ਦੀ ਨਿਸ਼ਕਾਮ ਸੇਵਾ ਦੇ ਸੰਦੇਸ਼ ਨੂੰ
+          ਅੱਗੇ ਵਧਾਉਣਾ ਸਾਡੀ ਵਚਨਬੱਧਤਾ ਹੈ।
         </p>
 
         <p class="section-intro en">
           We are committed to preserving Sikh heritage,
           encouraging positive values among young people,
-          and promoting the spirit of selfless service
-          to humanity.
+          and promoting selfless service to humanity.
         </p>
 
         <div class="grid">
@@ -401,13 +580,13 @@
             <h3 class="en">Preserving Heritage</h3>
 
             <p class="pa">
-              ਸਿੱਖ ਇਤਿਹਾਸ, ਰਵਾਇਤਾਂ ਅਤੇ ਮਹਾਨ ਸ਼ਖ਼ਸੀਅਤਾਂ
-              ਦੀ ਯਾਦ ਨੂੰ ਸਤਿਕਾਰ ਨਾਲ ਅੱਗੇ ਲਿਜਾਣਾ।
+              ਸਿੱਖ ਇਤਿਹਾਸ, ਰਵਾਇਤਾਂ ਅਤੇ ਮਹਾਨ
+              ਸ਼ਖ਼ਸੀਅਤਾਂ ਦੀ ਯਾਦ ਨੂੰ ਸਤਿਕਾਰ ਨਾਲ ਅੱਗੇ ਲਿਜਾਣਾ।
             </p>
 
             <p class="en">
-              Respectfully keeping Sikh history, traditions
-              and the memory of inspiring figures alive.
+              Respectfully preserving Sikh history,
+              traditions and the memory of inspiring figures.
             </p>
           </article>
 
@@ -416,13 +595,13 @@
             <h3 class="en">Serving Humanity</h3>
 
             <p class="pa">
-              ਲੋੜਵੰਦਾਂ ਦੀ ਮਦਦ ਅਤੇ ਭਾਈਚਾਰੇ ਵਿੱਚ ਸਾਂਝ
-              ਤੇ ਸਹਿਯੋਗ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ।
+              ਲੋੜਵੰਦਾਂ ਦੀ ਮਦਦ ਅਤੇ ਭਾਈਚਾਰੇ ਵਿੱਚ
+              ਸਾਂਝ ਤੇ ਸਹਿਯੋਗ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ।
             </p>
 
             <p class="en">
-              Supporting people in need and encouraging
-              compassion and cooperation in the community.
+              Helping people in need and encouraging
+              compassion and cooperation.
             </p>
           </article>
 
@@ -436,8 +615,8 @@
             </p>
 
             <p class="en">
-              Encouraging the next generation to value
-              service, discipline, courage and integrity.
+              Encouraging young people to value service,
+              discipline, courage and integrity.
             </p>
           </article>
 
@@ -446,6 +625,7 @@
     </section>
 
     <!-- HISTORY -->
+
     <section class="dark-section" id="history">
       <div class="container center">
 
@@ -462,20 +642,23 @@
         <div class="history-panel">
 
           <p class="pa">
-            ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਜੀ (1761–1823) ਸਿੱਖ ਇਤਿਹਾਸ
-            ਦੀ ਇੱਕ ਪ੍ਰਸਿੱਧ ਨਿਹੰਗ ਸ਼ਖ਼ਸੀਅਤ ਅਤੇ ਅਕਾਲੀ ਦਲ
-            ਦੇ ਮਹਾਨ ਜਥੇਦਾਰ ਸਨ। ਉਨ੍ਹਾਂ ਦਾ ਜੀਵਨ ਨਿਡਰਤਾ,
-            ਸਿਦਕ ਅਤੇ ਪੰਥਕ ਸਮਰਪਣ ਦੀ ਪ੍ਰੇਰਣਾ ਦਿੰਦਾ ਹੈ।
-            ਉਹ 1823 ਵਿੱਚ ਨੌਸ਼ਹਿਰਾ ਦੀ ਲੜਾਈ ਦੌਰਾਨ ਸ਼ਹੀਦ ਹੋਏ।
+            ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਜੀ (1761–1823)
+            ਸਿੱਖ ਇਤਿਹਾਸ ਦੀ ਇੱਕ ਪ੍ਰਸਿੱਧ ਨਿਹੰਗ ਸ਼ਖ਼ਸੀਅਤ
+            ਅਤੇ ਬੁੱਢਾ ਦਲ ਦੇ ਮਹਾਨ ਜਥੇਦਾਰ ਸਨ।
+            ਉਨ੍ਹਾਂ ਦਾ ਜੀਵਨ ਨਿਡਰਤਾ, ਸਿਦਕ ਅਤੇ ਪੰਥਕ
+            ਸਮਰਪਣ ਦੀ ਪ੍ਰੇਰਣਾ ਦਿੰਦਾ ਹੈ।
+            ਉਹ 1823 ਵਿੱਚ ਨੌਸ਼ਹਿਰਾ ਦੀ ਲੜਾਈ ਦੌਰਾਨ
+            ਸ਼ਹੀਦ ਹੋਏ।
           </p>
 
           <p class="en">
-            Akali Phula Singh Ji (1761–1823) was a renowned
-            Nihang Sikh leader and a distinguished Jathedar
-            of the Akali Dal. His life remains an inspiration
-            of courage, conviction and dedication to the
-            Sikh Panth. He attained martyrdom during the
-            Battle of Naushera in 1823.
+            Akali Phula Singh Ji (1761–1823)
+            was a renowned Nihang Sikh leader and
+            a distinguished Jathedar of the Budha Dal.
+            His life remains an inspiration of courage,
+            conviction and dedication to the Sikh Panth.
+            He attained martyrdom during the Battle
+            of Naushera in 1823.
           </p>
 
         </div>
@@ -483,6 +666,7 @@
     </section>
 
     <!-- SEVA -->
+
     <section id="seva">
       <div class="container center">
 
@@ -492,13 +676,13 @@
         <h2 class="section-heading en">Seva & Community</h2>
 
         <p class="section-intro pa">
-          ਸੇਵਾ, ਸਾਂਝ ਅਤੇ ਮਨੁੱਖਤਾ ਦੇ ਸਤਿਕਾਰ ਦੀ ਭਾਵਨਾ ਨਾਲ
-          ਸਮਾਜ ਵਿੱਚ ਸਕਾਰਾਤਮਕ ਯੋਗਦਾਨ ਪਾਉਣਾ।
+          ਸੇਵਾ, ਸਾਂਝ ਅਤੇ ਮਨੁੱਖਤਾ ਦੇ ਸਤਿਕਾਰ ਦੀ
+          ਭਾਵਨਾ ਨਾਲ ਸਮਾਜ ਵਿੱਚ ਸਕਾਰਾਤਮਕ ਯੋਗਦਾਨ ਪਾਉਣਾ।
         </p>
 
         <p class="section-intro en">
-          Making a positive contribution to society through
-          service, solidarity and respect for all humanity.
+          Making a positive contribution to society
+          through service, unity and respect for humanity.
         </p>
 
         <div class="grid">
@@ -508,12 +692,13 @@
             <h3 class="en">Community Support</h3>
 
             <p class="pa">
-              ਸਮਾਜਿਕ ਭਲਾਈ ਅਤੇ ਆਪਸੀ ਸਹਿਯੋਗ ਦੇ ਕਾਰਜਾਂ
-              ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ।
+              ਸਮਾਜਿਕ ਭਲਾਈ ਅਤੇ ਆਪਸੀ ਸਹਿਯੋਗ ਦੇ
+              ਕਾਰਜਾਂ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ।
             </p>
 
             <p class="en">
-              Encouraging community welfare and mutual support.
+              Encouraging community welfare
+              and mutual support.
             </p>
           </article>
 
@@ -522,13 +707,13 @@
             <h3 class="en">Education & Awareness</h3>
 
             <p class="pa">
-              ਇਤਿਹਾਸ, ਵਿਰਸੇ ਅਤੇ ਚੰਗੇ ਸਮਾਜਿਕ ਮੁੱਲਾਂ
-              ਬਾਰੇ ਜਾਗਰੂਕਤਾ ਫੈਲਾਉਣਾ।
+              ਇਤਿਹਾਸ, ਵਿਰਸੇ ਅਤੇ ਚੰਗੇ ਸਮਾਜਿਕ
+              ਮੁੱਲਾਂ ਬਾਰੇ ਜਾਗਰੂਕਤਾ ਫੈਲਾਉਣਾ।
             </p>
 
             <p class="en">
-              Promoting awareness of history, heritage
-              and positive social values.
+              Promoting awareness of history,
+              heritage and positive social values.
             </p>
           </article>
 
@@ -537,13 +722,13 @@
             <h3 class="en">Unity & Togetherness</h3>
 
             <p class="pa">
-              ਆਪਸੀ ਸਤਿਕਾਰ, ਏਕਤਾ ਅਤੇ ਸਾਂਝੀ ਜ਼ਿੰਮੇਵਾਰੀ
-              ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨਾ।
+              ਆਪਸੀ ਸਤਿਕਾਰ, ਏਕਤਾ ਅਤੇ ਸਾਂਝੀ
+              ਜ਼ਿੰਮੇਵਾਰੀ ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨਾ।
             </p>
 
             <p class="en">
-              Strengthening mutual respect, unity
-              and shared responsibility.
+              Strengthening mutual respect,
+              unity and shared responsibility.
             </p>
           </article>
 
@@ -552,10 +737,12 @@
     </section>
 
     <!-- CONTACT -->
+
     <section class="dark-section" id="contact">
       <div class="container">
 
         <div class="center">
+
           <p class="eyebrow">Get in Touch</p>
 
           <h2 class="section-heading pa">
@@ -567,9 +754,9 @@
           </h2>
 
           <p class="section-intro pa">
-            ਜਾਣਕਾਰੀ ਜਾਂ ਸੰਪਰਕ ਲਈ ਹੇਠਾਂ ਦਿੱਤੇ ਫ਼ੋਨ
-            ਨੰਬਰਾਂ ਅਤੇ ਈਮੇਲ ਪਤਿਆਂ ਰਾਹੀਂ ਸਾਡੇ ਨਾਲ
-            ਸੰਪਰਕ ਕਰੋ।
+            ਜਾਣਕਾਰੀ ਜਾਂ ਸੰਪਰਕ ਲਈ ਹੇਠਾਂ ਦਿੱਤੇ
+            ਫ਼ੋਨ ਨੰਬਰਾਂ ਅਤੇ ਈਮੇਲ ਪਤਿਆਂ ਰਾਹੀਂ
+            ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।
           </p>
 
           <p class="section-intro en">
@@ -577,57 +764,77 @@
             contact us using the phone numbers
             or email addresses below.
           </p>
+
         </div>
 
         <div class="contact-grid">
 
+          <!-- PHONE AND EMAIL -->
+
           <div class="contact-card">
+
             <h3 class="pa">ਸੰਪਰਕ ਵੇਰਵੇ</h3>
             <h3 class="en">Contact Details</h3>
 
             <p>
-              <strong>Helpline:</strong>
-              <a href="tel:+919501503080">+91 9501503080</a>
+              <strong>Helpline 1:</strong>
+              <a href="tel:+919501503080">
+                +91 9501503080
+              </a>
             </p>
 
             <p>
-              <strong>Helpline:</strong>
-              <a href="tel:+919779257727">+91 9779257727</a>
+              <strong>Helpline 2:</strong>
+              <a href="tel:+919779257727">
+                +91 9779257727
+              </a>
             </p>
 
             <p>
-              <strong>Email:</strong>
+              <strong>Email 1:</strong>
               <a href="mailto:jathedarakaliphulasingh@gmail.com">
                 jathedarakaliphulasingh@gmail.com
               </a>
             </p>
 
             <p>
-              <strong>Email:</strong>
+              <strong>Email 2:</strong>
               <a href="mailto:helpline.japsf@gmail.com">
                 helpline.japsf@gmail.com
               </a>
             </p>
+
           </div>
 
+          <!-- REGISTERED ADDRESS -->
+
           <div class="contact-card">
+
             <h3 class="pa">ਰਜਿਸਟਰਡ ਦਫ਼ਤਰ</h3>
             <h3 class="en">Registered Office</h3>
 
             <p>
-              <strong>Jathedar Akali Phula Singh Federation</strong>
+              <strong>
+                Jathedar Akali Phula Singh Federation
+              </strong>
             </p>
 
             <p>
               House No. 269, Village Timmowal,
-              Jandiala, Amritsar, Punjab, 143149, India
+              Jandiala, Amritsar, Punjab,
+              143149, India
             </p>
 
-            <p class="legal">
-              <strong>Corporate Identification Number (CIN):</strong>
+            <div class="cin">
+              <strong>
+                Corporate Identification Number (CIN):
+              </strong>
+
               <br>
+
               U88900PB2025NPL066430
-            </p>
+            </div>
+
           </div>
 
         </div>
@@ -637,706 +844,55 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer">
-    <p>
-      <strong>ੴ Jathedar Akali Phula Singh Federation</strong>
+
+  <footer>
+
+    <img
+      src="logo.png"
+      alt="Jathedar Akali Phula Singh Federation"
+      class="footer-logo"
+    >
+
+    <h3>Jathedar Akali Phula Singh Federation</h3>
+
+    <p class="pa">
+      ਸੇਵਾ • ਸਿਦਕ • ਨਿਡਰਤਾ • ਚੜ੍ਹਦੀ ਕਲਾ
     </p>
 
-    <p>
-      <span class="pa">ਸੇਵਾ • ਸਿਦਕ • ਨਿਡਰਤਾ</span>
-      <span class="en">Seva • Faith • Courage</span>
+    <p class="en">
+      Seva • Faith • Courage • Chardi Kala
     </p>
 
-    <p>
-      © <span id="year">2026</span>
-      Jathedar Akali Phula Singh Federation.
-      All Rights Reserved.
-    </p>
-  </footer>
+    <div class="footer-contact">
+      <p>
+        <a href="tel:+919501503080">+91 9501503080</a>
+        |
+        <a href="tel:+919779257727">+91 9779257727</a>
+      </p>
 
-  <script>
-    const languageToggle =
-      document.getElementById("languageToggle");
-
-    languageToggle.addEventListener("click", function () {
-      const isEnglish =
-        document.body.classList.toggle("en-mode");
-
-      document.documentElement.lang =
-        isEnglish ? "en" : "pa";
-
-      languageToggle.setAttribute(
-        "aria-pressed",
-        String(isEnglish)
-      );
-    });
-
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
-  </script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="pa">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101d35">
-  <meta name="description" content="Jathedar Akali Phula Singh Federation — Sikh heritage, seva, unity and community welfare.">
-  <title>Jathedar Akali Phula Singh Federation</title>
-
-  <style>
-    :root {
-      --navy: #101d35;
-      --navy-deep: #091326;
-      --gold: #d8ad55;
-      --cream: #f7f2e8;
-      --ink: #202532;
-      --muted: #626b79;
-      --white: #fff;
-    }
-
-    * { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 90px;
-    }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--cream);
-      font-family: Arial, "Noto Sans Gurmukhi", sans-serif;
-      line-height: 1.7;
-    }
-
-    a { color: inherit; }
-
-    .container {
-      width: min(1100px, calc(100% - 40px));
-      margin: 0 auto;
-    }
-
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(16, 29, 53, .97);
-      color: var(--white);
-      border-bottom: 3px solid var(--gold);
-    }
-
-    .header-inner {
-      min-height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-      padding: 12px 0;
-    }
-
-    .brand {
-      color: var(--gold);
-      font-size: 1.05rem;
-      font-weight: 800;
-      text-decoration: none;
-    }
-
-    .brand-mark {
-      margin-right: 8px;
-      font-size: 1.35rem;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      color: var(--white);
-      text-decoration: none;
-      font-size: .95rem;
-    }
-
-    nav a:hover { color: var(--gold); }
-
-    .language-button, .button {
-      display: inline-block;
-      border: 0;
-      border-radius: 999px;
-      padding: 11px 18px;
-      background: var(--gold);
-      color: var(--navy);
-      font-weight: 800;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .language-button:hover, .button:hover {
-      background: #edc875;
-    }
-
-    .hero {
-      color: var(--white);
-      text-align: center;
-      padding: 100px 20px 90px;
-      background: radial-gradient(
-        circle at top,
-        #304768 0,
-        var(--navy) 62%,
-        var(--navy-deep) 100%
-      );
-    }
-
-    .hero-symbol {
-      color: var(--gold);
-      font-size: 2.4rem;
-      margin-bottom: 12px;
-    }
-
-    .hero h1 {
-      max-width: 900px;
-      margin: 0 auto 16px;
-      color: var(--gold);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1.2;
-    }
-
-    .hero p {
-      max-width: 720px;
-      margin: 0 auto 28px;
-      color: #f2f4f8;
-      font-size: 1.12rem;
-    }
-
-    .eyebrow {
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: .13em;
-      font-size: .78rem;
-      font-weight: 800;
-    }
-
-    section { padding: 72px 0; }
-
-    .section-heading {
-      margin: 0 0 12px;
-      color: var(--navy);
-      font-size: clamp(1.7rem, 4vw, 2.35rem);
-      line-height: 1.25;
-    }
-
-    .section-intro {
-      max-width: 760px;
-      color: var(--muted);
-      margin: 0 0 28px;
-    }
-
-    .center { text-align: center; }
-
-    .center .section-intro {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      height: 100%;
-      padding: 24px;
-      background: var(--white);
-      border: 1px solid rgba(16, 29, 53, .08);
-      border-top: 4px solid var(--gold);
-      border-radius: 14px;
-      box-shadow: 0 12px 32px rgba(9, 19, 38, .10);
-    }
-
-    .card h3 {
-      color: var(--navy);
-      margin: 0 0 8px;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .dark-section {
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    .dark-section .section-heading { color: var(--gold); }
-
-    .dark-section .section-intro { color: #d9e0eb; }
-
-    .history-panel {
-      max-width: 850px;
-      margin: 0 auto;
-      padding: 30px;
-      border: 1px solid rgba(216, 173, 85, .45);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, .04);
-    }
-
-    .history-panel p {
-      margin: 0;
-      color: #edf0f5;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-
-    .contact-card {
-      background: var(--white);
-      border-radius: 14px;
-      padding: 24px;
-      box-shadow: 0 12px 32px rgba(9, 19, 38, .10);
-    }
-
-    .contact-card h3 {
-      margin-top: 0;
-      color: var(--navy);
-    }
-
-    .contact-card p {
-      margin: 8px 0;
-      overflow-wrap: anywhere;
-    }
-
-    .contact-card a {
-      color: #173e70;
-      text-decoration: none;
-    }
-
-    .contact-card a:hover { text-decoration: underline; }
-
-    .legal {
-      font-size: .95rem;
-      color: var(--muted);
-    }
-
-    .footer {
-      padding: 30px 20px;
-      text-align: center;
-      background: var(--navy-deep);
-      color: #e8edf5;
-    }
-
-    .footer strong { color: var(--gold); }
-    .footer p { margin: 5px 0; }
-
-    /* Language switching */
-    body.pa .en { display: none; }
-    body.en-mode .pa { display: none; }
-    body.en-mode .en { display: initial; }
-
-    @media (max-width: 800px) {
-      .header-inner { justify-content: center; }
-      nav {
-        order: 3;
-        width: 100%;
-        gap: 14px;
-      }
-      .grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .hero { padding: 76px 18px; }
-      section { padding: 56px 0; }
-    }
-
-    @media (max-width: 430px) {
-      .container { width: min(100% - 28px, 1100px); }
-      nav { gap: 10px; }
-      nav a { font-size: .88rem; }
-      .brand { font-size: .95rem; }
-      .history-panel, .card, .contact-card {
-        padding: 20px;
-      }
-    }
-  </style>
-</head>
-
-<body class="pa">
-
-  <header class="site-header">
-    <div class="container header-inner">
-
-      <a class="brand" href="#home">
-        <span class="brand-mark">ੴ</span>
-        Jathedar Akali Phula Singh Federation
-      </a>
-
-      <nav aria-label="Main navigation">
-        <a href="#home">
-          <span class="pa">ਮੁੱਖ ਪੰਨਾ</span>
-          <span class="en">Home</span>
+      <p>
+        <a href="mailto:jathedarakaliphulasingh@gmail.com">
+          jathedarakaliphulasingh@gmail.com
         </a>
-
-        <a href="#about">
-          <span class="pa">ਸਾਡੇ ਬਾਰੇ</span>
-          <span class="en">About</span>
-        </a>
-
-        <a href="#history">
-          <span class="pa">ਇਤਿਹਾਸ</span>
-          <span class="en">History</span>
-        </a>
-
-        <a href="#seva">
-          <span class="pa">ਸੇਵਾ</span>
-          <span class="en">Seva</span>
-        </a>
-
-        <a href="#contact">
-          <span class="pa">ਸੰਪਰਕ</span>
-          <span class="en">Contact</span>
-        </a>
-      </nav>
-
-      <button
-        class="language-button"
-        id="languageToggle"
-        type="button"
-        aria-label="Switch language"
-        aria-pressed="false">
-        English / ਪੰਜਾਬੀ
-      </button>
-
+      </p>
     </div>
-  </header>
 
-  <main>
-
-    <!-- HOME -->
-    <section class="hero" id="home">
-      <div class="hero-symbol" aria-hidden="true">ੴ</div>
-
-      <p class="eyebrow">Sikh Heritage • Seva • Unity</p>
-
-      <h1 class="pa">
-        ਜਥੇਦਾਰ ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਫੈਡਰੇਸ਼ਨ
-      </h1>
-
-      <h1 class="en">
-        Jathedar Akali Phula Singh Federation
-      </h1>
-
-      <p class="pa">
-        ਸਿੱਖ ਵਿਰਾਸਤ, ਸੇਵਾ, ਏਕਤਾ ਅਤੇ ਚੜ੍ਹਦੀ ਕਲਾ ਨੂੰ ਸਮਰਪਿਤ।
-      </p>
-
-      <p class="en">
-        Dedicated to Sikh heritage, selfless service,
-        unity and Chardi Kala.
-      </p>
-
-      <a class="button" href="#about">
-        <span class="pa">ਹੋਰ ਜਾਣੋ</span>
-        <span class="en">Discover More</span>
-      </a>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="container center">
-
-        <p class="eyebrow">Our Purpose</p>
-
-        <h2 class="section-heading pa">ਸਾਡਾ ਮਕਸਦ</h2>
-        <h2 class="section-heading en">Our Mission</h2>
-
-        <p class="section-intro pa">
-          ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ, ਨੌਜਵਾਨਾਂ ਵਿੱਚ
-          ਚੰਗੇ ਮੁੱਲਾਂ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ ਅਤੇ ਮਨੁੱਖਤਾ ਦੀ
-          ਨਿਸ਼ਕਾਮ ਸੇਵਾ ਦੇ ਸੰਦੇਸ਼ ਨੂੰ ਅੱਗੇ ਵਧਾਉਣਾ ਸਾਡੀ
-          ਵਚਨਬੱਧਤਾ ਹੈ।
-        </p>
-
-        <p class="section-intro en">
-          We are committed to preserving Sikh heritage,
-          encouraging positive values among young people,
-          and promoting the spirit of selfless service
-          to humanity.
-        </p>
-
-        <div class="grid">
-
-          <article class="card">
-            <h3 class="pa">ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ</h3>
-            <h3 class="en">Preserving Heritage</h3>
-
-            <p class="pa">
-              ਸਿੱਖ ਇਤਿਹਾਸ, ਰਵਾਇਤਾਂ ਅਤੇ ਮਹਾਨ ਸ਼ਖ਼ਸੀਅਤਾਂ
-              ਦੀ ਯਾਦ ਨੂੰ ਸਤਿਕਾਰ ਨਾਲ ਅੱਗੇ ਲਿਜਾਣਾ।
-            </p>
-
-            <p class="en">
-              Respectfully keeping Sikh history, traditions
-              and the memory of inspiring figures alive.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3 class="pa">ਮਨੁੱਖਤਾ ਦੀ ਸੇਵਾ</h3>
-            <h3 class="en">Serving Humanity</h3>
-
-            <p class="pa">
-              ਲੋੜਵੰਦਾਂ ਦੀ ਮਦਦ ਅਤੇ ਭਾਈਚਾਰੇ ਵਿੱਚ ਸਾਂਝ
-              ਤੇ ਸਹਿਯੋਗ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ।
-            </p>
-
-            <p class="en">
-              Supporting people in need and encouraging
-              compassion and cooperation in the community.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3 class="pa">ਨੌਜਵਾਨਾਂ ਦੀ ਪ੍ਰੇਰਣਾ</h3>
-            <h3 class="en">Inspiring Youth</h3>
-
-            <p class="pa">
-              ਨੌਜਵਾਨ ਪੀੜ੍ਹੀ ਨੂੰ ਸੇਵਾ, ਅਨੁਸ਼ਾਸਨ,
-              ਹਿੰਮਤ ਅਤੇ ਚੰਗੇ ਆਚਰਨ ਨਾਲ ਜੋੜਨਾ।
-            </p>
-
-            <p class="en">
-              Encouraging the next generation to value
-              service, discipline, courage and integrity.
-            </p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- HISTORY -->
-    <section class="dark-section" id="history">
-      <div class="container center">
-
-        <p class="eyebrow">A Legacy of Courage</p>
-
-        <h2 class="section-heading pa">
-          ਜਥੇਦਾਰ ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਜੀ
-        </h2>
-
-        <h2 class="section-heading en">
-          Jathedar Akali Phula Singh Ji
-        </h2>
-
-        <div class="history-panel">
-
-          <p class="pa">
-            ਅਕਾਲੀ ਫੂਲਾ ਸਿੰਘ ਜੀ (1761–1823) ਸਿੱਖ ਇਤਿਹਾਸ
-            ਦੀ ਇੱਕ ਪ੍ਰਸਿੱਧ ਨਿਹੰਗ ਸ਼ਖ਼ਸੀਅਤ ਅਤੇ ਅਕਾਲੀ ਦਲ
-            ਦੇ ਮਹਾਨ ਜਥੇਦਾਰ ਸਨ। ਉਨ੍ਹਾਂ ਦਾ ਜੀਵਨ ਨਿਡਰਤਾ,
-            ਸਿਦਕ ਅਤੇ ਪੰਥਕ ਸਮਰਪਣ ਦੀ ਪ੍ਰੇਰਣਾ ਦਿੰਦਾ ਹੈ।
-            ਉਹ 1823 ਵਿੱਚ ਨੌਸ਼ਹਿਰਾ ਦੀ ਲੜਾਈ ਦੌਰਾਨ ਸ਼ਹੀਦ ਹੋਏ।
-          </p>
-
-          <p class="en">
-            Akali Phula Singh Ji (1761–1823) was a renowned
-            Nihang Sikh leader and a distinguished Jathedar
-            of the Akali Dal. His life remains an inspiration
-            of courage, conviction and dedication to the
-            Sikh Panth. He attained martyrdom during the
-            Battle of Naushera in 1823.
-          </p>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- SEVA -->
-    <section id="seva">
-      <div class="container center">
-
-        <p class="eyebrow">Community & Compassion</p>
-
-        <h2 class="section-heading pa">ਸੇਵਾ ਅਤੇ ਭਾਈਚਾਰਾ</h2>
-        <h2 class="section-heading en">Seva & Community</h2>
-
-        <p class="section-intro pa">
-          ਸੇਵਾ, ਸਾਂਝ ਅਤੇ ਮਨੁੱਖਤਾ ਦੇ ਸਤਿਕਾਰ ਦੀ ਭਾਵਨਾ ਨਾਲ
-          ਸਮਾਜ ਵਿੱਚ ਸਕਾਰਾਤਮਕ ਯੋਗਦਾਨ ਪਾਉਣਾ।
-        </p>
-
-        <p class="section-intro en">
-          Making a positive contribution to society through
-          service, solidarity and respect for all humanity.
-        </p>
-
-        <div class="grid">
-
-          <article class="card">
-            <h3 class="pa">ਭਾਈਚਾਰਕ ਸਹਿਯੋਗ</h3>
-            <h3 class="en">Community Support</h3>
-
-            <p class="pa">
-              ਸਮਾਜਿਕ ਭਲਾਈ ਅਤੇ ਆਪਸੀ ਸਹਿਯੋਗ ਦੇ ਕਾਰਜਾਂ
-              ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਕਰਨਾ।
-            </p>
-
-            <p class="en">
-              Encouraging community welfare and mutual support.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3 class="pa">ਸਿੱਖਿਆ ਅਤੇ ਜਾਗਰੂਕਤਾ</h3>
-            <h3 class="en">Education & Awareness</h3>
-
-            <p class="pa">
-              ਇਤਿਹਾਸ, ਵਿਰਸੇ ਅਤੇ ਚੰਗੇ ਸਮਾਜਿਕ ਮੁੱਲਾਂ
-              ਬਾਰੇ ਜਾਗਰੂਕਤਾ ਫੈਲਾਉਣਾ।
-            </p>
-
-            <p class="en">
-              Promoting awareness of history, heritage
-              and positive social values.
-            </p>
-          </article>
-
-          <article class="card">
-            <h3 class="pa">ਏਕਤਾ ਅਤੇ ਸਾਂਝ</h3>
-            <h3 class="en">Unity & Togetherness</h3>
-
-            <p class="pa">
-              ਆਪਸੀ ਸਤਿਕਾਰ, ਏਕਤਾ ਅਤੇ ਸਾਂਝੀ ਜ਼ਿੰਮੇਵਾਰੀ
-              ਨੂੰ ਮਜ਼ਬੂਤ ਕਰਨਾ।
-            </p>
-
-            <p class="en">
-              Strengthening mutual respect, unity
-              and shared responsibility.
-            </p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="dark-section" id="contact">
-      <div class="container">
-
-        <div class="center">
-          <p class="eyebrow">Get in Touch</p>
-
-          <h2 class="section-heading pa">
-            ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰੋ
-          </h2>
-
-          <h2 class="section-heading en">
-            Contact the Federation
-          </h2>
-
-          <p class="section-intro pa">
-            ਜਾਣਕਾਰੀ ਜਾਂ ਸੰਪਰਕ ਲਈ ਹੇਠਾਂ ਦਿੱਤੇ ਫ਼ੋਨ
-            ਨੰਬਰਾਂ ਅਤੇ ਈਮੇਲ ਪਤਿਆਂ ਰਾਹੀਂ ਸਾਡੇ ਨਾਲ
-            ਸੰਪਰਕ ਕਰੋ।
-          </p>
-
-          <p class="section-intro en">
-            For enquiries or further information,
-            contact us using the phone numbers
-            or email addresses below.
-          </p>
-        </div>
-
-        <div class="contact-grid">
-
-          <div class="contact-card">
-            <h3 class="pa">ਸੰਪਰਕ ਵੇਰਵੇ</h3>
-            <h3 class="en">Contact Details</h3>
-
-            <p>
-              <strong>Helpline:</strong>
-              <a href="tel:+919501503080">+91 9501503080</a>
-            </p>
-
-            <p>
-              <strong>Helpline:</strong>
-              <a href="tel:+919779257727">+91 9779257727</a>
-            </p>
-
-            <p>
-              <strong>Email:</strong>
-              <a href="mailto:jathedarakaliphulasingh@gmail.com">
-                jathedarakaliphulasingh@gmail.com
-              </a>
-            </p>
-
-            <p>
-              <strong>Email:</strong>
-              <a href="mailto:helpline.japsf@gmail.com">
-                helpline.japsf@gmail.com
-              </a>
-            </p>
-          </div>
-
-          <div class="contact-card">
-            <h3 class="pa">ਰਜਿਸਟਰਡ ਦਫ਼ਤਰ</h3>
-            <h3 class="en">Registered Office</h3>
-
-            <p>
-              <strong>Jathedar Akali Phula Singh Federation</strong>
-            </p>
-
-            <p>
-              House No. 269, Village Timmowal,
-              Jandiala, Amritsar, Punjab, 143149, India
-            </p>
-
-            <p class="legal">
-              <strong>Corporate Identification Number (CIN):</strong>
-              <br>
-              U88900PB2025NPL066430
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>
-      <strong>ੴ Jathedar Akali Phula Singh Federation</strong>
-    </p>
-
-    <p>
-      <span class="pa">ਸੇਵਾ • ਸਿਦਕ • ਨਿਡਰਤਾ</span>
-      <span class="en">Seva • Faith • Courage</span>
-    </p>
-
-    <p>
+    <p style="margin-top:20px; font-size:13px;">
       © <span id="year">2026</span>
       Jathedar Akali Phula Singh Federation.
       All Rights Reserved.
     </p>
+
   </footer>
+
+  <!-- JAVASCRIPT -->
 
   <script>
     const languageToggle =
       document.getElementById("languageToggle");
 
     languageToggle.addEventListener("click", function () {
+
       const isEnglish =
         document.body.classList.toggle("en-mode");
 
@@ -1347,6 +903,7 @@
         "aria-pressed",
         String(isEnglish)
       );
+
     });
 
     document.getElementById("year").textContent =
