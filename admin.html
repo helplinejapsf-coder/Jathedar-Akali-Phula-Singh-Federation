@@ -30,8 +30,8 @@
    const {data:{user},error:userError}=await client.auth.getUser();
    if(userError||!user){showGate();return false}
    if((user.email||"").toLowerCase()!==allowedEmail){await client.auth.signOut();showGate();message("This email is not authorized for the administrator panel.");return false}
-   const {data,error}=await client.from("admin_allowlist").select("email").eq("email",allowedEmail).maybeSingle();
-   if(error||!data){await client.auth.signOut();showGate();message("Administrator authorization failed. Contact the project owner.");return false}
+   const {data,error}=await client.functions.invoke("admin-authorize",{body:{}});
+   if(error||!data||data.authorized!==true){await client.auth.signOut();showGate();message("Administrator authorization failed. Contact the project owner.");return false}
    showApp();return true
  }
  form.addEventListener("submit",async e=>{
@@ -48,7 +48,7 @@
    if(email!==allowedEmail){message("Account creation is restricted to the approved administrator email.");return}
    if(password.length<8){message("Choose a password with at least 8 characters.");return}
    message("Creating administrator account...");
-   const {data,error}=await client.auth.signUp({email,password});
+   const {data,error}=await client.auth.signUp({email,password,options:{emailRedirectTo:location.href.split("#")[0]}});
    if(error){message(error.message);return}
    if(data.session){if(await authorize())message("Administrator account created and verified.");}
    else message("Account request submitted. Check the administrator email inbox and confirm the address, then return here to sign in.");
