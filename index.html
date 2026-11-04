@@ -45,6 +45,40 @@ footer{padding:38px 18px}
 
 /* Membership application form */
 .membership-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}.membership-form .form-group{min-width:0}.membership-form .full{grid-column:1/-1}.membership-form input[type=file]{padding:9px;background:#faf8f2}.membership-form .plan-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0 20px}.membership-form .plan-option{display:block;border:1px solid #d8ad55;border-radius:10px;padding:14px;background:#fff;cursor:pointer}.membership-form .plan-option:has(input:checked){background:#fff4d9;border:2px solid #a77b27}.membership-form .plan-option strong{display:block;color:#101d35;font-size:19px}.membership-form .plan-option small{color:#626b79}.membership-form .form-group label{color:#25334a}.membership-form .section-label{grid-column:1/-1;color:#101d35;border-bottom:2px solid #d8ad55;padding:14px 0 6px;margin-top:8px;font-size:18px}.membership-form .consent{display:flex;align-items:flex-start;gap:9px;margin:18px 0}.membership-form .consent input{width:auto;margin-top:6px}.membership-form button:disabled{opacity:.65;cursor:not-allowed}@media(max-width:650px){.membership-form{grid-template-columns:1fr}.membership-form .plan-list{grid-template-columns:1fr}.membership-form .full,.membership-form .section-label{grid-column:auto}}
+
+/* Premium membership application visual refresh */
+.page-card:has(.membership-form){max-width:1040px;margin:34px auto;padding:clamp(20px,4vw,42px);border:1px solid #e8dfcf;border-radius:24px;background:linear-gradient(145deg,#fff 0%,#fffdf8 100%);box-shadow:0 22px 60px rgba(16,29,53,.10);position:relative;overflow:hidden}
+.page-card:has(.membership-form):before{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:linear-gradient(90deg,#101d35 0%,#c99736 48%,#f0d38b 100%)}
+.page-card:has(.membership-form)>.eyebrow{display:inline-flex;align-items:center;gap:8px;margin:6px 0 10px;padding:7px 13px;border-radius:30px;background:#f8f0df;color:#93691f;font-size:11px;font-weight:800;letter-spacing:2px}
+.page-card:has(.membership-form)>h2{font-size:clamp(26px,4vw,38px);line-height:1.16;color:#101d35;margin:4px 0 10px;font-weight:800;letter-spacing:-.7px}
+.page-card:has(.membership-form)>p:not(.eyebrow){font-size:15px;line-height:1.7;color:#667085;max-width:720px;margin-bottom:22px}
+.page-card:has(.membership-form)>.notice{border:1px solid #f0dcae;border-left:4px solid #c99736;border-radius:13px;background:#fff9eb;color:#72531b;padding:15px 17px;line-height:1.65;margin:18px 0 26px}
+.membership-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 22px;padding:0}
+.membership-form .form-group{min-width:0;margin:0 0 15px}
+.membership-form .form-group label{display:block;margin:0 0 8px;color:#25334a;font-size:13px;font-weight:750;letter-spacing:.15px}
+.membership-form .form-group input:not([type=file]),.membership-form .form-group select,.membership-form .form-group textarea{display:block;width:100%;min-height:49px;padding:12px 14px;border:1px solid #dce2eb;border-radius:11px;background:#fff;color:#17243b;font:inherit;font-size:14px;outline:none;box-shadow:0 2px 5px rgba(16,29,53,.025);transition:border-color .18s,box-shadow .18s,background .18s}
+.membership-form .form-group textarea{min-height:105px;resize:vertical}
+.membership-form .form-group input:focus,.membership-form .form-group select:focus,.membership-form .form-group textarea:focus{border-color:#bd8b32;box-shadow:0 0 0 4px rgba(201,151,54,.14);background:#fffefa}
+.membership-form .form-group input[type=file]{display:block;width:100%;min-height:54px;padding:12px;border:1.5px dashed #cbd3df;border-radius:12px;background:#f8fafc;color:#475467;font-size:13px;cursor:pointer}
+.membership-form .form-group small{display:block;margin-top:7px;color:#8791a1;font-size:11px;line-height:1.5}
+.membership-form .full,.membership-form .section-label{grid-column:1/-1}
+.membership-form .section-label{display:flex;align-items:center;gap:11px;margin:20px 0 14px;padding:0 0 12px;border:0;border-bottom:1px solid #e8e3d8;color:#101d35;font-size:17px;font-weight:800;letter-spacing:-.2px}
+.membership-form .section-label:before{content:"";width:5px;height:23px;border-radius:8px;background:linear-gradient(#d8ad55,#a77b27);flex:0 0 5px}
+.membership-form .plan-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:8px 0 16px}
+.membership-form .plan-option{position:relative;display:flex;flex-direction:column;gap:7px;min-height:116px;padding:17px 15px;border:1.5px solid #e0e4eb;border-radius:15px;background:#fff;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s,background .18s}
+.membership-form .plan-option:hover{transform:translateY(-2px);border-color:#c99a42;box-shadow:0 9px 24px rgba(16,29,53,.08)}
+.membership-form .plan-option:has(input:checked){border:2px solid #bd8b32;background:linear-gradient(145deg,#fffaf0,#fff);box-shadow:0 0 0 4px rgba(201,151,54,.12)}
+.membership-form .plan-option input{accent-color:#a77b27;margin:0 0 2px;width:17px;height:17px}
+.membership-form .plan-option strong{display:block;color:#101d35;font-size:25px;line-height:1.1;font-weight:850}
+.membership-form .plan-option small{color:#667085;font-size:12px;font-weight:650}
+.membership-form .notice{grid-column:1/-1;border:1px solid #dce7f2;border-radius:12px;background:#f4f8fc;color:#40536b;padding:14px 16px;font-size:13px;line-height:1.6}
+.membership-form .consent{display:flex;align-items:flex-start;gap:11px;margin:18px 0;padding:15px;border:1px solid #e6eaf0;border-radius:12px;background:#fafbfd;color:#596579;font-size:12px;line-height:1.6}
+.membership-form .consent input{flex:0 0 auto;width:17px;height:17px;margin:2px 0 0;accent-color:#a77b27}
+.membership-form button.button{width:100%;min-height:52px;border:0;border-radius:12px;background:linear-gradient(110deg,#101d35,#243c61);color:#fff;font-size:15px;font-weight:800;letter-spacing:.2px;box-shadow:0 9px 20px rgba(16,29,53,.18)}
+.membership-form button:disabled{opacity:.72;cursor:not-allowed;box-shadow:none}
+.membership-form .form-message{margin:11px 0 0;text-align:center;color:#7a8494;font-size:12px}
+@media(max-width:680px){.page-card:has(.membership-form){margin:16px 10px;padding:22px 16px;border-radius:18px}.membership-form{grid-template-columns:1fr;gap:0}.membership-form .full,.membership-form .section-label{grid-column:auto}.membership-form .plan-list{grid-template-columns:1fr;gap:9px}.membership-form .plan-option{min-height:0;padding:14px 15px}.membership-form .plan-option strong{font-size:23px}.page-card:has(.membership-form)>h2{font-size:27px}}
+
 </style>
 </head>
 <body>
