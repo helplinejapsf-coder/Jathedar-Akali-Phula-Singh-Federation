@@ -4,10 +4,62 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>JAPSF Admin Console</title>
 <style>
 :root{--navy:#101d35;--gold:#d9b263;--bg:#f3f5f9}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#263449;font:15px Arial,sans-serif}.top{background:var(--navy);color:white;padding:22px 5%;border-bottom:4px solid var(--gold);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}.top h1{font-size:19px;margin:0}.top p{color:#c5cfdd;font-size:12px}.tag{color:#f5d99f;border:1px solid #806a43;border-radius:20px;padding:7px 12px;font-size:11px}.wrap{max-width:1200px;margin:28px auto;padding:0 16px}.notice{background:#fff7e5;border-left:4px solid var(--gold);padding:15px;border-radius:8px;color:#69552d;font-size:13px;line-height:1.6;margin-bottom:18px}.layout{display:grid;grid-template-columns:230px 1fr;gap:18px}.side,.panel,.metric{background:white;border:1px solid #e4e9f0;border-radius:12px;padding:18px;box-shadow:0 3px 14px #14233a0a}.side a{display:block;text-decoration:none;color:#394a61;background:#f4f6f9;padding:12px;border-radius:8px;margin:5px 0;font-size:13px}.side a:hover{background:var(--navy);color:var(--gold)}h2,h3{color:var(--navy);margin-top:0}.muted{color:#78869a;font-size:13px;line-height:1.6}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.metric span{font-size:12px;color:#7a8798}.metric strong{display:block;font-size:27px;color:var(--navy);margin:9px 0}.panel{margin-bottom:16px}.empty{padding:23px;border:1px dashed #d7dfe9;border-radius:8px;text-align:center;color:#77869a;font-size:13px}.pill{font-size:10px;color:#8c6b2d;background:#faf1df;padding:5px 9px;border-radius:20px}@media(max-width:800px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr;gap:4px}.side a{margin:0}.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:420px){.cards{grid-template-columns:1fr}}
-</style></head><body>
-<header class="top"><div><h1>Jathedar Akali Phula Singh Federation</h1><p>Administration Console</p></div><div><span class="tag">PREVIEW MODE</span><p>Administrator contact: helpline.japsf@gmail.com</p></div></header>
-<main class="wrap"><div class="notice"><b>Security notice:</b> This is a visual preview only. Secure sign-in, live records and management actions are not active. Do not enter passwords or private member, donor or payment information. Production use requires server-side authentication, role permissions and protected database access.</div>
+#loginGate{max-width:460px;margin:48px auto;padding:28px;background:#fff;border:1px solid #e4e9f0;border-radius:14px;box-shadow:0 8px 28px #14233a12}#loginGate h2{margin:0 0 8px}#loginGate label{display:block;font-size:12px;color:#536176;margin:14px 0 6px}#loginGate input{width:100%;padding:12px;border:1px solid #d9e0e9;border-radius:8px;font-size:15px}#loginGate button,.logout{border:0;border-radius:8px;background:var(--navy);color:white;padding:12px 15px;font-weight:700;cursor:pointer;margin:12px 7px 0 0}#loginGate button.secondary{background:#eef1f5;color:#33445b}#authMessage{font-size:12px;line-height:1.5;color:#705b32;margin-top:12px;min-height:20px}#adminApp[hidden]{display:none!important}.logout{margin:0;font-size:11px;padding:8px 12px}@media(max-width:520px){#loginGate{margin:24px 14px;padding:22px}}\n</style></head><body>
+<header class="top"><div><h1>Jathedar Akali Phula Singh Federation</h1><p>Administration Console</p></div><div><span class="tag">SECURE ADMIN ACCESS</span><p>Administrator: helpline.japsf@gmail.com</p><button class="logout" id="logoutBtn" hidden>Sign out</button></div></header>
+<section id="loginGate">
+<h2>Administrator Sign In</h2><p class="muted">Authorized access for helpline.japsf@gmail.com only.</p>
+<form id="authForm"><label for="adminEmail">Administrator Email</label><input id="adminEmail" type="email" value="helpline.japsf@gmail.com" autocomplete="username" required><label for="adminPassword">Password</label><input id="adminPassword" type="password" autocomplete="current-password" minlength="8" required><button type="submit">Sign In</button><button type="button" class="secondary" id="createAccountBtn">Create Admin Account</button><button type="button" class="secondary" id="resetPasswordBtn">Reset Password</button></form><div id="authMessage" role="status" aria-live="polite"></div><p class="muted">New account registration is restricted to the allowlisted administrator email. Email verification may be required by your Supabase Auth settings.</p>
+</section>
+<main class="wrap" id="adminApp" hidden><div class="notice"><b>Security notice:</b> This is a visual preview only. Secure sign-in, live records and management actions are not active. Do not enter passwords or private member, donor or payment information. Production use requires server-side authentication, role permissions and protected database access.</div>
 <div class="layout"><nav class="side"><a href="#dashboard">Dashboard</a><a href="#members">Members & Applications</a><a href="#idcards">ID Cards</a><a href="#events">Events</a><a href="#requests">Help Requests</a><a href="#funds">Donations & Crowdfunding</a><a href="#team">Team Members</a><a href="#content">Website Content</a><a href="#ai">AI Assistant Policy</a><a href="#security">Security Settings</a></nav><div>
 <section id="dashboard" class="panel"><h2>Welcome to the Admin Console</h2><p class="muted">Manage federation website operations from one central workspace.</p><div class="cards"><div class="metric"><span>Total Members</span><strong>—</strong><span>Database not connected</span></div><div class="metric"><span>Applications</span><strong>—</strong><span>Database not connected</span></div><div class="metric"><span>Donations</span><strong>—</strong><span>Payment data not connected</span></div><div class="metric"><span>Open Requests</span><strong>—</strong><span>Database not connected</span></div></div><div class="empty">No live data available. Connect the secure backend to display verified records.</div></section>
 <section id="members" class="panel"><h3>Members & Applications</h3><p class="muted">Review applications, verify documents and manage approved member records. Authorized backend access is required.</p><span class="pill">BACKEND REQUIRED</span></section><section id="idcards" class="panel"><h3>ID Card Management</h3><p class="muted">Prepare and issue membership ID cards only after identity and membership verification.</p></section><section id="events" class="panel"><h3>Events Management</h3><p class="muted">Create, edit and publish federation events and announcements.</p></section><section id="requests" class="panel"><h3>Help Requests</h3><p class="muted">Restrict access to private case details to authorized staff only.</p></section><section id="funds" class="panel"><h3>Donations & Crowdfunding</h3><p class="muted">Review verified transactions and campaign reports. Verify payment signatures on the server.</p></section><section id="team" class="panel"><h3>Team Members</h3><p class="muted">Manage approved public profiles and office-bearer information.</p></section><section id="content" class="panel"><h3>Website Content</h3><p class="muted">Manage public pages, announcements and gallery content after authentication is configured.</p></section><section id="ai" class="panel"><h3>AI Assistant Security Policy</h3><ul class="muted"><li>AI may access public pages and approved public FAQs only.</li><li>Never expose member, donor, payment or private help-request records.</li><li>Never share admin credentials, database secrets or privileged keys.</li><li>Enforce restrictions on the server, not only through prompts.</li></ul></section><section id="security" class="panel"><h3>Security Settings</h3><p class="muted">Administrator contact: helpline.japsf@gmail.com</p><ul class="muted"><li>Server-side authentication and multi-factor authentication.</li><li>Role-based access control and least-privilege permissions.</li><li>Database row-level security and server-side validation.</li><li>Secrets stored only in protected server environment variables.</li><li>Audit logs and session expiry.</li></ul></section>
-</div></div><p class="muted" style="text-align:center;margin:25px">© 2026 Jathedar Akali Phula Singh Federation · Admin Preview</p></main></body></html>
+</div></div><p class="muted" style="text-align:center;margin:25px">© 2026 Jathedar Akali Phula Singh Federation · Admin Preview</p></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+ const SUPABASE_URL="https://urghiemtxhwhvoaivwge.supabase.co";
+ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ const gate=document.getElementById("loginGate"),app=document.getElementById("adminApp"),msg=document.getElementById("authMessage"),form=document.getElementById("authForm"),logout=document.getElementById("logoutBtn");
+ const allowedEmail="helpline.japsf@gmail.com";
+ function message(t){msg.textContent=t}
+ function showApp(){gate.hidden=true;app.hidden=false;logout.hidden=false}
+ function showGate(){gate.hidden=false;app.hidden=true;logout.hidden=true}
+ async function authorize(){
+   const {data:{user},error:userError}=await client.auth.getUser();
+   if(userError||!user){showGate();return false}
+   if((user.email||"").toLowerCase()!==allowedEmail){await client.auth.signOut();showGate();message("This email is not authorized for the administrator panel.");return false}
+   const {data,error}=await client.from("admin_allowlist").select("email").eq("email",allowedEmail).maybeSingle();
+   if(error||!data){await client.auth.signOut();showGate();message("Administrator authorization failed. Contact the project owner.");return false}
+   showApp();return true
+ }
+ form.addEventListener("submit",async e=>{
+   e.preventDefault();message("Signing in securely...");
+   const email=document.getElementById("adminEmail").value.trim().toLowerCase();
+   const password=document.getElementById("adminPassword").value;
+   if(email!==allowedEmail){message("Only the approved administrator email can sign in.");return}
+   const {error}=await client.auth.signInWithPassword({email,password});
+   if(error){message(error.message);return}
+   if(await authorize())message("Administrator access verified.");
+ });
+ document.getElementById("createAccountBtn").addEventListener("click",async()=>{
+   const email=document.getElementById("adminEmail").value.trim().toLowerCase(),password=document.getElementById("adminPassword").value;
+   if(email!==allowedEmail){message("Account creation is restricted to the approved administrator email.");return}
+   if(password.length<8){message("Choose a password with at least 8 characters.");return}
+   message("Creating administrator account...");
+   const {data,error}=await client.auth.signUp({email,password});
+   if(error){message(error.message);return}
+   if(data.session){if(await authorize())message("Administrator account created and verified.");}
+   else message("Account request submitted. Check the administrator email inbox and confirm the address, then return here to sign in.");
+ });
+ document.getElementById("resetPasswordBtn").addEventListener("click",async()=>{
+   const email=document.getElementById("adminEmail").value.trim().toLowerCase();
+   if(email!==allowedEmail){message("Password reset is available only for the approved administrator email.");return}
+   const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.href.split("#")[0]});
+   message(error?error.message:"If an account exists, a password reset email has been sent.");
+ });
+ logout.addEventListener("click",async()=>{await client.auth.signOut();showGate();message("You have signed out.")});
+ client.auth.getSession().then(async({data})=>{if(data.session)await authorize()});
+})();
+</script></body></html>
