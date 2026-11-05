@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101d35"><title>Unverified Members | JAPSF Admin</title>
+<style>
+:root{--navy:#101d35;--gold:#d9b263;--ink:#202b3c;--muted:#748096;--line:#e8ebf1;--bg:#f4f6fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 Inter,system-ui,Arial,sans-serif}
+header{background:linear-gradient(110deg,#4b2c20,#70452d);color:#fff;padding:13px 20px;border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700}.brand img{width:43px;height:43px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}header a{color:#fff;text-decoration:none;border:1px solid #ffffff55;border-radius:8px;padding:8px 12px;font-size:12px}
+main{max-width:1250px;margin:26px auto;padding:0 18px}.eyebrow{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#9a773d;font-weight:800}h1{font-size:clamp(23px,4vw,31px);margin:5px 0;color:var(--navy)}.muted{color:var(--muted);font-size:12px;margin:0}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 8px 25px #14233a0a}.summary{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}.count{font-weight:700;color:#9a6a14;background:#fff4dc;padding:7px 11px;border-radius:25px;font-size:11px}
+input{width:min(420px,100%);padding:11px 13px;border:1px solid #dce2eb;border-radius:9px;font:inherit;outline:none}
+.table-scroll{overflow-x:auto;border:1px solid #edf0f4;border-radius:10px}.table{width:100%;min-width:850px;border-collapse:collapse;text-align:left;font-size:12px}.table th{background:#222831;color:#fff;white-space:nowrap}.table th,.table td{padding:12px 13px;border-bottom:1px solid #edf0f4}.status{display:inline-block;padding:4px 9px;border-radius:20px;background:#fff1d6;color:#946200;font-size:10px;font-weight:800}
+.action{border:0;border-radius:7px;padding:7px 10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;margin:2px}.approve{background:#eab308;color:#302500}.remove{background:#dc3545}.action:disabled{opacity:.5;cursor:wait}
+.empty{padding:32px 16px;border:1px dashed #d6dce6;border-radius:10px;text-align:center;color:#778499;background:#fbfcfe;font-size:12px}.pagination{display:flex;justify-content:flex-end;align-items:center;gap:9px;margin-top:14px}.pagination button{border:1px solid #dce2eb;background:#fff;border-radius:7px;padding:8px 12px;cursor:pointer}.notice{margin-bottom:14px;padding:12px 14px;border-radius:9px;background:#fff8e8;border:1px solid #f0dfb9;color:#775a25;font-size:12px}.footer{text-align:center;color:#98a2b1;font-size:10px;padding:22px 0}
+@media(max-width:600px){header{padding:10px 12px}.brand{font-size:12px}.brand img{width:36px;height:36px}main{margin:18px auto;padding:0 12px}.panel{padding:13px}}
+</style></head><body>
+<header><div class="brand"><img src="./logo.png" alt="JAPSF logo"><span>Jathedar Akali Phula Singh Federation</span></div><a href="./admin.html">← Admin Dashboard</a></header>
+<main><div class="eyebrow">Membership Administration</div><h1>Unverified Members</h1><p class="muted" style="margin-bottom:18px">Review pending and under-review membership applications.</p>
+<div class="notice">Approve applications only after reviewing membership details and payment evidence. Remove moves an application to Rejected status so its history remains available for audit.</div>
+<section class="panel"><div class="summary"><input id="search" type="search" placeholder="Search application ID, name, email or mobile…" aria-label="Search unverified members"><span class="count" id="count">Loading…</span></div><div id="tableHost" class="empty">Checking administrator access and loading records…</div><div class="pagination" id="pagination"></div><p class="muted" style="margin-top:12px">Only the latest 100 pending or under-review records are loaded. Private identity documents are not displayed here.</p></section>
+<footer class="footer">© 2026 Jathedar Akali Phula Singh Federation · Website Designed by New Granthi Singh Federation</footer></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+(async function(){
+ const client=window.supabase.createClient("https://urghiemtxhwhvoaivwge.supabase.co","sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0");
+ const host=document.getElementById("tableHost"),count=document.getElementById("count"),search=document.getElementById("search"),pagination=document.getElementById("pagination");
+ let rows=[],page=1,busy=false;const pageSize=10;
+ const {data:{user},error:userError}=await client.auth.getUser();
+ if(userError||!user||(user.email||"").toLowerCase()!=="helpline.japsf@gmail.com"){location.replace("./admin.html");return;}
+ const {data:auth,error:authError}=await client.functions.invoke("admin-authorize",{body:{}});
+ if(authError||!auth||auth.authorized!==true){host.textContent="Administrator access could not be verified. Please sign in again.";return;}
+ async function load(){
+  host.className="empty";host.textContent="Loading unverified applications…";
+  const {data,error}=await client.functions.invoke("admin-unverified-members",{body:{action:"list"}});
+  if(error||!data||data.authorized!==true){host.textContent="Could not load unverified members. Please refresh the page.";return;}
+  rows=Array.isArray(data.records)?data.records:[];page=1;render();
+ }
+ function render(){
+  const term=search.value.trim().toLowerCase();
+  const filtered=rows.filter(r=>[r.application_no,r.full_name,r.email,r.mobile].some(v=>String(v??"").toLowerCase().includes(term)));
+  const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
+  const shown=filtered.slice((page-1)*pageSize,page*pageSize);
+  count.textContent=filtered.length+" unverified member"+(filtered.length===1?"":"s");
+  if(!shown.length){host.className="empty";host.textContent=term?"No applications match your search.":"No unverified applications. All caught up!";pagination.replaceChildren();return;}
+  host.className="table-scroll";host.replaceChildren();
+  const table=document.createElement("table");table.className="table";const head=document.createElement("thead"),trh=document.createElement("tr");
+  ["Application ID","Full Name","Mobile","Email","Fee","Apply Date","Status","Action"].forEach(t=>{const th=document.createElement("th");th.textContent=t;trh.appendChild(th)});head.appendChild(trh);table.appendChild(head);
+  const body=document.createElement("tbody");
+  shown.forEach(row=>{
+   const tr=document.createElement("tr");
+   [row.application_no,row.full_name,row.mobile,row.email,row.membership_fee==null?"—":"₹"+row.membership_fee,row.created_at?new Date(row.created_at).toLocaleString():"—"].forEach(v=>{const td=document.createElement("td");td.textContent=String(v??"—");tr.appendChild(td)});
+   const tdStatus=document.createElement("td"),badge=document.createElement("span");badge.className="status";badge.textContent=String(row.status||"PENDING").replace("_"," ").toUpperCase();tdStatus.appendChild(badge);tr.appendChild(tdStatus);
+   const tdAction=document.createElement("td"),approve=document.createElement("button"),remove=document.createElement("button");
+   approve.type="button";approve.className="action approve";approve.textContent="✓ Approve";remove.type="button";remove.className="action remove";remove.textContent="✕ Remove";
+   approve.addEventListener("click",()=>act("approve",row,approve));remove.addEventListener("click",()=>act("reject",row,remove));
+   tdAction.append(approve,remove);tr.appendChild(tdAction);body.appendChild(tr);
+  });
+  table.appendChild(body);host.appendChild(table);pagination.replaceChildren();
+  const label=document.createElement("span");label.textContent="Page "+page+" of "+pages;pagination.appendChild(label);
+  const prev=document.createElement("button");prev.textContent="Previous";prev.disabled=page<=1;prev.addEventListener("click",()=>{page--;render()});pagination.appendChild(prev);
+  const next=document.createElement("button");next.textContent="Next";next.disabled=page>=pages;next.addEventListener("click",()=>{page++;render()});pagination.appendChild(next);
+ }
+ async function act(action,row,button){
+  if(busy)return;
+  const question=action==="approve"?"Approve "+row.full_name+" ("+row.application_no+") as a verified member?":"Move "+row.application_no+" to Rejected status? The record will be preserved.";
+  if(!confirm(question))return;
+  busy=true;button.disabled=true;button.textContent="Please wait…";
+  const {data,error}=await client.functions.invoke("admin-unverified-members",{body:{action,id:row.id}});
+  busy=false;
+  if(error||!data||data.success!==true){alert(data?.error||error?.message||"The action could not be completed.");button.disabled=false;button.textContent=action==="approve"?"✓ Approve":"✕ Remove";return;}
+  alert(data.message);await load();
+ }
+ search.addEventListener("input",()=>{page=1;render()});await load();
+})();
+</script></body></html>
