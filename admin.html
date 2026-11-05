@@ -53,11 +53,8 @@
    if(data.session){if(await authorize())message("Administrator account created and verified.");}
    else message("Account request submitted. Check the administrator email inbox and confirm the address, then return here to sign in.");
  });
- document.getElementById("resetPasswordBtn").addEventListener("click",async()=>{
-   const email=document.getElementById("adminEmail").value.trim().toLowerCase();
-   if(email!==allowedEmail){message("Password reset is available only for the approved administrator email.");return}
-   const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:location.href.split("#")[0]});
-   message(error?error.message:"If an account exists, a password reset email has been sent.");
+ document.getElementById("resetPasswordBtn").addEventListener("click",()=>{
+   location.href="./password-recovery.html";
  });
  logout.addEventListener("click",async()=>{await client.auth.signOut();showGate();message("You have signed out.")});
  client.auth.getSession().then(async({data})=>{if(data.session)await authorize()});
