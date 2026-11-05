@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101d35"><title>Complaints & Suggestions | JAPSF Admin</title>
+<style>
+:root{--navy:#101d35;--gold:#d9b263;--ink:#202b3c;--muted:#748096;--line:#e8ebf1;--bg:#f4f6fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 Inter,system-ui,Arial,sans-serif}
+header{background:linear-gradient(110deg,#4b2c20,#70452d);color:#fff;padding:13px 20px;border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700}.brand img{width:43px;height:43px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}header a{color:#fff;text-decoration:none;border:1px solid #ffffff55;border-radius:8px;padding:8px 12px;font-size:12px}
+main{max-width:1250px;margin:26px auto;padding:0 18px}.eyebrow{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#9a773d;font-weight:800}h1{font-size:clamp(23px,4vw,31px);margin:5px 0;color:var(--navy)}.muted{color:var(--muted);font-size:12px;margin:0}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 8px 25px #14233a0a}.tools{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}input,select,textarea{font:inherit;color:var(--ink);border:1px solid #dce2eb;border-radius:9px;padding:10px 12px;background:#fff;outline:none;width:100%}input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px #d9b26325}#search{max-width:430px}.count{font-weight:700;color:#87621f;background:#fff4dc;padding:7px 11px;border-radius:25px;font-size:11px}
+.grid{display:grid;grid-template-columns: minmax(0,1fr) minmax(280px,.9fr);gap:14px}.list{display:grid;gap:9px;align-content:start}.item{width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px;cursor:pointer}.item.active{border-color:var(--gold);box-shadow:0 0 0 2px #d9b26325}.item strong{display:block;color:var(--navy);font-size:13px}.item small{display:block;color:var(--muted);font-size:10px;margin-top:4px}.status{display:inline-block;border-radius:20px;padding:4px 8px;font-size:9px;font-weight:800;background:#fff1d6;color:#946200;margin-top:7px}.status.resolved,.status.closed{background:#e8f7ee;color:#168447}.status.in_progress{background:#eaf1ff;color:#315c9d}
+.detail h2{font-size:18px;color:var(--navy);margin:0 0 5px}.meta{font-size:11px;color:var(--muted);margin:0 0 14px;overflow-wrap:anywhere}.message{white-space:pre-wrap;overflow-wrap:anywhere;background:#f8f9fc;border:1px solid #edf0f4;border-radius:10px;padding:13px;font-size:13px;margin:12px 0 18px;min-height:75px}.detail label{display:block;font-size:11px;font-weight:750;margin:13px 0 6px;color:#4b5870}.detail textarea{min-height:120px;resize:vertical}.save{background:var(--navy);color:#fff;border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer;margin-top:14px}.save:disabled{opacity:.55;cursor:wait}.empty{padding:28px 16px;border:1px dashed #d6dce6;border-radius:10px;text-align:center;color:#778499;background:#fbfcfe;font-size:12px}.pagination{display:flex;justify-content:flex-end;align-items:center;gap:9px;margin-top:14px}.pagination button{border:1px solid #dce2eb;background:#fff;border-radius:7px;padding:8px 12px;cursor:pointer}.pagination button:disabled{opacity:.4;cursor:not-allowed}.footer{text-align:center;color:#98a2b1;font-size:10px;padding:22px 0}
+@media(max-width:760px){header{padding:10px 12px}.brand{font-size:12px}.brand img{width:36px;height:36px}main{margin:18px auto;padding:0 12px}.panel{padding:13px}.grid{grid-template-columns:1fr}.tools{align-items:stretch}.count{align-self:flex-start}}
+</style></head><body>
+<header><div class="brand"><img src="./logo.png" alt="JAPSF logo"><span>Jathedar Akali Phula Singh Federation</span></div><a href="./admin.html">← Admin Dashboard</a></header>
+<main><div class="eyebrow">Community Support Administration</div><h1>Complaints &amp; Suggestions</h1><p class="muted" style="margin-bottom:18px">Review community submissions, update their progress and save an internal reply.</p>
+<section class="panel"><div class="tools"><input id="search" type="search" placeholder="Search name, subject, message, mobile or email…" aria-label="Search complaints"><span id="count" class="count">Loading…</span></div>
+<div class="grid"><div><div id="list" class="list"><div class="empty">Checking administrator access…</div></div><div id="pagination" class="pagination"></div></div>
+<div id="detail" class="detail"><div class="empty">Select a complaint or suggestion to review its details.</div></div></div></section>
+<footer class="footer">© 2026 Jathedar Akali Phula Singh Federation · Website Designed by New Granthi Singh Federation</footer></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+(async function(){
+ const client=window.supabase.createClient("https://urghiemtxhwhvoaivwge.supabase.co","sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0");
+ const list=document.getElementById("list"),detail=document.getElementById("detail"),count=document.getElementById("count"),search=document.getElementById("search"),pagination=document.getElementById("pagination");
+ let records=[],selectedId=null,page=1,busy=false;const pageSize=8;
+ const {data:{user},error:userError}=await client.auth.getUser();
+ if(userError||!user||(user.email||"").toLowerCase()!=="helpline.japsf@gmail.com"){location.replace("./admin.html");return;}
+ const {data:auth,error:authError}=await client.functions.invoke("admin-authorize",{body:{}});
+ if(authError||!auth||auth.authorized!==true){list.textContent="Administrator access could not be verified. Please sign in again.";return;}
+ async function load(){
+  list.innerHTML='<div class="empty">Loading complaints and suggestions…</div>';
+  const {data,error}=await client.functions.invoke("admin-complaints",{body:{action:"list"}});
+  if(error||!data||data.authorized!==true){list.textContent="Could not load records. Please refresh the page.";count.textContent="Unavailable";return;}
+  records=Array.isArray(data.records)?data.records:[];count.textContent=records.length+" record"+(records.length===1?"":"s");
+  if(!records.some(r=>r.id===selectedId))selectedId=records[0]?.id??null;
+  page=1;render();
+ }
+ function render(){
+  const term=search.value.trim().toLowerCase();
+  const filtered=records.filter(r=>[r.full_name,r.mobile,r.email,r.subject,r.category,r.message,r.status].some(v=>String(v??"").toLowerCase().includes(term)));
+  count.textContent=filtered.length+" matching record"+(filtered.length===1?"":"s");
+  const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
+  const shown=filtered.slice((page-1)*pageSize,page*pageSize);list.replaceChildren();
+  if(!shown.length){list.className="list";const e=document.createElement("div");e.className="empty";e.textContent=term?"No records match your search.":"No registered complaints or suggestions.";list.appendChild(e);pagination.replaceChildren();detail.innerHTML='<div class="empty">There are no records to display.</div>';return;}
+  shown.forEach(r=>{
+   const b=document.createElement("button");b.type="button";b.className="item"+(r.id===selectedId?" active":"");
+   const name=document.createElement("strong");name.textContent=r.full_name||"Anonymous submission";
+   const meta=document.createElement("small");meta.textContent=(r.subject||r.category||"Community request")+" · "+(r.created_at?new Date(r.created_at).toLocaleString():"Date unavailable");
+   const badge=document.createElement("span");badge.className="status "+(r.status||"open");badge.textContent=labelStatus(r.status);
+   b.append(name,meta,badge);b.addEventListener("click",()=>{selectedId=r.id;render()});list.appendChild(b);
+  });
+  pagination.replaceChildren();const info=document.createElement("span");info.textContent="Page "+page+" of "+pages;pagination.appendChild(info);
+  const prev=document.createElement("button");prev.textContent="Previous";prev.disabled=page<=1;prev.addEventListener("click",()=>{page--;render()});pagination.appendChild(prev);
+  const next=document.createElement("button");next.textContent="Next";next.disabled=page>=pages;next.addEventListener("click",()=>{page++;render()});pagination.appendChild(next);
+  const selected=records.find(r=>r.id===selectedId);if(selected)renderDetail(selected);
+ }
+ function labelStatus(s){return ({open:"Pending",in_progress:"In Progress",resolved:"Resolved",closed:"Closed"})[s]||"Pending"}
+ function renderDetail(r){
+  detail.replaceChildren();
+  const title=document.createElement("h2");title.textContent=r.subject||r.category||"Complaint / Suggestion";detail.appendChild(title);
+  const meta=document.createElement("p");meta.className="meta";meta.textContent=[r.full_name,r.mobile,r.email,r.created_at?new Date(r.created_at).toLocaleString():null].filter(Boolean).join(" · ");detail.appendChild(meta);
+  const msgLabel=document.createElement("label");msgLabel.textContent="Submitted Message";detail.appendChild(msgLabel);
+  const message=document.createElement("div");message.className="message";message.textContent=r.message||"No message supplied.";detail.appendChild(message);
+  const statusLabel=document.createElement("label");statusLabel.textContent="Status";detail.appendChild(statusLabel);
+  const status=document.createElement("select");status.id="status";
+  [["open","Pending"],["in_progress","In Progress"],["resolved","Resolved"],["closed","Closed"]].forEach(([v,t])=>{const o=document.createElement("option");o.value=v;o.textContent=t;status.appendChild(o)});status.value=r.status||"open";detail.appendChild(status);
+  const replyLabel=document.createElement("label");replyLabel.textContent="Admin Reply / Internal Notes";detail.appendChild(replyLabel);
+  const notes=document.createElement("textarea");notes.id="adminNotes";notes.maxLength=4000;notes.placeholder="Write an update or reply for this case…";notes.value=r.admin_notes||"";detail.appendChild(notes);
+  const save=document.createElement("button");save.type="button";save.className="save";save.textContent="Save Status & Reply";save.addEventListener("click",()=>saveRecord(r.id,save));detail.appendChild(save);
+  const hint=document.createElement("p");hint.className="meta";hint.style.marginTop="10px";hint.textContent="The reply is stored as an administrator note. It is not automatically emailed to the submitter.";detail.appendChild(hint);
+ }
+ async function saveRecord(id,button){
+  if(busy)return;const status=document.getElementById("status").value,admin_notes=document.getElementById("adminNotes").value;
+  busy=true;button.disabled=true;button.textContent="Saving…";
+  const {data,error}=await client.functions.invoke("admin-complaints",{body:{action:"update",id,status,admin_notes}});
+  busy=false;
+  if(error||!data||data.success!==true){alert(data?.error||error?.message||"Could not save changes.");button.disabled=false;button.textContent="Save Status & Reply";return;}
+  alert(data.message);const row=records.find(r=>r.id===id);if(row){row.status=data.record.status;row.admin_notes=data.record.admin_notes;row.updated_at=data.record.updated_at;}render();
+ }
+ search.addEventListener("input",()=>{page=1;render()});await load();
+})();
+</script></body></html>
