@@ -21,40 +21,24 @@ input{width:min(420px,100%);padding:11px 13px;border:1px solid #dce2eb;border-ra
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
 <script>
 (async function(){
- const client=window.supabase.createClient("https://urghiemtxhwhvoaivwge.supabase.co","sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0");
- const host=document.getElementById("tableHost"),count=document.getElementById("count"),search=document.getElementById("search"),pagination=document.getElementById("pagination");
- const esc=(v)=>String(v??"—");
- const {data:{user},error:userError}=await client.auth.getUser();
- if(userError||!user||(user.email||"").toLowerCase()!=="helpline.japsf@gmail.com"){location.replace("./admin.html");return;}
- const {data:auth,error:authError}=await client.functions.invoke("admin-authorize",{body:{}});
- if(authError||!auth||auth.authorized!==true){host.textContent="Administrator access could not be verified. Please sign in again.";return;}
- const {data,error}=await client.functions.invoke("admin-dashboard",{body:{}});
- if(error||!data||data.authorized!==true){host.textContent="Could not load verified member records. Please refresh the page.";return;}
- const rows=Array.isArray(data.recent?.verifiedMembers)?data.recent.verifiedMembers:[];
- let page=1;const pageSize=10;
- function render(){
-  const term=search.value.trim().toLowerCase();
-  const filtered=rows.filter(r=>[r.application_no,r.full_name,r.email,r.mobile].some(v=>String(v??"").toLowerCase().includes(term)));
-  const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
-  const shown=filtered.slice((page-1)*pageSize,page*pageSize);
-  count.textContent=filtered.length+" verified member"+(filtered.length===1?"":"s");
-  if(!shown.length){host.className="empty";host.textContent=term?"No verified members match your search.":"No verified members have been approved yet.";pagination.replaceChildren();return;}
-  host.className="table-scroll";host.replaceChildren();
-  const table=document.createElement("table");table.className="table";
-  const head=document.createElement("thead"),trh=document.createElement("tr");
-  ["Member ID","Full Name","Mobile","Email","Membership Fee","Status","Action"].forEach(t=>{const th=document.createElement("th");th.textContent=t;trh.appendChild(th)});head.appendChild(trh);table.appendChild(head);
-  const body=document.createElement("tbody");
-  shown.forEach(row=>{
-   const tr=document.createElement("tr");
-   [row.application_no,row.full_name,row.mobile,row.email,row.membership_fee==null?"—":"₹"+row.membership_fee].forEach(v=>{const td=document.createElement("td");td.textContent=esc(v);tr.appendChild(td)});
-   const tdStatus=document.createElement("td"),badge=document.createElement("span");badge.className="status";badge.textContent="VERIFIED";tdStatus.appendChild(badge);tr.appendChild(tdStatus);
-   const tdAction=document.createElement("td"),btn=document.createElement("button");btn.type="button";btn.className="action";btn.textContent="View Details";btn.addEventListener("click",()=>{const details=[["Member ID",row.application_no],["Name",row.full_name],["Email",row.email],["Mobile",row.mobile],["Membership Fee",row.membership_fee==null?"—":"₹"+row.membership_fee],["Status",row.status],["Application Date",row.created_at?new Date(row.created_at).toLocaleDateString():"—"]];alert(details.map(([k,v])=>k+": "+esc(v)).join("\\n"));});tdAction.appendChild(btn);tr.appendChild(tdAction);body.appendChild(tr);
-  });
-  table.appendChild(body);host.appendChild(table);pagination.replaceChildren();
-  const label=document.createElement("span");label.textContent="Page "+page+" of "+pages;pagination.appendChild(label);
-  const prev=document.createElement("button");prev.textContent="Previous";prev.disabled=page<=1;prev.addEventListener("click",()=>{page--;render()});pagination.appendChild(prev);
-  const next=document.createElement("button");next.textContent="Next";next.disabled=page>=pages;next.addEventListener("click",()=>{page++;render()});pagination.appendChild(next);
- }
- search.addEventListener("input",()=>{page=1;render()});render();
+const sb=window.supabase.createClient("https://urghiemtxhwhvoaivwge.supabase.co","sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0"),$=id=>document.getElementById(id),host=$("tableHost"),count=$("count"),search=$("search"),pagination=$("pagination");let records=[],page=1,selected=null;const per=10;
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const {data:{user},error}=await sb.auth.getUser();if(error||!user||(user.email||"").toLowerCase()!=="helpline.japsf@gmail.com"){location.replace("./admin.html");return}
+const {data:auth,error:ae}=await sb.functions.invoke("admin-authorize",{body:{}});if(ae||!auth||auth.authorized!==true){host.textContent="Administrator access could not be verified.";return}
+async function api(body){const {data,error}=await sb.functions.invoke("admin-membership-applications",{body});if(error||!data)throw Error(data?.error||error?.message||"Request failed");if(data.error)throw Error(data.error);return data}
+function act(text,color,title,fn){const b=document.createElement("button");b.type="button";b.textContent=text;b.title=title;b.setAttribute("aria-label",title);b.style.cssText="border:0;border-radius:5px;padding:7px 9px;color:white;background:"+color+";margin:2px;cursor:pointer";b.onclick=fn;return b}
+function filtered(){const q=search.value.trim().toLowerCase();return records.filter(r=>[r.application_no,r.full_name,r.email,r.mobile].some(v=>String(v??"").toLowerCase().includes(q)))}
+function render(){const list=filtered(),pages=Math.max(1,Math.ceil(list.length/per));page=Math.min(page,pages);count.textContent=list.length+" verified members";host.replaceChildren();if(!list.length){host.className="empty";host.textContent="No verified members currently available.";pagination.replaceChildren();return}host.className="table-scroll";const t=document.createElement("table");t.className="table";const h=document.createElement("thead"),hr=document.createElement("tr");["User ID","Name","Mobile No.","City","Authority","Card Status","Action"].forEach(x=>{const th=document.createElement("th");th.textContent=x;hr.append(th)});h.append(hr);t.append(h);const body=document.createElement("tbody");list.slice((page-1)*per,page*per).forEach(r=>{const tr=document.createElement("tr");[r.application_no,r.full_name,r.mobile,r.district,r.member_authority||"Member"].forEach(v=>{const td=document.createElement("td");td.textContent=v||"—";tr.append(td)});const st=document.createElement("td");st.textContent=r.id_card_active?"ACTIVE":"DEACTIVATED";tr.append(st);const td=document.createElement("td");
+td.append(act(r.id_card_active?"●":"○", "#25a653", "Activate / Deactivate ID Card",async()=>{if(!confirm("Change ID Card active status for "+r.full_name+"?"))return;try{await api({action:"card_toggle",id:r.id,active:!r.id_card_active});r.id_card_active=!r.id_card_active;render()}catch(e){alert(e.message)}}));
+td.append(act("▣","#f2b90b","Download ID Card",()=>printMember(r,"card")));
+td.append(act("▤","#1684d8","Download Appointment Letter",()=>printMember(r,"letter")));
+td.append(act("✎","#087bd7","Update Member Details",()=>edit(r)));
+td.append(act("▣","#dc3545","Archive Member",async()=>{if(!confirm("Archive "+r.full_name+" from the active verified member list? The record will be retained for audit."))return;try{await api({action:"soft_delete",id:r.id,confirm:"DELETE"});await load()}catch(e){alert(e.message)}}));
+tr.append(td);body.append(tr)});t.append(body);host.append(t);pagination.replaceChildren();const label=document.createElement("span");label.textContent="Page "+page+" of "+pages;pagination.append(label);for(const [txt,delta] of [["Previous",-1],["Next",1]]){const b=document.createElement("button");b.textContent=txt;b.disabled=page+delta<1||page+delta>pages;b.onclick=()=>{page+=delta;render()};pagination.append(b)}}
+async function load(){host.className="empty";host.textContent="Loading verified members…";try{records=(await api({action:"list_verified"})).records||[];page=1;render()}catch(e){host.textContent=e.message}}
+async function printMember(r,type){if(!r.id_card_active){alert("This ID Card is deactivated. Activate it before downloading.");return}try{const d=(await api({action:"detail",id:r.id})).record;const w=window.open("","_blank","width=850,height=700");if(!w){alert("Please allow pop-ups to print this document.");return}let body;if(type==="card"){body='<article class="card"><header>JATHEDAR AKALI PHULA SINGH FEDERATION<br><small>OFFICIAL MEMBERSHIP ID CARD</small></header><h2>'+esc(d.full_name)+'</h2><p><b>Member ID:</b> '+esc(d.application_no)+'</p><p><b>Authority:</b> '+esc(d.member_authority||"Member")+'</p><p><b>Mobile:</b> '+esc(d.mobile)+'</p><p><b>District:</b> '+esc(d.district)+' · '+esc(d.state)+'</p><p><b>Status:</b> VERIFIED & ACTIVE</p></article>'}else{body='<article><h1>APPOINTMENT LETTER</h1><p>Date: '+new Date().toLocaleDateString()+'</p><p>To, '+esc(d.full_name)+' (Member ID: '+esc(d.application_no)+')</p><p>We acknowledge your verified membership with Jathedar Akali Phula Singh Federation. Your recorded designation is <b>'+esc(d.member_authority||"Member")+'</b>.</p><p>This letter confirms the designation recorded in the Federation membership database.</p><p style="margin-top:70px">Authorized Signatory<br>Jathedar Akali Phula Singh Federation</p></article>'}w.document.write('<!doctype html><html><head><title>JAPSF '+(type==="card"?"ID Card":"Appointment Letter")+'</title><style>body{font:16px Arial;margin:35px;color:#202b3c}.card{max-width:460px;margin:50px auto;border:3px solid #d9b263;border-radius:15px;padding:22px}.card header{background:#101d35;color:white;text-align:center;padding:18px;font-weight:bold}.card h2{color:#9a773d}</style></head><body>'+body+'<script>window.onload=()=>window.print()<\/script></body></html>');w.document.close()}catch(e){alert(e.message)}}
+const keys=[["full_name","Full Name"],["gender","Gender"],["date_of_birth","Date of Birth"],["father_name","Father Name"],["profession","Profession"],["blood_group","Blood Group"],["country","Country"],["state","State"],["district","District"],["mobile","Mobile"],["whatsapp","WhatsApp"],["address","Address"],["pin_code","PIN Code"],["email","Email"],["member_authority","Authority"]];
+async function edit(r){try{const d=(await api({action:"detail",id:r.id})).record;const values={};for(const [key,label] of keys){const v=prompt("Update "+label,d[key]||"");if(v===null)return;values[key]=v}await api({action:"update_member",id:r.id,...values});alert("Member details updated.");await load()}catch(e){alert(e.message)}}
+search.addEventListener("input",()=>{page=1;render()});await load();
 })();
 </script></body></html>
