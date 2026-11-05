@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101d35"><title>Verified Members | JAPSF Admin</title>
+<style>
+:root{--navy:#101d35;--gold:#d9b263;--ink:#202b3c;--muted:#748096;--line:#e8ebf1;--bg:#f4f6fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 Inter,system-ui,Arial,sans-serif}
+header{background:linear-gradient(110deg,#4b2c20,#70452d);color:#fff;padding:13px 20px;border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700}.brand img{width:43px;height:43px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}
+header a{color:#fff;text-decoration:none;border:1px solid #ffffff55;border-radius:8px;padding:8px 12px;font-size:12px}
+main{max-width:1250px;margin:26px auto;padding:0 18px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:20px}.eyebrow{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:#9a773d;font-weight:800}h1{font-size:clamp(23px,4vw,31px);margin:5px 0;color:var(--navy)}.muted{color:var(--muted);font-size:12px;margin:0}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 8px 25px #14233a0a}
+.summary{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}.count{font-weight:700;color:#168447;background:#e8f7ee;padding:7px 11px;border-radius:25px;font-size:11px}
+input{width:min(420px,100%);padding:11px 13px;border:1px solid #dce2eb;border-radius:9px;font:inherit;outline:none}input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #d9b26325}
+.table-scroll{overflow-x:auto;border:1px solid #edf0f4;border-radius:10px}.table{width:100%;min-width:800px;border-collapse:collapse;text-align:left;font-size:12px}.table th{background:#f7f9fc;color:#56647a;white-space:nowrap}.table th,.table td{padding:12px 13px;border-bottom:1px solid #edf0f4}.table tr:last-child td{border-bottom:0}.status{display:inline-block;padding:4px 9px;border-radius:20px;background:#e8f7ee;color:#168447;font-size:10px;font-weight:800}.action{border:1px solid #d9e0e9;background:#fff;border-radius:7px;padding:6px 9px;color:#34445a;font-size:11px;cursor:pointer}.action:hover{border-color:#c49b54;color:#7b5a22}
+.empty{padding:32px 16px;border:1px dashed #d6dce6;border-radius:10px;text-align:center;color:#778499;background:#fbfcfe;font-size:12px}.pagination{display:flex;justify-content:flex-end;align-items:center;gap:9px;margin-top:14px}.pagination button{border:1px solid #dce2eb;background:#fff;border-radius:7px;padding:8px 12px;cursor:pointer}.pagination button:disabled{opacity:.4;cursor:not-allowed}.pagination span{font-size:11px;color:#718096}.footer{text-align:center;color:#98a2b1;font-size:10px;padding:22px 0}
+@media(max-width:600px){header{padding:10px 12px}.brand{font-size:12px}.brand img{width:36px;height:36px}main{margin:18px auto;padding:0 12px}.panel{padding:13px}.heading{align-items:flex-start;flex-direction:column}.summary{align-items:stretch}.count{align-self:flex-start}}
+</style></head><body>
+<header><div class="brand"><img src="./logo.png" alt="JAPSF logo"><span>Jathedar Akali Phula Singh Federation</span></div><a href="./admin.html">← Admin Dashboard</a></header>
+<main><div class="heading"><div><div class="eyebrow">Membership Administration</div><h1>Verified Members</h1><p class="muted">Approved membership applications · administrator-only directory</p></div></div>
+<section class="panel"><div class="summary"><input id="search" type="search" placeholder="Search member ID, name, email or mobile…" aria-label="Search verified members"><span class="count" id="count">Loading…</span></div><div id="tableHost" class="empty">Checking administrator access and loading records…</div><div class="pagination" id="pagination"></div><p class="muted" style="margin-top:12px">For privacy, only approved member contact and application details are shown. This directory loads up to the latest 100 approved records.</p></section>
+<footer class="footer">© 2026 Jathedar Akali Phula Singh Federation · Website Designed by New Granthi Singh Federation</footer></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+(async function(){
+ const client=window.supabase.createClient("https://urghiemtxhwhvoaivwge.supabase.co","sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0");
+ const host=document.getElementById("tableHost"),count=document.getElementById("count"),search=document.getElementById("search"),pagination=document.getElementById("pagination");
+ const esc=(v)=>String(v??"—");
+ const {data:{user},error:userError}=await client.auth.getUser();
+ if(userError||!user||(user.email||"").toLowerCase()!=="helpline.japsf@gmail.com"){location.replace("./admin.html");return;}
+ const {data:auth,error:authError}=await client.functions.invoke("admin-authorize",{body:{}});
+ if(authError||!auth||auth.authorized!==true){host.textContent="Administrator access could not be verified. Please sign in again.";return;}
+ const {data,error}=await client.functions.invoke("admin-dashboard",{body:{}});
+ if(error||!data||data.authorized!==true){host.textContent="Could not load verified member records. Please refresh the page.";return;}
+ const rows=Array.isArray(data.recent?.verifiedMembers)?data.recent.verifiedMembers:[];
+ let page=1;const pageSize=10;
+ function render(){
+  const term=search.value.trim().toLowerCase();
+  const filtered=rows.filter(r=>[r.application_no,r.full_name,r.email,r.mobile].some(v=>String(v??"").toLowerCase().includes(term)));
+  const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
+  const shown=filtered.slice((page-1)*pageSize,page*pageSize);
+  count.textContent=filtered.length+" verified member"+(filtered.length===1?"":"s");
+  if(!shown.length){host.className="empty";host.textContent=term?"No verified members match your search.":"No verified members have been approved yet.";pagination.replaceChildren();return;}
+  host.className="table-scroll";host.replaceChildren();
+  const table=document.createElement("table");table.className="table";
+  const head=document.createElement("thead"),trh=document.createElement("tr");
+  ["Member ID","Full Name","Mobile","Email","Membership Fee","Status","Action"].forEach(t=>{const th=document.createElement("th");th.textContent=t;trh.appendChild(th)});head.appendChild(trh);table.appendChild(head);
+  const body=document.createElement("tbody");
+  shown.forEach(row=>{
+   const tr=document.createElement("tr");
+   [row.application_no,row.full_name,row.mobile,row.email,row.membership_fee==null?"—":"₹"+row.membership_fee].forEach(v=>{const td=document.createElement("td");td.textContent=esc(v);tr.appendChild(td)});
+   const tdStatus=document.createElement("td"),badge=document.createElement("span");badge.className="status";badge.textContent="VERIFIED";tdStatus.appendChild(badge);tr.appendChild(tdStatus);
+   const tdAction=document.createElement("td"),btn=document.createElement("button");btn.type="button";btn.className="action";btn.textContent="View Details";btn.addEventListener("click",()=>{const details=[["Member ID",row.application_no],["Name",row.full_name],["Email",row.email],["Mobile",row.mobile],["Membership Fee",row.membership_fee==null?"—":"₹"+row.membership_fee],["Status",row.status],["Application Date",row.created_at?new Date(row.created_at).toLocaleDateString():"—"]];alert(details.map(([k,v])=>k+": "+esc(v)).join("\\n"));});tdAction.appendChild(btn);tr.appendChild(tdAction);body.appendChild(tr);
+  });
+  table.appendChild(body);host.appendChild(table);pagination.replaceChildren();
+  const label=document.createElement("span");label.textContent="Page "+page+" of "+pages;pagination.appendChild(label);
+  const prev=document.createElement("button");prev.textContent="Previous";prev.disabled=page<=1;prev.addEventListener("click",()=>{page--;render()});pagination.appendChild(prev);
+  const next=document.createElement("button");next.textContent="Next";next.disabled=page>=pages;next.addEventListener("click",()=>{page++;render()});pagination.appendChild(next);
+ }
+ search.addEventListener("input",()=>{page=1;render()});render();
+})();
+</script></body></html>
