@@ -32,7 +32,7 @@ function render(){const list=filtered(),pages=Math.max(1,Math.ceil(list.length/p
 td.append(act(r.id_card_active?"●":"○", "#25a653", "Activate / Deactivate ID Card",async()=>{if(!confirm("Change ID Card active status for "+r.full_name+"?"))return;try{await api({action:"card_toggle",id:r.id,active:!r.id_card_active});r.id_card_active=!r.id_card_active;render()}catch(e){alert(e.message)}}));
 td.append(act("▣","#f2b90b","Download ID Card",()=>printMember(r,"card")));
 td.append(act("▤","#1684d8","Download Appointment Letter",()=>printMember(r,"letter")));
-td.append(act("✎","#087bd7","Update Member Details",()=>edit(r)));
+td.append(act("✎","#087bd7","Update Member Details",()=>{location.href="./member-update.html?id="+encodeURIComponent(r.id)}));
 td.append(act("▣","#dc3545","Archive Member",async()=>{if(!confirm("Archive "+r.full_name+" from the active verified member list? The record will be retained for audit."))return;try{await api({action:"soft_delete",id:r.id,confirm:"DELETE"});await load()}catch(e){alert(e.message)}}));
 tr.append(td);body.append(tr)});t.append(body);host.append(t);pagination.replaceChildren();const label=document.createElement("span");label.textContent="Page "+page+" of "+pages;pagination.append(label);for(const [txt,delta] of [["Previous",-1],["Next",1]]){const b=document.createElement("button");b.textContent=txt;b.disabled=page+delta<1||page+delta>pages;b.onclick=()=>{page+=delta;render()};pagination.append(b)}}
 async function load(){host.className="empty";host.textContent="Loading verified members…";try{records=(await api({action:"list_verified"})).records||[];page=1;render()}catch(e){host.textContent=e.message}}
