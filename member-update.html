@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#101d35"><title>Update Membership | JAPSF Admin</title>
+<style>
+:root{--navy:#101d35;--gold:#d9b263;--brown:#583725;--ink:#283346;--muted:#778397;--line:#e5e8ee;--bg:#eaf0f2}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(120deg,#e8eff1,#f0edf0);font:14px/1.5 Inter,system-ui,Arial,sans-serif;color:var(--ink)}
+header{height:42px;background:linear-gradient(100deg,#4b2c20,#70452d);border-bottom:2px solid var(--gold);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 12px;position:sticky;top:0;z-index:5}
+header .brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px}header img{width:30px;height:30px;object-fit:contain;background:white;border-radius:50%;padding:2px}header a{color:#fff;text-decoration:none;font-size:12px;background:#ffffff20;padding:6px 10px;border-radius:6px}
+main{max-width:1050px;margin:30px auto;padding:0 16px}.title{text-align:center;margin:0 0 20px}.title small{color:#98743c;font-weight:800;letter-spacing:1.7px}.title h1{margin:4px 0;color:var(--navy);font-size:26px}
+.form-card{background:#fff;border:1px solid #b9b9b9;border-radius:9px;padding:28px 5.5%;box-shadow:0 10px 30px #19283a0b}
+.grid{display:grid;grid-template-columns:1fr 1fr;column-gap:7%;row-gap:0}.field{display:grid;grid-template-columns:minmax(110px, .9fr) minmax(0,1.35fr);align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #8a7565}.field label{font-size:11px;font-weight:750;color:#333}.field input,.field select,.field textarea{width:100%;min-width:0;border:1px solid #d9c77c;border-radius:5px;padding:9px 10px;font:13px Arial,sans-serif;color:#555;background:#fff}.field textarea{min-height:62px;resize:vertical}.field.full{grid-column:1/-1}.field.full label{align-self:start;padding-top:8px}.upload{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.upload input{border:0;padding:3px}.preview{max-width:70px;max-height:70px;border:1px solid #ccc;border-radius:6px;object-fit:cover}.existing{font-size:11px;color:#58718d}.actions{display:flex;justify-content:center;margin-top:20px}.save{background:linear-gradient(110deg,#4b2c20,#70452d);color:#fff;border:0;border-radius:7px;padding:12px 28px;font-weight:800;cursor:pointer}.save:disabled{opacity:.55;cursor:wait}.message{text-align:center;min-height:24px;margin-top:12px;font-size:12px;font-weight:700}.hint{color:#8b8b8b;font-size:10px}.footer{text-align:center;color:#8b95a4;font-size:10px;padding:22px}
+@media(max-width:680px){main{margin:20px auto;padding:0 12px}.form-card{padding:14px 6%}.grid{grid-template-columns:1fr}.field{grid-template-columns:38% 1fr;gap:8px;padding:11px 0}.field.full{grid-column:auto}.title h1{font-size:22px}header .brand span{max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+</style></head><body>
+<header><div class="brand"><img src="./logo.png" alt="JAPSF"><span>Jathedar Akali Phula Singh Federation</span></div><a href="./verified-members.html">← Verified Members</a></header>
+<main><div class="title"><small>MEMBERSHIP ADMINISTRATION</small><h1>Update Membership Details</h1></div>
+<section class="form-card"><form id="memberForm">
+<div class="grid">
+<div class="field"><label for="full_name">Name <b>*</b></label><input id="full_name" name="full_name" required maxlength="120"></div>
+<div class="field"><label for="gender">Gender <b>*</b></label><select id="gender" name="gender" required><option value="">Select Gender</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div class="field"><label for="date_of_birth">Date of Birth <b>*</b></label><input id="date_of_birth" name="date_of_birth" type="date" required></div>
+<div class="field"><label for="father_name">Father Name <b>*</b></label><input id="father_name" name="father_name" required maxlength="120"></div>
+<div class="field"><label for="profession">Profession</label><input id="profession" name="profession" maxlength="80"></div>
+<div class="field"><label for="blood_group">Blood Group</label><select id="blood_group" name="blood_group"><option value="">Select Blood Group</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+<div class="field"><label for="country">Country</label><input id="country" name="country" value="India"></div>
+<div class="field"><label for="state">State <b>*</b></label><input id="state" name="state" required></div>
+<div class="field"><label for="district">District <b>*</b></label><input id="district" name="district" required></div>
+<div class="field"><label for="mobile">Mobile No. <b>*</b></label><input id="mobile" name="mobile" required maxlength="30"></div>
+<div class="field"><label for="whatsapp">WhatsApp No.</label><input id="whatsapp" name="whatsapp" maxlength="30"></div>
+<div class="field"><label for="pin_code">Pin Code <b>*</b></label><input id="pin_code" name="pin_code" required maxlength="20"></div>
+<div class="field"><label for="email">Email</label><input id="email" name="email" type="email" maxlength="254"></div>
+<div class="field"><label for="member_authority">Authority <b>*</b></label><input id="member_authority" name="member_authority" value="Member" required maxlength="100"></div>
+<div class="field full"><label for="address">Address <b>*</b></label><textarea id="address" name="address" required maxlength="1000"></textarea></div>
+<div class="field"><label for="validity_start">Validity Start</label><input id="validity_start" name="validity_start" type="date"></div>
+<div class="field"><label for="validity_end">Validity End</label><input id="validity_end" name="validity_end" type="date"></div>
+<div class="field full"><label>Profile Photo</label><div class="upload"><img id="profilePreview" class="preview" alt="Current profile photo" hidden><input id="profile_file" type="file" accept="image/png,image/jpeg"><span class="hint">JPG or PNG · max 5 MB</span></div></div>
+<div class="field"><label for="document_type">Document Type</label><select id="document_type" name="document_type"><option value="">Select Document</option><option>Aadhaar Card</option><option>Voter ID</option><option>Driving Licence</option><option>Passport</option><option>Other</option></select></div>
+<div class="field"><label>Upload Document</label><div class="upload"><input id="document_file" type="file" accept="image/png,image/jpeg,application/pdf"><span class="hint">JPG, PNG or PDF · max 5 MB</span></div></div>
+<div class="field full"><label>Existing Documents</label><div id="documents" class="existing">Loading secure document links…</div></div>
+</div>
+<div class="actions"><button id="save" class="save" type="submit">UPDATE</button></div><div id="message" class="message" role="status"></div>
+</form></section>
+<footer class="footer">© 2026 Jathedar Akali Phula Singh Federation · Website Designed by New Granthi Singh Federation</footer></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+(async function(){
+const sb=window.supabase.createClient("https://urghiemtxhwhvoaivwge.supabase.co","sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0");
+const $=id=>document.getElementById(id),id=new URLSearchParams(location.search).get("id"),form=$("memberForm"),msg=$("message"),save=$("save");
+if(!id){msg.textContent="Member ID is missing. Open Update from Verified Members.";save.disabled=true;return}
+const {data:{user},error:authError}=await sb.auth.getUser();
+if(authError||!user||(user.email||"").toLowerCase()!=="helpline.japsf@gmail.com"){location.replace("./admin.html");return}
+const {data:auth,error:authCheck}=await sb.functions.invoke("admin-authorize",{body:{}});
+if(authCheck||!auth||auth.authorized!==true){msg.textContent="Administrator access could not be verified.";save.disabled=true;return}
+async function api(body){const {data,error}=await sb.functions.invoke("admin-membership-applications",{body});if(error||!data)throw Error(data?.message||error?.message||"Request failed");if(data.error)throw Error(data.error);return data}
+const keys=["full_name","gender","date_of_birth","father_name","profession","blood_group","country","state","district","mobile","whatsapp","pin_code","email","member_authority","address","validity_start","validity_end","document_type"];
+try{
+ const {record:r}=await api({action:"detail",id});
+ for(const k of keys){if(form.elements[k])form.elements[k].value=r[k]??""}
+ if(r.profile_photo_url){$("profilePreview").src=r.profile_photo_url;$("profilePreview").hidden=false}
+ const docs=$("documents");docs.replaceChildren();
+ if(r.documents?.length){r.documents.forEach((d,i)=>{if(d.url){const a=document.createElement("a");a.href=d.url;a.target="_blank";a.rel="noopener";a.textContent="Document "+(i+1)+" (secure link)";a.style.marginRight="14px";docs.append(a)}})}
+ if(!docs.childNodes.length)docs.textContent="No previously uploaded documents.";
+}catch(e){msg.textContent=e.message;save.disabled=true}
+function fileData(file){return new Promise((resolve,reject)=>{if(!file){resolve(null);return}if(file.size>5*1024*1024){reject(Error("Each file must be 5 MB or smaller."));return}const reader=new FileReader();reader.onload=()=>resolve({name:file.name,type:file.type,data:String(reader.result).split(",")[1]});reader.onerror=()=>reject(Error("Could not read selected file."));reader.readAsDataURL(file)})}
+form.addEventListener("submit",async e=>{e.preventDefault();save.disabled=true;msg.textContent="Saving updated member details securely…";try{
+ const payload={action:"update_member",id};
+ for(const k of keys)payload[k]=form.elements[k]?.value??"";
+ const profile=await fileData($("profile_file").files[0]);const document=await fileData($("document_file").files[0]);
+ if(profile)payload.profile_file=profile;if(document)payload.document_file=document;
+ await api(payload);msg.textContent="Membership details updated successfully.";msg.style.color="#168447";
+ }catch(err){msg.textContent=err.message;msg.style.color="#b42318"}finally{save.disabled=false}
+});
+})();
+</script></body></html>
