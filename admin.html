@@ -20,20 +20,20 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <section id="loginGate"><div class="login-icon"><img src="./logo.png" alt="Jathedar Akali Phula Singh Federation logo"></div><div class="eyebrow">Authorized personnel only</div><h2>Welcome back</h2><p class="muted">Sign in to access the Federation administration workspace.</p>
 <form id="authForm"><label for="adminEmail">Administrator Email</label><input id="adminEmail" type="email" value="helpline.japsf@gmail.com" autocomplete="username" required><label for="adminPassword">Password</label><input id="adminPassword" type="password" autocomplete="current-password" minlength="8" required><button type="submit">Sign In Securely →</button><button type="button" class="secondary" id="createAccountBtn">Create Account</button><button type="button" class="secondary" id="resetPasswordBtn">Forgot Password?</button></form><div id="authMessage" role="status" aria-live="polite"></div><p class="muted">Access is restricted to the approved administrator email. Email verification may be required.</p></section>
 <main class="wrap" id="adminApp" hidden>
-<div class="notice"><span>◆</span><div><b>Backend connection status:</b> Administrator sign-in is protected by Supabase authorization. Member records, applications, donations and other management actions are not connected yet; the figures below are placeholders, not live data.</div></div>
+<div class="notice" id="backendNotice"><span>◆</span><div><b>Secure database:</b> Administrator sign-in is protected by server-side authorization. Live records load only after the approved administrator session is verified.</div></div>
 <div class="layout">
 <nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donations & Crowdfunding</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
 <div class="main">
 <section id="dashboard" class="welcome"><div><div class="eyebrow">Federation control centre</div><h2>Dashboard Overview</h2><p>Welcome to your administration workspace.</p></div><div class="date-chip">✦ &nbsp; JAPSF ADMINISTRATOR</div></section>
 <section class="panel" style="background:linear-gradient(115deg,#e8eaff,#f2e8ff);border:0"><div class="panel-head"><h3>Federation Quick Access</h3><span class="pill">ADMIN TOOLS</span></div><p class="muted">Manage the Federation website, review requests and keep public information up to date from one secure workspace.</p><div class="two-col"><div class="mini-card"><h4>Website Administration</h4><p class="muted">Review content, events and public announcements.</p></div><div class="mini-card"><h4>Member Services</h4><p class="muted">Membership and ID card modules will appear here once database integration is complete.</p></div></div></section><div class="cards"><div class="metric"><div class="metric-top"><span class="metric-label">Total Members</span><span class="metric-icon">♙</span></div><strong>—</strong><small>Awaiting database connection</small></div><div class="metric"><div class="metric-top"><span class="metric-label">New Applications</span><span class="metric-icon">▤</span></div><strong>—</strong><small>Awaiting database connection</small></div><div class="metric"><div class="metric-top"><span class="metric-label">Donation Records</span><span class="metric-icon">₹</span></div><strong>—</strong><small>Awaiting payment integration</small></div><div class="metric"><div class="metric-top"><span class="metric-label">Open Help Requests</span><span class="metric-icon">✉</span></div><strong>—</strong><small>Awaiting database connection</small></div><div class="metric"><div class="metric-top"><span class="metric-label">Team Profiles</span><span class="metric-icon">♧</span></div><strong>—</strong><small>Awaiting database connection</small></div><div class="metric"><div class="metric-top"><span class="metric-label">Published Events</span><span class="metric-icon">◇</span></div><strong>—</strong><small>Awaiting database connection</small></div><div class="metric"><div class="metric-top"><span class="metric-label">Website Messages</span><span class="metric-icon">✉</span></div><strong>—</strong><small>Awaiting database connection</small></div></div>
-<section class="panel"><div class="panel-head"><h3>Workspace Status</h3><span class="pill">SETUP IN PROGRESS</span></div><div class="empty">Your premium admin workspace is ready. Connect the secure database modules to start managing verified Federation records here.</div></section>
-<section id="members" class="panel"><div class="panel-head"><h3>Members & Applications</h3><span class="pill">BACKEND REQUIRED</span></div><p class="muted">Review membership applications, verify submitted documents, approve eligible members and maintain member records. Database actions are not connected yet.</p></section>
+<section class="panel"><div class="panel-head"><h3>Latest Activity</h3><span class="pill">LIVE DATA</span></div><div id="latestActivity" class="empty">Loading latest records…</div></section>
+<section id="members" class="panel"><div class="panel-head"><h3>Members & Applications</h3><span class="pill">BACKEND REQUIRED</span></div><p class="muted">Membership applications and their review status from the secure database.</p><div id="applicationRecords" class="empty">Loading applications…</div></section>
 <section id="idcards" class="panel"><h3>ID Card Management</h3><p class="muted">Prepare and issue membership ID cards only after identity and membership verification. ID card generation is not connected yet.</p></section>
-<section id="events" class="panel"><h3>Events Management</h3><p class="muted">Create, edit and publish Federation events, programmes and announcements. Event publishing is not connected yet.</p></section>
-<section id="requests" class="panel"><h3>Help Requests</h3><p class="muted">Review community help requests. Private case details must remain restricted to authorized staff only. Request management is not connected yet.</p></section>
-<section id="funds" class="panel"><h3>Donations & Crowdfunding</h3><p class="muted">Review verified transactions and campaign reports. Payment signatures must be verified on the server. Donation records are not connected yet.</p></section>
-<section id="team" class="panel"><h3>Team Members</h3><p class="muted">Manage approved public profiles and office-bearer information. Team editing is not connected yet.</p></section>
-<section id="content" class="panel"><h3>Website Content</h3><p class="muted">Manage public pages, announcements and gallery content after the content-management backend is configured.</p></section>
+<section id="events" class="panel"><h3>Events Management</h3><p class="muted">Published event records from the secure database.</p><div id="eventRecords" class="empty">Loading events…</div></section>
+<section id="requests" class="panel"><h3>Help Requests</h3><p class="muted">Review community help requests. Private case details remain restricted to authorized staff only.</p><div id="helpRecords" class="empty">Loading requests…</div></section>
+<section id="funds" class="panel"><h3>Donations & Crowdfunding</h3><p class="muted">Donation entries are shown as pending until the payment provider's server-side verification is implemented.</p><div id="donationRecords" class="empty">Loading donations…</div></section>
+<section id="team" class="panel"><h3>Team Members</h3><p class="muted">Current public team profiles from the secure database.</p><div id="teamRecords" class="empty">Loading team…</div></section>
+<section id="content" class="panel"><h3>Website Content</h3><div id="messageRecords" class="empty">Loading contact messages…</div><p class="muted">Manage public pages, announcements and gallery content after the content-management backend is configured.</p></section>
 <section id="ai" class="panel"><h3>AI Assistant Policy</h3><div class="two-col"><div class="mini-card"><h4>Allowed information</h4><p class="muted">Public website pages and approved public FAQs only.</p></div><div class="mini-card"><h4>Restricted information</h4><p class="muted">Member, donor, payment and private help-request records must never be exposed.</p></div></div><p class="muted">Enforce all access restrictions on the server, not only through AI instructions.</p></section>
 <section id="security" class="panel"><h3>Security Settings</h3><p class="muted">Administrator contact: helpline.japsf@gmail.com</p><ul class="muted"><li>Server-side authentication and administrator allowlisting.</li><li>Role-based access control and least-privilege permissions.</li><li>Database row-level security and server-side validation.</li><li>Secrets stored only in protected server environment variables.</li><li>Session expiry and audit logging.</li></ul></section>
 <footer class="footer">© 2026 Jathedar Akali Phula Singh Federation · Website Designed by New Granthi Singh Federation</footer>
@@ -49,13 +49,54 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
  function message(t){msg.textContent=t}
  function showApp(){gate.hidden=true;app.hidden=false;logout.hidden=false}
  function showGate(){gate.hidden=false;app.hidden=true;logout.hidden=true}
+
+ async function loadDashboard(){
+   const notice=document.getElementById("backendNotice");
+   const {data,error}=await client.functions.invoke("admin-dashboard",{body:{}});
+   if(error||!data||data.authorized!==true){
+     notice.innerHTML="<span>◆</span><div><b>Database connection:</b> Live dashboard data could not be loaded. Please refresh or sign in again.</div>";
+     return;
+   }
+   const c=data.counts||{};
+   const values={members:c.members,applications:c.pendingApplications,donations:c.donations,requests:c.openRequests,team:c.team,events:c.events,messages:c.messages};
+   for(const [key,value] of Object.entries(values)){
+     const node=document.getElementById("metric-"+key);
+     if(node)node.textContent=String(value??0);
+   }
+   notice.innerHTML="<span>◆</span><div><b>Connected:</b> Live counts and recent records are being read from Supabase through a protected administrator-only function.</div>";
+   const safe=(value)=>String(value??"—");
+   function renderList(id,rows,fields,emptyText){
+     const host=document.getElementById(id); if(!host)return;
+     host.replaceChildren();
+     if(!rows||!rows.length){host.className="empty";host.textContent=emptyText;return;}
+     host.className="record-list";
+     const table=document.createElement("table");
+     table.style.cssText="width:100%;border-collapse:collapse;font-size:12px;text-align:left";
+     const head=document.createElement("tr");
+     fields.forEach(([label])=>{const th=document.createElement("th");th.textContent=label;th.style.cssText="padding:9px;border-bottom:1px solid #e5e7eb;color:#536174";head.appendChild(th)});
+     const thead=document.createElement("thead");thead.appendChild(head);table.appendChild(thead);
+     const tbody=document.createElement("tbody");
+     rows.forEach(row=>{const tr=document.createElement("tr");fields.forEach(([,key])=>{const td=document.createElement("td");td.textContent=safe(row[key]);td.style.cssText="padding:9px;border-bottom:1px solid #edf0f4;vertical-align:top;overflow-wrap:anywhere";tr.appendChild(td)});tbody.appendChild(tr)});
+     table.appendChild(tbody);host.appendChild(table);
+   }
+   const r=data.recent||{};
+   renderList("applicationRecords",r.applications,[["Application","application_no"],["Name","full_name"],["Mobile","mobile"],["Fee (₹)","membership_fee"],["Status","status"]],"No membership applications received yet.");
+   renderList("helpRecords",r.helpRequests,[["Name","full_name"],["Subject","subject"],["Category","category"],["Status","status"]],"No help requests received yet.");
+   renderList("donationRecords",r.donations,[["Donor","donor_name"],["Amount (₹)","amount"],["Campaign","campaign_name"],["Payment status","payment_status"]],"No donation records received yet.");
+   renderList("messageRecords",r.messages,[["Name","full_name"],["Subject","subject"],["Email","email"],["Status","status"]],"No contact messages received yet.");
+   renderList("teamRecords",[],[],"Team profiles are stored securely; public profile editing will be added separately.");
+   renderList("eventRecords",[],[],"No published events are available yet.");
+   const latest=document.getElementById("latestActivity");
+   if(latest){latest.className="muted";latest.textContent="Dashboard updated "+new Date(data.generatedAt||Date.now()).toLocaleString();}
+ }
+
  async function authorize(){
    const {data:{user},error:userError}=await client.auth.getUser();
    if(userError||!user){showGate();return false}
    if((user.email||"").toLowerCase()!==allowedEmail){await client.auth.signOut();showGate();message("This email is not authorized for the administrator panel.");return false}
    const {data,error}=await client.functions.invoke("admin-authorize",{body:{}});
    if(error||!data||data.authorized!==true){await client.auth.signOut();showGate();message("Administrator authorization failed. Contact the project owner.");return false}
-   showApp();return true
+   showApp();await loadDashboard();return true
  }
  form.addEventListener("submit",async e=>{
    e.preventDefault();message("Signing in securely...");
