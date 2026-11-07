@@ -13,7 +13,7 @@
 <body>
 <header class="top"><h1>Jathedar Akali Phula Singh Federation</h1><p>Official Donation Receipt & Public Verification</p></header>
 <main class="wrap">
-<section class="search"><h2>Verify Donation Receipt</h2><p>Scan the QR code or barcode on a receipt, or enter its receipt number below. No login is required.</p><form id="verifyForm" class="search-row"><input id="receiptInput" autocomplete="off" placeholder="Enter receipt number (e.g. JAPSF-2026-000001)" aria-label="Receipt number"><button class="btn" type="submit">Verify Receipt</button></form><div id="verifyMessage" class="message" role="status" aria-live="polite">Enter a receipt number or open the secure QR verification link.</div></section>
+<section class="search"><h2>Verify Donation Receipt</h2><p>Scan the QR code or barcode on a receipt, or enter its receipt number below. No login is required.</p><form id="verifyForm" class="search-row"><input id="receiptInput" autocomplete="off" placeholder="Enter receipt number (e.g. JAPSF-2026-000001)" aria-label="Receipt number"><input id="mobileLast4" inputmode="numeric" maxlength="4" placeholder="Donor mobile last 4 digits" aria-label="Donor mobile last four digits" style="max-width:220px"><button class="btn" type="submit">Verify Receipt</button></form><div id="verifyMessage" class="message" role="status" aria-live="polite">Enter a receipt number or open the secure QR verification link.</div></section>
 <section id="receiptCard" class="receipt">
 <div class="receipt-head"><img src="./logo.png" alt="Federation logo"><h2>JATHEDAR AKALI PHULA SINGH FEDERATION</h2><p>OFFICIAL DONATION RECEIPT</p></div>
 <div class="verified"><span>✓ VERIFIED DONATION</span></div>
@@ -39,13 +39,13 @@
  const endpoint="https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/public-donation-verification";
  const apiKey="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
  const params=new URLSearchParams(location.search);
- const token=params.get("token")||"",receipt=params.get("receipt")||"";
+ const token=params.get("token")||"",receipt=params.get("receipt")||"",last4=params.get("last4")||"";
  const form=document.getElementById("verifyForm"),input=document.getElementById("receiptInput"),msg=document.getElementById("verifyMessage"),card=document.getElementById("receiptCard");
  const date=v=>v?new Date(v).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"}):"—";
  function message(text,type){msg.className="message"+(type?" "+type:"");msg.textContent=text;}
  async function verify(value){
   card.classList.remove("show");message("Checking the Federation donation records…");
-  const body=value&&value.token?{token:value.token}:{receipt_no:value?.receipt_no||input.value.trim()};
+  const body=value&&value.token?{token:value.token}:{receipt_no:value?.receipt_no||input.value.trim(),mobile_last4:value?.mobile_last4||document.getElementById("mobileLast4").value.trim()};
   if(!body.token&&!body.receipt_no){message("Please enter a receipt number or scan its QR code.","wait");return;}
   try{
    const response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json","apikey":apiKey},body:JSON.stringify(body)});
@@ -74,7 +74,7 @@
  form.addEventListener("submit",e=>{e.preventDefault();verify({receipt_no:input.value.trim()});});
  document.getElementById("printBtn").addEventListener("click",()=>window.print());
  document.getElementById("verifyAgain").addEventListener("click",()=>{card.classList.remove("show");message("Enter the receipt number or scan its code to verify again.");input.focus();});
- if(token)verify({token});else if(receipt){input.value=receipt;verify({receipt_no:receipt});}
+ if(token)verify({token});else if(receipt){input.value=receipt;document.getElementById("mobileLast4").value=last4;verify({receipt_no:receipt,mobile_last4:last4});}
 })();
 </script>
 </body></html>
