@@ -16,6 +16,34 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 @media(max-width:1050px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:205px minmax(0,1fr)}}@media(max-width:760px){.top{height:54px;padding:0 9px}.top:after{font-size:15px}.menu-toggle{display:inline-block}.admin-mail,.secure{display:none}.layout{display:block}.side{position:fixed;top:54px;left:0;bottom:0;width:min(245px,78vw);z-index:40;border-radius:0 12px 12px 0;overflow-y:auto;display:block;transform:translateX(-105%);transition:transform .22s ease;padding:12px;box-shadow:12px 0 28px #0003}.side.open{transform:translateX(0)}.side-label{display:block}.side a{white-space:normal;margin:3px 0;padding:10px}.side a span{display:inline-block}.wrap{margin:12px auto}.welcome{align-items:flex-start;flex-direction:column}.date-chip{display:none}.two-col{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.metric{min-height:126px;display:flex;flex-direction:column;justify-content:center}.notice{font-size:11px}}@media(max-width:420px){.cards{gap:10px}.metric{padding:12px 8px}.metric strong{font-size:27px}.metric-label{font-size:11px}.panel{padding:15px}.brand-mark{width:36px;height:36px;flex-basis:36px}}
 
 .report-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}.report-box{border:1px solid #e8ebf1;border-radius:11px;padding:14px;min-width:0}.report-box h4{margin:0 0 10px;color:#101d35;font-size:13px}.report-table{width:100%;border-collapse:collapse;font-size:11px}.report-table th,.report-table td{padding:8px 6px;text-align:left;border-bottom:1px solid #edf0f4}.report-table th{color:#657187;background:#f8f9fb}.report-table tr:last-child td{border-bottom:0}.report-bar{height:6px;background:#eee7d9;border-radius:8px;overflow:hidden;min-width:55px}.report-bar span{display:block;height:100%;background:#d9b263;border-radius:8px}.report-empty{color:#8792a3;text-align:center;padding:14px;font-size:11px}@media(max-width:760px){.report-grid{grid-template-columns:1fr}}
+
+.event-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0}
+.event-primary{border:0;border-radius:9px;background:linear-gradient(110deg,#4b2c20,#70452d);color:#fff;padding:11px 16px;font-weight:750;cursor:pointer;box-shadow:0 5px 13px #4b2c2025}
+.event-secondary,.event-danger{border:1px solid #e1e5ec;background:#fff;color:#34445a;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer}
+.event-danger{color:#b42318;border-color:#f0c9c5}
+.event-form{background:#fbfcfe;border:1px solid #e5e8ef;border-radius:12px;padding:17px;margin:14px 0}
+.event-form[hidden]{display:none!important}
+.event-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.event-field{min-width:0}.event-field.full{grid-column:1/-1}
+.event-field label{display:block;font-size:11px;font-weight:750;color:#536174;margin:0 0 6px}
+.event-field input,.event-field textarea{width:100%;border:1px solid #dce2eb;border-radius:8px;padding:11px 12px;background:#fff;color:#202b3c;font:inherit;min-width:0}
+.event-field textarea{min-height:94px;resize:vertical}
+.event-field input:focus,.event-field textarea:focus{outline:2px solid #d9b26355;border-color:#c49b54}
+.event-preview{display:flex;align-items:center;gap:12px;margin-top:9px;color:#778499;font-size:11px}
+.event-preview img{width:84px;height:62px;object-fit:cover;border-radius:8px;border:1px solid #e2e5eb;background:#f3f4f6}
+.event-publish{display:flex;align-items:center;gap:9px;font-size:12px;color:#4c5b70;font-weight:650}
+.event-publish input{width:17px;height:17px;accent-color:#6d482f}
+.event-form-actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.event-feedback{font-size:12px;color:#705b32;min-height:18px;margin-top:10px}
+.event-list{display:grid;gap:10px;margin-top:12px}
+.event-row{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:13px;align-items:center;padding:11px;border:1px solid #e8ebf1;border-radius:11px;background:#fff}
+.event-row img{width:76px;height:66px;object-fit:cover;border-radius:8px;background:#f1f3f6}
+.event-row h4{font-size:13px;margin:0 0 3px;color:#101d35;overflow-wrap:anywhere}
+.event-row p{font-size:11px;color:#778499;margin:2px 0;overflow-wrap:anywhere}
+.event-state{display:inline-block;border-radius:20px;padding:3px 8px;font-size:9px;font-weight:800;background:#f2f3f5;color:#677386;margin-top:3px}
+.event-state.live{background:#e8f7ee;color:#168447}
+.event-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:560px){.event-fields{grid-template-columns:1fr}.event-field.full{grid-column:auto}.event-row{grid-template-columns:60px minmax(0,1fr)}.event-row img{width:60px;height:58px}.event-actions{grid-column:1/-1;justify-content:flex-start}}
 </style></head>
 <body>
 <header class="top"><div class="top-left"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">☰</button><div class="brand"><div class="brand-mark"><img src="./logo.png" alt="Jathedar Akali Phula Singh Federation logo"></div><div><h1>Jathedar Akali Phula Singh Federation</h1><p>Administration Workspace</p></div></div></div><div class="top-right"><span class="secure">✦ SECURE ADMIN ACCESS</span><span class="admin-mail">helpline.japsf@gmail.com</span><button class="logout" id="logoutBtn" hidden>Sign out</button></div></header>
@@ -34,7 +62,22 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <section class="panel"><div class="panel-head"><h3>Latest Activity</h3><span class="pill">LIVE DATA</span></div><div id="latestActivity" class="empty">Loading latest records…</div></section>
 <section id="members" class="panel"><div class="panel-head"><h3>Members & Applications</h3><span class="pill">LIVE REVIEW</span></div><p class="muted">Review applications, inspect private documents, add notes and approve or reject applicants.</p><p><a href="./membership-applications.html" style="display:inline-block;background:#101d35;color:#fff;text-decoration:none;padding:10px 14px;border-radius:9px;font-weight:700">Open Membership Applications →</a></p><div id="applicationRecords" class="empty">Loading applications…</div></section>
 <section id="idcards" class="panel"><h3>ID Card Management</h3><p class="muted">Prepare and issue membership ID cards only after identity and membership verification. ID card generation is not connected yet.</p></section>
-<section id="events" class="panel"><h3>Events Management</h3><p class="muted">Published event records from the secure database.</p><div id="eventRecords" class="empty">Loading events…</div></section>
+<section id="events" class="panel"><div class="panel-head"><div><h3>Events Management</h3><p class="muted" style="margin:4px 0 0">Create, edit, publish and remove Federation events.</p></div><span class="pill">EVENTS</span></div>
+<div class="event-toolbar"><span class="muted">Event images are stored securely in Federation public assets (max 5 MB).</span><button class="event-primary" id="showEventForm" type="button">＋ Create New Event</button></div>
+<form id="eventForm" class="event-form" hidden>
+<input type="hidden" id="eventEditId">
+<div class="event-fields">
+<div class="event-field"><label for="eventImage">Event Image *</label><input id="eventImage" type="file" accept="image/jpeg,image/png,image/webp"><div class="event-preview"><img id="eventImagePreview" alt="Event image preview" hidden><span id="eventImageHint">Choose a JPG, PNG or WebP image (up to 5 MB).</span></div></div>
+<div class="event-field"><label for="eventTitle">Title *</label><input id="eventTitle" type="text" maxlength="160" placeholder="Event title" required></div>
+<div class="event-field full"><label for="eventDescription">Description *</label><textarea id="eventDescription" maxlength="5000" placeholder="Describe the event…" required></textarea></div>
+<div class="event-field"><label for="eventVenue">Venue *</label><input id="eventVenue" type="text" maxlength="250" placeholder="Event venue" required></div>
+<div class="event-field"><label for="eventDate">Event Date &amp; Time *</label><input id="eventDate" type="datetime-local" required></div>
+</div>
+<div class="event-form-actions"><label class="event-publish"><input id="eventPublish" type="checkbox"> Publish on public website</label></div>
+<div class="event-form-actions"><button class="event-primary" id="saveEventBtn" type="submit">Create Event</button><button class="event-secondary" id="cancelEventBtn" type="button">Cancel</button></div>
+<div id="eventFeedback" class="event-feedback" role="status" aria-live="polite"></div>
+</form>
+<div id="eventRecords" class="empty">Loading events…</div></section>
 <section id="requests" class="panel"><h3>Help Requests</h3><p class="muted">Review community help requests. Private case details remain restricted to authorized staff only.</p><div id="helpRecords" class="empty">Loading requests…</div></section>
 <section id="funds" class="panel"><h3>Donations & Crowdfunding</h3><p class="muted">Donation entries are shown as pending until the payment provider's server-side verification is implemented.</p><div id="donationRecords" class="empty">Loading donations…</div></section>
 <section id="team" class="panel"><h3>Team Members</h3><p class="muted">Current public team profiles from the secure database.</p><div id="teamRecords" class="empty">Loading team…</div></section>
@@ -55,6 +98,115 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
  function showApp(){gate.hidden=true;app.hidden=false;logout.hidden=false}
  function showGate(){gate.hidden=false;app.hidden=true;logout.hidden=true}
 
+
+ const eventForm=document.getElementById("eventForm");
+ const eventFeedback=document.getElementById("eventFeedback");
+ let eventCurrentImagePath="";
+ let eventPreviewObjectUrl="";
+ function eventMessage(text){eventFeedback.textContent=text;}
+ function resetEventForm(){
+   eventForm.reset();document.getElementById("eventEditId").value="";
+   eventCurrentImagePath="";document.getElementById("eventImagePreview").hidden=true;
+   document.getElementById("eventImagePreview").removeAttribute("src");
+   document.getElementById("eventImageHint").textContent="Choose a JPG, PNG or WebP image (up to 5 MB).";
+   document.getElementById("saveEventBtn").textContent="Create Event";
+   if(eventPreviewObjectUrl){URL.revokeObjectURL(eventPreviewObjectUrl);eventPreviewObjectUrl="";}
+   eventMessage("");
+ }
+ function showEventForm(){eventForm.hidden=false;document.getElementById("eventTitle").focus();eventForm.scrollIntoView({behavior:"smooth",block:"start"});}
+ document.getElementById("showEventForm").addEventListener("click",()=>{resetEventForm();showEventForm();});
+ document.getElementById("cancelEventBtn").addEventListener("click",()=>{eventForm.hidden=true;resetEventForm();});
+ document.getElementById("eventImage").addEventListener("change",()=>{
+   const file=document.getElementById("eventImage").files[0];if(!file)return;
+   if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){
+     document.getElementById("eventImage").value="";eventMessage("Please choose a JPG, PNG or WebP image up to 5 MB.");return;
+   }
+   if(eventPreviewObjectUrl)URL.revokeObjectURL(eventPreviewObjectUrl);
+   eventPreviewObjectUrl=URL.createObjectURL(file);
+   const img=document.getElementById("eventImagePreview");img.src=eventPreviewObjectUrl;img.hidden=false;
+   document.getElementById("eventImageHint").textContent=file.name;
+ });
+ function eventDateLabel(value){
+   if(!value)return "Date not set";
+   const d=new Date(value);return Number.isNaN(d.getTime())?"Date not set":d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"});
+ }
+ async function loadEventRecords(){
+   const host=document.getElementById("eventRecords");host.className="empty";host.textContent="Loading events…";
+   const {data,error}=await client.from("events").select("id,title,description,event_date,venue,image_path,is_published,created_at").order("event_date",{ascending:false});
+   if(error){host.textContent="Could not load events: "+error.message;return;}
+   host.replaceChildren();
+   if(!data||!data.length){host.className="empty";host.textContent="No events have been created yet. Select “Create New Event” to add the first one.";return;}
+   host.className="event-list";
+   data.forEach(ev=>{
+     const row=document.createElement("article");row.className="event-row";
+     const img=document.createElement("img");img.alt="";img.src=ev.image_path?client.storage.from("federation-public-assets").getPublicUrl(ev.image_path).data.publicUrl:"";
+     const info=document.createElement("div");const title=document.createElement("h4");title.textContent=ev.title||"Untitled event";
+     const date=document.createElement("p");date.textContent=eventDateLabel(ev.event_date);
+     const venue=document.createElement("p");venue.textContent=ev.venue||"Venue not specified";
+     const status=document.createElement("span");status.className="event-state"+(ev.is_published?" live":"");status.textContent=ev.is_published?"PUBLISHED":"DRAFT";
+     info.append(title,date,venue,status);
+     const actions=document.createElement("div");actions.className="event-actions";
+     const edit=document.createElement("button");edit.type="button";edit.className="event-secondary";edit.textContent="Edit";edit.addEventListener("click",()=>editEvent(ev));
+     const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=ev.is_published?"Unpublish":"Publish";toggle.addEventListener("click",()=>toggleEventPublish(ev));
+     const del=document.createElement("button");del.type="button";del.className="event-danger";del.textContent="Delete";del.addEventListener("click",()=>deleteEvent(ev));
+     actions.append(edit,toggle,del);row.append(img,info,actions);host.appendChild(row);
+   });
+ }
+ function editEvent(ev){
+   resetEventForm();document.getElementById("eventEditId").value=ev.id;
+   document.getElementById("eventTitle").value=ev.title||"";
+   document.getElementById("eventDescription").value=ev.description||"";
+   document.getElementById("eventVenue").value=ev.venue||"";
+   if(ev.event_date){const d=new Date(ev.event_date);const local=new Date(d.getTime()-d.getTimezoneOffset()*60000);document.getElementById("eventDate").value=local.toISOString().slice(0,16);}
+   document.getElementById("eventPublish").checked=!!ev.is_published;
+   eventCurrentImagePath=ev.image_path||"";
+   if(eventCurrentImagePath){const url=client.storage.from("federation-public-assets").getPublicUrl(eventCurrentImagePath).data.publicUrl;const img=document.getElementById("eventImagePreview");img.src=url;img.hidden=false;document.getElementById("eventImageHint").textContent="Current image (choose a new file to replace it).";}
+   document.getElementById("saveEventBtn").textContent="Save Changes";showEventForm();
+ }
+ async function toggleEventPublish(ev){
+   const {error}=await client.from("events").update({is_published:!ev.is_published,updated_at:new Date().toISOString()}).eq("id",ev.id);
+   if(error){alert("Could not update event: "+error.message);return;}await loadEventRecords();
+ }
+ async function deleteEvent(ev){
+   if(!confirm("Delete “"+ev.title+"”? This cannot be undone."))return;
+   const {error}=await client.from("events").delete().eq("id",ev.id);
+   if(error){alert("Could not delete event: "+error.message);return;}
+   if(ev.image_path)await client.storage.from("federation-public-assets").remove([ev.image_path]);
+   await loadEventRecords();
+ }
+ eventForm.addEventListener("submit",async e=>{
+   e.preventDefault();
+   const btn=document.getElementById("saveEventBtn");btn.disabled=true;btn.textContent="Saving…";eventMessage("Saving event securely…");
+   try{
+     const id=document.getElementById("eventEditId").value;
+     const file=document.getElementById("eventImage").files[0];
+     if(!id&&!file)throw new Error("Please upload an event image.");
+     let imagePath=eventCurrentImagePath;
+     if(file){
+       const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+       imagePath="events/"+crypto.randomUUID()+"."+ext;
+       const {error:uploadError}=await client.storage.from("federation-public-assets").upload(imagePath,file,{contentType:file.type,cacheControl:"3600",upsert:false});
+       if(uploadError)throw uploadError;
+     }
+     const localDate=document.getElementById("eventDate").value;
+     const payload={
+       title:document.getElementById("eventTitle").value.trim(),
+       description:document.getElementById("eventDescription").value.trim(),
+       venue:document.getElementById("eventVenue").value.trim(),
+       event_date:new Date(localDate).toISOString(),
+       image_path:imagePath,
+       is_published:document.getElementById("eventPublish").checked,
+       updated_at:new Date().toISOString()
+     };
+     if(id){
+       const {error}=await client.from("events").update(payload).eq("id",id);if(error)throw error;
+     }else{
+       const {error}=await client.from("events").insert(payload);if(error)throw error;
+     }
+     eventMessage("Event saved successfully.");eventForm.hidden=true;resetEventForm();await loadEventRecords();
+   }catch(err){eventMessage(err.message||"Could not save event.");}
+   finally{btn.disabled=false;btn.textContent=document.getElementById("eventEditId").value?"Save Changes":"Create Event";}
+ });
  async function loadDashboard(){
    const notice=document.getElementById("backendNotice");
    const {data,error}=await client.functions.invoke("admin-dashboard",{body:{}});
@@ -113,7 +265,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
    renderList("donationRecords",r.donations,[["Donor","donor_name"],["Amount (₹)","amount"],["Campaign","campaign_name"],["Payment status","payment_status"]],"No donation records received yet.");
    renderList("messageRecords",r.messages,[["Name","full_name"],["Subject","subject"],["Email","email"],["Status","status"]],"No contact messages received yet.");
    renderList("teamRecords",[],[],"Team profiles are stored securely; public profile editing will be added separately.");
-   renderList("eventRecords",[],[],"No published events are available yet.");
+   await loadEventRecords();
    const latest=document.getElementById("latestActivity");
    if(latest){latest.className="muted";latest.textContent="Dashboard updated "+new Date(data.generatedAt||Date.now()).toLocaleString();}
  }
