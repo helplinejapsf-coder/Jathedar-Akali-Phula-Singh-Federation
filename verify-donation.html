@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101d35"><title>Donation Receipt Verification | JAPSF</title>
+<style>
+:root{--navy:#101d35;--deep:#091326;--gold:#d8ad55;--cream:#f7f2e8;--ink:#202532}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.6 Arial,sans-serif}.top{background:var(--navy);color:#fff;border-bottom:4px solid var(--gold);padding:17px;text-align:center}.top h1{margin:0;color:var(--gold);font-size:clamp(19px,4vw,27px)}.top p{margin:4px 0 0;font-size:12px;color:#e5eaf2}.wrap{width:min(850px,calc(100% - 26px));margin:28px auto 50px}.search,.receipt,.result{background:#fff;border-radius:17px;border:1px solid #e8dfcf;box-shadow:0 12px 35px #101d3510;padding:clamp(18px,4vw,30px);margin-bottom:18px}.search h2,.receipt h2{color:var(--navy);margin:0 0 8px}.search p{color:#687386;margin:0 0 16px}.search-row{display:flex;gap:9px;flex-wrap:wrap}.search input{flex:1;min-width:180px;padding:13px;border:1px solid #d7dce5;border-radius:9px;font:inherit}.btn{border:0;border-radius:9px;background:var(--navy);color:#fff;padding:12px 17px;font-weight:bold;cursor:pointer}.btn.gold{background:var(--gold);color:var(--navy)}.message{padding:13px;border-radius:10px;background:#f4f6fa;color:#536174;margin-top:14px}.message.good{background:#eaf8ef;color:#176b3b;border:1px solid #bde6ca}.message.bad{background:#fff0ef;color:#a52620;border:1px solid #f0c9c5}.message.wait{background:#fff8e8;color:#8b6416;border:1px solid #f0dfb9}.receipt{display:none;border-top:8px solid var(--gold)}.receipt.show{display:block}.receipt-head{text-align:center}.receipt-head img{width:78px;height:78px;object-fit:contain;border:2px solid var(--gold);border-radius:50%;padding:4px}.receipt-head h2{margin:9px 0 2px;font-size:20px}.receipt-head p{margin:0;color:#9b742e;font-weight:bold;letter-spacing:1.4px;font-size:12px}.verified{text-align:center;color:#168447;font-weight:800;margin:16px 0}.verified span{display:inline-block;border:1px solid #bde6ca;background:#eaf8ef;border-radius:30px;padding:6px 14px}.details{margin:20px 0;border-top:1px solid #e8ebf1}.detail{display:flex;justify-content:space-between;gap:15px;padding:11px 3px;border-bottom:1px solid #edf0f4}.detail span{color:#697487}.detail strong{text-align:right;overflow-wrap:anywhere}.amount{font-size:25px;color:var(--navy)}.codes{display:grid;grid-template-columns:1fr 1fr;gap:15px;align-items:center;border-top:1px dashed #d8ad55;padding-top:20px;margin-top:15px}.codebox{text-align:center;min-width:0}.codebox strong{display:block;color:var(--navy);font-size:12px;margin-bottom:8px}.qr{display:flex;justify-content:center;min-height:145px;align-items:center}.qr img{max-width:145px}.barcode{width:100%;max-width:310px;height:auto}.codebox small{display:block;color:#778196;font-size:10px;margin-top:5px}.receipt-foot{text-align:center;border-top:1px solid #e8ebf1;padding-top:14px;margin-top:17px;color:#6c7482;font-size:11px}.receipt-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:18px}.footer{text-align:center;color:#6f7786;font-size:11px;padding:8px 10px 30px}.hidden{display:none!important}
+@media(max-width:560px){.codes{grid-template-columns:1fr}.detail{font-size:13px}.amount{font-size:21px}}
+@media print{body{background:#fff}.top,.search,.receipt-actions,.footer{display:none!important}.wrap{width:100%;margin:0}.receipt{display:block!important;box-shadow:none;border:1px solid #d8ad55;border-top:8px solid #d8ad55;border-radius:0;margin:0;padding:20px}.receipt.show{display:block}.codes{break-inside:avoid}.receipt-foot{margin-top:12px}}
+</style>
+</head>
+<body>
+<header class="top"><h1>Jathedar Akali Phula Singh Federation</h1><p>Official Donation Receipt & Public Verification</p></header>
+<main class="wrap">
+<section class="search"><h2>Verify Donation Receipt</h2><p>Scan the QR code or barcode on a receipt, or enter its receipt number below. No login is required.</p><form id="verifyForm" class="search-row"><input id="receiptInput" autocomplete="off" placeholder="Enter receipt number (e.g. JAPSF-2026-000001)" aria-label="Receipt number"><button class="btn" type="submit">Verify Receipt</button></form><div id="verifyMessage" class="message" role="status" aria-live="polite">Enter a receipt number or open the secure QR verification link.</div></section>
+<section id="receiptCard" class="receipt">
+<div class="receipt-head"><img src="./logo.png" alt="Federation logo"><h2>JATHEDAR AKALI PHULA SINGH FEDERATION</h2><p>OFFICIAL DONATION RECEIPT</p></div>
+<div class="verified"><span>✓ VERIFIED DONATION</span></div>
+<div class="details">
+<div class="detail"><span>Receipt Number</span><strong id="rNo"></strong></div>
+<div class="detail"><span>Donor Name</span><strong id="rName"></strong></div>
+<div class="detail"><span>Donation Amount</span><strong class="amount" id="rAmount"></strong></div>
+<div class="detail"><span>Donation Purpose</span><strong id="rPurpose"></strong></div>
+<div class="detail"><span>Payment Method</span><strong id="rMethod"></strong></div>
+<div class="detail"><span>Donation Date</span><strong id="rDate"></strong></div>
+<div class="detail"><span>Verified On</span><strong id="rVerified"></strong></div>
+</div>
+<div class="codes"><div class="codebox"><strong>SCAN QR TO VERIFY</strong><div class="qr" id="qrCode"></div><small>Secure public verification link</small></div><div class="codebox"><strong>BARCODE VERIFICATION</strong><svg id="barcode" class="barcode"></svg><small>Scan with a phone barcode scanner to open verification</small></div></div>
+<div class="receipt-foot">Thank you for supporting the Federation's seva. Waheguru Ji Mehar Karan.<br><strong>Jathedar Akali Phula Singh Federation</strong><br>Website Designed by New Granthi Singh Federation</div>
+<div class="receipt-actions"><button class="btn gold" id="printBtn" type="button">Print / Save PDF</button><button class="btn" id="verifyAgain" type="button">Verify Again</button></div>
+</section>
+</main>
+<footer class="footer">This public verification page displays only limited receipt details. Donor contact information is never shown.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script>
+(function(){
+ const endpoint="https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/public-donation-verification";
+ const apiKey="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ const params=new URLSearchParams(location.search);
+ const token=params.get("token")||"",receipt=params.get("receipt")||"";
+ const form=document.getElementById("verifyForm"),input=document.getElementById("receiptInput"),msg=document.getElementById("verifyMessage"),card=document.getElementById("receiptCard");
+ const date=v=>v?new Date(v).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"}):"—";
+ function message(text,type){msg.className="message"+(type?" "+type:"");msg.textContent=text;}
+ async function verify(value){
+  card.classList.remove("show");message("Checking the Federation donation records…");
+  const body=value&&value.token?{token:value.token}:{receipt_no:value?.receipt_no||input.value.trim()};
+  if(!body.token&&!body.receipt_no){message("Please enter a receipt number or scan its QR code.","wait");return;}
+  try{
+   const response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json","apikey":apiKey},body:JSON.stringify(body)});
+   const data=await response.json();
+   if(data.status==="revoked"){message("CANCELLED RECEIPT — "+data.message+" Receipt: "+(data.receipt_no||"—"),"bad");return;}
+   if(data.status==="pending"){message("PENDING — "+data.message,"wait");return;}
+   if(!response.ok||data.status!=="verified"||!data.receipt){message(data.message||"No valid receipt was found.","bad");return;}
+   const r=data.receipt;
+   document.getElementById("rNo").textContent=r.receipt_no;
+   document.getElementById("rName").textContent=r.donor_name;
+   document.getElementById("rAmount").textContent="₹"+Number(r.amount).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+   document.getElementById("rPurpose").textContent=r.campaign_name||"General Donation";
+   document.getElementById("rMethod").textContent=r.payment_method||"Recorded donation";
+   document.getElementById("rDate").textContent=date(r.donation_date);
+   document.getElementById("rVerified").textContent=date(r.verified_at||r.issued_at);
+   const base=location.origin+location.pathname;
+   const qrUrl=body.token?base+"?token="+encodeURIComponent(body.token):base+"?receipt="+encodeURIComponent(r.receipt_no);
+   const barcodeUrl=base+"?receipt="+encodeURIComponent(r.receipt_no);
+   const qr=document.getElementById("qrCode");qr.replaceChildren();
+   if(window.QRCode)new QRCode(qr,{text:qrUrl,width:145,height:145,colorDark:"#101d35",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
+   const barcode=document.getElementById("barcode");
+   if(window.JsBarcode)JsBarcode(barcode,barcodeUrl,{format:"CODE128",displayValue:false,lineColor:"#101d35",width:1.35,height:52,margin:4});
+   card.classList.add("show");message(data.message,"good");
+  }catch(e){message("Verification service is temporarily unavailable. Please try again later.","bad");}
+ }
+ form.addEventListener("submit",e=>{e.preventDefault();verify({receipt_no:input.value.trim()});});
+ document.getElementById("printBtn").addEventListener("click",()=>window.print());
+ document.getElementById("verifyAgain").addEventListener("click",()=>{card.classList.remove("show");message("Enter the receipt number or scan its code to verify again.");input.focus();});
+ if(token)verify({token});else if(receipt){input.value=receipt;verify({receipt_no:receipt});}
+})();
+</script>
+</body></html>
