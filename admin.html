@@ -52,6 +52,8 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 .timeline-row .timeline-excerpt{color:#4d596b;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 @media(max-width:560px){.timeline-row{grid-template-columns:60px minmax(0,1fr)}.timeline-row img{width:60px;height:58px}.timeline-row .event-actions{grid-column:1/-1;justify-content:flex-start}}
 
+
+.donation-metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin:15px 0}.donation-metrics .metric{min-height:100px}.donor-actions{display:flex;gap:6px;flex-wrap:wrap}.donor-actions button{border:1px solid #dce2eb;background:#fff;border-radius:7px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer}.donor-actions .verify{background:#e8f7ee;border-color:#b9e5c9;color:#168447}.donor-actions .cancel{color:#b42318;border-color:#f0c9c5}.donor-status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:800;background:#f2f3f5;color:#667085}.donor-status.good{background:#e8f7ee;color:#168447}.donor-status.bad{background:#fff0ef;color:#b42318}.donor-status.wait{background:#fff7e6;color:#946200}@media(max-width:760px){.donation-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body>
 <header class="top"><div class="top-left"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">☰</button><div class="brand"><div class="brand-mark"><img src="./logo.png" alt="Jathedar Akali Phula Singh Federation logo"></div><div><h1>Jathedar Akali Phula Singh Federation</h1><p>Administration Workspace</p></div></div></div><div class="top-right"><span class="secure">✦ SECURE ADMIN ACCESS</span><span class="admin-mail">helpline.japsf@gmail.com</span><button class="logout" id="logoutBtn" hidden>Sign out</button></div></header>
@@ -102,7 +104,22 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 </form>
 <div id="timelineRecords" class="empty">Loading timeline posts…</div></section>
 <section id="requests" class="panel"><h3>Help Requests</h3><p class="muted">Review community help requests. Private case details remain restricted to authorized staff only.</p><div id="helpRecords" class="empty">Loading requests…</div></section>
-<section id="funds" class="panel"><h3>Donations & Crowdfunding</h3><p class="muted">Donation entries are shown as pending until the payment provider's server-side verification is implemented.</p><div id="donationRecords" class="empty">Loading donations…</div></section>
+<section id="funds" class="panel">
+<div class="panel-head"><div><h3>Donors List & Donation Receipts</h3><p class="muted" style="margin:4px 0 0">Manage online, UPI, bank transfer and cash donations. Receipts are issued only after admin verification.</p></div><span class="pill">DONATION CONTROL</span></div>
+<div class="cards donation-metrics"><div class="metric"><div class="metric-label">Total Donors</div><strong id="donorTotal">—</strong></div><div class="metric"><div class="metric-label">Verified Donations</div><strong id="donorVerified">—</strong></div><div class="metric"><div class="metric-label">Pending Verification</div><strong id="donorPending">—</strong></div><div class="metric"><div class="metric-label">Verified Amount</div><strong id="donorAmount">₹—</strong></div></div>
+<div class="event-toolbar"><span class="muted">New offline or manually recorded donation</span><button class="event-primary" id="donorShowForm" type="button">＋ Add Donation</button></div>
+<form id="donorForm" class="event-form" hidden><div class="event-fields">
+<div class="event-field"><label for="donorName">Donor Name *</label><input id="donorName" maxlength="160" required></div>
+<div class="event-field"><label for="donorAmountInput">Donation Amount (₹) *</label><input id="donorAmountInput" type="number" min="1" max="100000000" step="0.01" required></div>
+<div class="event-field"><label for="donorMobile">Mobile Number</label><input id="donorMobile" maxlength="30" type="tel"></div>
+<div class="event-field"><label for="donorEmail">Email</label><input id="donorEmail" maxlength="254" type="email"></div>
+<div class="event-field"><label for="donorMethod">Payment Method *</label><select id="donorMethod" required><option value="">Select method</option><option>Razorpay</option><option>UPI</option><option>Bank Transfer</option><option>Cash</option><option>Other</option></select></div>
+<div class="event-field"><label for="donorReference">Transaction / UTR / Reference</label><input id="donorReference" maxlength="180"></div>
+<div class="event-field full"><label for="donorCampaign">Donation Purpose / Campaign</label><input id="donorCampaign" maxlength="160" placeholder="General Donation / Seva / Campaign name"></div>
+</div><div class="event-form-actions"><button class="event-primary" id="donorSaveBtn" type="submit">Save as Pending</button><button class="event-secondary" id="donorCancelBtn" type="button">Cancel</button></div><div id="donorFeedback" class="event-feedback" role="status" aria-live="polite"></div></form>
+<div class="table-tools"><input id="donorSearch" type="search" placeholder="Search donor, receipt or transaction…"><select id="donorStatusFilter" aria-label="Filter donations"><option value="all">All donations</option><option value="pending">Pending</option><option value="successful">Verified / Successful</option><option value="revoked">Receipt cancelled</option></select><button class="event-secondary" id="donorRefresh" type="button">↻ Refresh</button></div>
+<div id="donorRecords" class="empty">Loading donors…</div><p class="muted" id="donorUpdated" style="margin-top:10px"></p>
+</section>
 <section id="team" class="panel"><h3>Team Members</h3><p class="muted">Current public team profiles from the secure database.</p><div id="teamRecords" class="empty">Loading team…</div></section>
 <section id="content" class="panel"><h3>Website Content</h3><div id="messageRecords" class="empty">Loading contact messages…</div><p class="muted">Manage public pages, announcements and gallery content after the content-management backend is configured.</p></section>
 <section id="ai" class="panel"><h3>AI Assistant Policy</h3><div class="two-col"><div class="mini-card"><h4>Allowed information</h4><p class="muted">Public website pages and approved public FAQs only.</p></div><div class="mini-card"><h4>Restricted information</h4><p class="muted">Member, donor, payment and private help-request records must never be exposed.</p></div></div><p class="muted">Enforce all access restrictions on the server, not only through AI instructions.</p></section>
@@ -432,4 +449,92 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
  client.auth.getSession().then(async({data})=>{if(data.session)await authorize()});
  const side=document.querySelector(".side");document.getElementById("menuToggle").addEventListener("click",()=>side.classList.toggle("open"));document.querySelectorAll(".side a").forEach(link=>link.addEventListener("click",()=>{document.querySelectorAll(".side a").forEach(item=>item.classList.remove("active"));link.classList.add("active");side.classList.remove("open")}));
 })();
-</script></body></html>
+</script><script>
+(function(){
+ const URL_BASE="https://urghiemtxhwhvoaivwge.supabase.co";
+ const KEY="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ const api=window.supabase.createClient(URL_BASE,KEY);
+ const $=id=>document.getElementById(id);
+ const host=$("donorRecords"); if(!host)return;
+ let rows=[];
+ const money=v=>"₹"+Number(v||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ async function call(body){const {data,error}=await api.functions.invoke("admin-donations",{body});if(error)throw new Error(data?.error||error.message||"Donation service unavailable");if(data?.error)throw new Error(data.error);return data;}
+ function statusClass(r){if(r.receipt_status==="revoked")return "bad";if(r.payment_status==="successful"&&r.receipt_status==="issued")return "good";return "wait";}
+ function statusText(r){if(r.receipt_status==="revoked")return "Cancelled";if(r.payment_status==="successful"&&r.receipt_status==="issued")return "Verified";return "Pending";}
+ function render(){
+  const term=$("donorSearch").value.trim().toLowerCase(),filter=$("donorStatusFilter").value;
+  const list=rows.filter(r=>{
+   const hay=[r.donor_name,r.email,r.mobile,r.receipt_no,r.payment_reference,r.campaign_name,r.payment_method].join(" ").toLowerCase();
+   if(term&&!hay.includes(term))return false;
+   if(filter==="pending"&&r.payment_status!=="pending")return false;
+   if(filter==="successful"&&!(r.payment_status==="successful"&&r.receipt_status==="issued"))return false;
+   if(filter==="revoked"&&r.receipt_status!=="revoked")return false;
+   return true;
+  });
+  if(!list.length){host.className="empty";host.textContent=rows.length?"No donations match this filter.":"No donation records found. Add a donation to begin.";return;}
+  host.className="table-scroll";
+  const table=document.createElement("table");table.className="member-table";table.style.minWidth="1100px";
+  table.innerHTML="<thead><tr><th>Donor</th><th>Amount</th><th>Payment</th><th>Transaction / UTR</th><th>Date</th><th>Status</th><th>Receipt No.</th><th>Actions</th></tr></thead>";
+  const tbody=document.createElement("tbody");
+  list.forEach(r=>{
+   const tr=document.createElement("tr");
+   const verified=r.payment_status==="successful"&&r.receipt_status==="issued";
+   const actions=[];
+   if(!verified&&r.receipt_status!=="revoked")actions.push('<button class="verify" data-action="verify" data-id="'+esc(r.id)+'">Verify & Issue</button>');
+   if(verified)actions.push('<button data-action="print" data-token="'+esc(r.verification_token||"")+'">Receipt / PDF</button>');
+   if(r.receipt_status==="issued")actions.push('<button class="cancel" data-action="revoke" data-id="'+esc(r.id)+'">Cancel</button>');
+   const date=r.created_at?new Date(r.created_at).toLocaleString("en-IN"):"—";
+   tr.innerHTML='<td><strong>'+esc(r.donor_name)+'</strong><br><small>'+esc(r.mobile||r.email||"")+'</small></td><td>'+money(r.amount)+'</td><td>'+esc(r.payment_method||r.payment_provider||"—")+'</td><td>'+esc(r.payment_reference||"—")+'</td><td>'+esc(date)+'</td><td><span class="donor-status '+statusClass(r)+'">'+statusText(r)+'</span></td><td>'+esc(r.receipt_no||"Not issued")+'</td><td><div class="donor-actions">'+actions.join("")+'</div></td>';
+   tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);host.replaceChildren(table);
+ }
+ async function load(){
+  host.className="empty";host.textContent="Loading donor records…";
+  try{
+   const data=await call({action:"list"});rows=data.donations||[];
+   const s=data.summary||{};
+   $("donorTotal").textContent=Number(s.total||0).toLocaleString("en-IN");
+   $("donorVerified").textContent=Number(s.verified||0).toLocaleString("en-IN");
+   $("donorPending").textContent=Number(s.pending||0).toLocaleString("en-IN");
+   $("donorAmount").textContent=money(s.totalVerifiedAmount);
+   $("donorUpdated").textContent="Updated "+new Date().toLocaleString("en-IN");
+   render();
+  }catch(e){host.className="empty";host.textContent=e.message;}
+ }
+ $("donorShowForm").addEventListener("click",()=>{$("donorForm").hidden=false;$("donorName").focus();});
+ $("donorCancelBtn").addEventListener("click",()=>{$("donorForm").reset();$("donorForm").hidden=true;$("donorFeedback").textContent="";});
+ $("donorForm").addEventListener("submit",async e=>{
+  e.preventDefault();const btn=$("donorSaveBtn");btn.disabled=true;btn.textContent="Saving…";
+  try{
+   await call({action:"create",donor_name:$("donorName").value,email:$("donorEmail").value,mobile:$("donorMobile").value,amount:$("donorAmountInput").value,payment_method:$("donorMethod").value,payment_reference:$("donorReference").value,campaign_name:$("donorCampaign").value});
+   $("donorFeedback").textContent="Donation saved as Pending. Verify payment evidence before issuing a receipt.";
+   $("donorForm").reset();await load();
+  }catch(err){$("donorFeedback").textContent=err.message;}
+  finally{btn.disabled=false;btn.textContent="Save as Pending";}
+ });
+ $("donorSearch").addEventListener("input",render);$("donorStatusFilter").addEventListener("change",render);$("donorRefresh").addEventListener("click",load);
+ host.addEventListener("click",async e=>{
+  const b=e.target.closest("button[data-action]");if(!b)return;
+  const action=b.dataset.action;
+  if(action==="print"){if(!b.dataset.token){alert("Receipt token unavailable. Please refresh records.");return;}window.open("./verify-donation.html?token="+encodeURIComponent(b.dataset.token),"_blank","noopener");return;}
+  if(action==="revoke"){
+   const reason=prompt("Enter the reason for cancelling this receipt:");if(!reason||!reason.trim())return;
+   if(!confirm("Cancel this donation receipt? Public verification will show it as cancelled."))return;
+   b.disabled=true;try{await call({action:"revoke",id:b.dataset.id,reason});await load();}catch(err){alert(err.message);b.disabled=false;}return;
+  }
+  if(action==="verify"){
+   if(!confirm("Have you checked the actual UPI/bank/cash record or payment gateway transaction? Only confirm after the money is received."))return;
+   b.disabled=true;b.textContent="Verifying…";
+   try{const result=await call({action:"verify",id:b.dataset.id});await load();if(result.donation?.verification_token)window.open("./verify-donation.html?token="+encodeURIComponent(result.donation.verification_token),"_blank","noopener");}
+   catch(err){alert(err.message);b.disabled=false;b.textContent="Verify & Issue";}
+  }
+ });
+ async function init(){if(window.__japsfDonorModuleReady)return;const {data}=await api.auth.getSession();if(data.session&&!$("adminApp").hidden){window.__japsfDonorModuleReady=true;await load();}}
+ const observer=new MutationObserver(()=>{if(!$("adminApp").hidden)init();});
+ observer.observe($("adminApp"),{attributes:true,attributeFilter:["hidden"]});
+ init();
+})();
+</script>
+</body></html>
