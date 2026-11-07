@@ -398,7 +398,7 @@ const forms={
 'coordinator-login':()=>`<div class="page-card"><h2>Coordinator Login</h2><p>Coordinator Login server-side authentication ਅਤੇ permission controls ਲਾਗੂ ਹੋਣ ਤੋਂ ਬਾਅਦ ਹੀ ਚਾਲੂ ਕੀਤਾ ਜਾਵੇਗਾ।</p><div class="notice">ਇਸ Demo ਪੇਜ ਉੱਤੇ ਆਪਣਾ Coordinator ID ਜਾਂ Password ਨਾ ਭਰੋ।</div><a class="button" href="?page=contact-us">Contact Federation</a></div>`};
 const pages={
 'timeline-posts':()=>`<div class="page-card timeline-public-card"><p class="eyebrow">FEDERATION UPDATES</p><h2>Timeline Posts</h2><p>Updates, announcements and seva activities from Jathedar Akali Phula Singh Federation.</p><div id="publicTimelineStatus" class="notice" role="status">Loading the latest Federation updates…</div><div id="publicTimelineList" class="public-timeline-list" aria-live="polite"></div></div>`,
-'latest-event':`<div class="page-card"><h2>Latest Events</h2><p>Federation ਦੇ ਤਾਜ਼ਾ ਸਮਾਗਮਾਂ ਅਤੇ ਸੇਵਾ ਕਾਰਜਾਂ ਦੀ ਜਾਣਕਾਰੀ ਇੱਥੇ ਪਾਈ ਜਾਵੇਗੀ।</p><div class="notice">ਅਜੇ ਕੋਈ Event Upload ਨਹੀਂ ਕੀਤਾ ਗਿਆ।</div></div>`,
+'latest-event':`<div class="page-card"><h2>Latest Events & Registration</h2><p>Choose an upcoming Federation event and complete the registration form.</p><div id="publicEventStatus" class="notice" role="status">Loading published events…</div><div id="publicEventList" class="public-event-list"></div></div>`,
 'our-solutions':`<div class="page-card"><h2>Our Solutions</h2><ul><li>ਲੋੜਵੰਦ ਲੋਕਾਂ ਦੀ ਸਹਾਇਤਾ</li><li>ਸਮਾਜਿਕ ਭਲਾਈ ਦੇ ਕਾਰਜ</li><li>ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਵਿਰਸੇ ਦੀ ਜਾਗਰੂਕਤਾ</li><li>ਨੌਜਵਾਨਾਂ ਲਈ ਸੇਵਾ ਅਤੇ ਅਗਵਾਈ</li></ul></div>`,
 'id-card-print':`<div class="page-card"><h2>ID Card Print</h2><p>Federation ਮੈਂਬਰ ID Card ਲਈ ਬੇਨਤੀ ਕਰ ਸਕਦੇ ਹਨ।</p><div class="notice">ID Card ਦੀ ਅਸਲ ਜਾਂਚ ਅਤੇ Print ਲਈ Member Database ਅਤੇ Backend ਲੋੜੀਂਦਾ ਹੈ।</div><a class="button" href="?page=member-registration">Member Registration</a></div>`,
 'team-members':teamHTML,'management-team':teamHTML,
@@ -626,4 +626,59 @@ document.addEventListener("submit",async function(event){
  finally{button.disabled=false;button.textContent="Submit Donation Details";}
 });
 </script>
+
+<script>
+/* Public event registration: submissions are stored server-side and reviewed in the protected admin panel. */
+(function(){
+ const endpoint="https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/public-event-registration";
+ const key="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ let api=null;
+ const el=id=>document.getElementById(id);
+ function eventDate(v){const d=new Date(v);return Number.isNaN(d.getTime())?"Date to be announced":d.toLocaleString("en-IN",{dateStyle:"long",timeStyle:"short"});}
+ function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
+ async function loadPublicEvents(){
+  const host=el("publicEventList"),status=el("publicEventStatus");if(!host||!status)return;
+  if(!window.supabase?.createClient){status.textContent="Event service is temporarily unavailable. Please refresh.";return;}
+  if(!api)api=window.supabase.createClient("https://urghiemtxhwhvoaivwge.supabase.co",key);
+  status.textContent="Loading published events…";host.replaceChildren();
+  const {data,error}=await api.from("events").select("id,title,description,event_date,venue,image_path").eq("is_published",true).order("event_date",{ascending:true}).limit(50);
+  if(error){status.textContent="Published events could not be loaded. Please try again later.";return;}
+  if(!data?.length){status.textContent="No events are currently open for registration.";return;}
+  status.hidden=true;
+  data.forEach(ev=>{
+   const card=node("article","public-event-card");
+   if(ev.image_path){const img=node("img","public-event-image");img.src=api.storage.from("federation-public-assets").getPublicUrl(ev.image_path).data.publicUrl;img.alt=ev.title||"Federation event";img.loading="lazy";card.appendChild(img);}
+   const content=node("div","public-event-copy");content.appendChild(node("h3","",ev.title||"Federation Event"));
+   content.appendChild(node("p","public-event-meta","📅 "+eventDate(ev.event_date)));
+   if(ev.venue)content.appendChild(node("p","public-event-meta","📍 "+ev.venue));
+   if(ev.description)content.appendChild(node("p","",ev.description));
+   const form=node("form","public-event-registration");form.dataset.eventId=ev.id;
+   const heading=node("h4","","Register for this Event");form.appendChild(heading);
+   const name=node("input");name.name="full_name";name.placeholder="Full Name";name.maxLength=120;name.required=true;name.autocomplete="name";form.appendChild(name);
+   const mobile=node("input");mobile.name="mobile";mobile.type="tel";mobile.placeholder="Mobile Number";mobile.maxLength=25;mobile.required=true;mobile.autocomplete="tel";form.appendChild(mobile);
+   const email=node("input");email.name="email";email.type="email";email.placeholder="Email (optional)";email.maxLength=254;email.autocomplete="email";form.appendChild(email);
+   const notes=node("textarea");notes.name="notes";notes.placeholder="Additional information (optional)";notes.maxLength=1000;form.appendChild(notes);
+   const trap=node("input");trap.name="website";trap.tabIndex=-1;trap.autocomplete="off";trap.setAttribute("aria-hidden","true");trap.style.cssText="position:absolute;left:-9999px";form.appendChild(trap);
+   const button=node("button","button","Submit Registration");button.type="submit";form.appendChild(button);
+   const feedback=node("p","form-message");feedback.setAttribute("role","status");feedback.setAttribute("aria-live","polite");form.appendChild(feedback);
+   content.appendChild(form);card.appendChild(content);host.appendChild(card);
+  });
+ }
+ document.addEventListener("submit",async e=>{
+  const form=e.target.closest(".public-event-registration");if(!form)return;e.preventDefault();
+  if(!form.reportValidity())return;
+  const button=form.querySelector('button[type="submit"]'),feedback=form.querySelector(".form-message");
+  button.disabled=true;button.textContent="Submitting…";feedback.textContent="Sending your registration securely…";
+  try{
+   const response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json","apikey":key},body:JSON.stringify({event_id:form.dataset.eventId,full_name:form.elements.full_name.value,mobile:form.elements.mobile.value,email:form.elements.email.value,notes:form.elements.notes.value,website:form.elements.website.value})});
+   const result=await response.json();if(!response.ok||!result.success)throw new Error(result.error||"Registration could not be submitted.");
+   feedback.textContent="Registration received. Your Registration ID is "+result.participant_code+". Status: Pending approval.";
+   form.reset();button.textContent="Registration Submitted";
+  }catch(err){feedback.textContent=err.message||"Unable to submit. Please try again.";button.disabled=false;button.textContent="Submit Registration";}
+ });
+ window.loadPublicEvents=loadPublicEvents;
+ if(new URLSearchParams(location.search).get("page")==="latest-event")loadPublicEvents();
+})();
+</script>
+
 </body></html>
