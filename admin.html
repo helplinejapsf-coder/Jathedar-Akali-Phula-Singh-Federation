@@ -54,6 +54,20 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 
 
 .donation-metrics{grid-template-columns:repeat(4,minmax(0,1fr));margin:15px 0}.donation-metrics .metric{min-height:100px}.donor-actions{display:flex;gap:6px;flex-wrap:wrap}.donor-actions button{border:1px solid #dce2eb;background:#fff;border-radius:7px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer}.donor-actions .verify{background:#e8f7ee;border-color:#b9e5c9;color:#168447}.donor-actions .cancel{color:#b42318;border-color:#f0c9c5}.donor-status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:800;background:#f2f3f5;color:#667085}.donor-status.good{background:#e8f7ee;color:#168447}.donor-status.bad{background:#fff0ef;color:#b42318}.donor-status.wait{background:#fff7e6;color:#946200}@media(max-width:760px){.donation-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.participant-tools{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.participant-tools input,.participant-tools select{min-width:170px;max-width:100%;padding:10px 12px;border:1px solid #dce2eb;border-radius:9px;background:#fff;color:#34445a}
+.participant-summary{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.participant-summary span{padding:8px 11px;border:1px solid #eee4d2;background:#fffaf0;border-radius:9px;font-size:11px;color:#66502b}
+.participant-table{width:100%;min-width:920px;border-collapse:collapse;font-size:11px}
+.participant-table th,.participant-table td{padding:11px 10px;border-bottom:1px solid #edf0f4;text-align:left;vertical-align:top}
+.participant-table th{background:#f7f9fc;color:#56647a;white-space:nowrap}
+.participant-status{padding:4px 8px;border-radius:20px;font-size:9px;font-weight:800;text-transform:uppercase}
+.participant-status.pending{background:#fff4d8;color:#8a641e}.participant-status.approved{background:#e8f7ee;color:#168447}.participant-status.rejected{background:#fdebea;color:#b42318}
+.participant-action{border:1px solid #dce2eb;background:#fff;border-radius:7px;padding:6px 8px;font-size:10px;cursor:pointer;margin:2px}
+.participant-action.danger{color:#b42318}
+@media(max-width:560px){.participant-tools input,.participant-tools select{width:100%;max-width:none}}
+
 </style></head>
 <body>
 <header class="top"><div class="top-left"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">☰</button><div class="brand"><div class="brand-mark"><img src="./logo.png" alt="Jathedar Akali Phula Singh Federation logo"></div><div><h1>Jathedar Akali Phula Singh Federation</h1><p>Administration Workspace</p></div></div></div><div class="top-right"><span class="secure">✦ SECURE ADMIN ACCESS</span><span class="admin-mail">helpline.japsf@gmail.com</span><button class="logout" id="logoutBtn" hidden>Sign out</button></div></header>
@@ -62,7 +76,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <main class="wrap" id="adminApp" hidden>
 <div class="notice" id="backendNotice"><span>◆</span><div><b>Secure database:</b> Administrator sign-in is protected by server-side authorization. Live records load only after the approved administrator session is verified.</div></div>
 <div class="layout">
-<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#timeline"><span>◷</span>Timeline Posts</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donors & Receipts</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
+<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#participants"><span>♙</span>Participant List</a><a href="#timeline"><span>◷</span>Timeline Posts</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donors & Receipts</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
 <div class="main">
 <section id="dashboard" class="welcome"><div><div class="eyebrow">Federation control centre</div><h2>Dashboard Overview</h2><p>Welcome to your administration workspace.</p></div><div class="date-chip">✦ &nbsp; JAPSF ADMINISTRATOR</div></section>
 <section class="panel" style="background:linear-gradient(115deg,#e8eaff,#f2e8ff);border:0"><div class="panel-head"><h3>Federation Quick Access</h3><span class="pill">ADMIN TOOLS</span></div><p class="muted">Manage the Federation website, review requests and keep public information up to date from one secure workspace.</p><div class="two-col"><div class="mini-card"><h4>Website Administration</h4><p class="muted">Review content, events and public announcements.</p></div><div class="mini-card"><h4>Member Services</h4><p class="muted">Membership and ID card modules will appear here once database integration is complete.</p></div></div></section>
@@ -88,6 +102,12 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <div id="eventFeedback" class="event-feedback" role="status" aria-live="polite"></div>
 </form>
 <div id="eventRecords" class="empty">Loading events…</div></section>
+<section id="participants" class="panel">
+<div class="panel-head"><div><h3>Event Participant List</h3><p class="muted" style="margin:4px 0 0">Registrations submitted through the public website. Participant contact details are visible only to the approved administrator.</p></div><span class="pill">PARTICIPANTS</span></div>
+<div class="participant-summary"><span id="participantTotal">Total: 0</span><span id="participantPending">Pending: 0</span><span id="participantApproved">Approved: 0</span><span id="participantRejected">Rejected: 0</span></div>
+<div class="participant-tools"><input id="participantSearch" type="search" placeholder="Search name, mobile or registration ID" aria-label="Search participants"><select id="participantEventFilter" aria-label="Filter by event"><option value="">All Events</option></select><select id="participantStatusFilter" aria-label="Filter by status"><option value="">All Statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select><button class="event-secondary" id="refreshParticipants" type="button">↻ Refresh</button><button class="event-secondary" id="exportParticipants" type="button">Export CSV</button><button class="event-secondary" id="printParticipants" type="button">Print / Save PDF</button></div>
+<div id="participantRecords" class="empty">Sign in to load participant registrations.</div>
+</section>
 <section id="timeline" class="panel"><div class="panel-head"><div><h3>Timeline Post List</h3><p class="muted" style="margin:4px 0 0">Create and manage Federation timeline updates, photos and announcements.</p></div><span class="pill">TIMELINE</span></div>
 <div class="event-toolbar"><span class="muted">Upload JPG, PNG or WebP images up to 5 MB. Drafts stay private.</span><button class="event-primary" id="showTimelineForm" type="button">＋ Create Timeline Post</button></div>
 <form id="timelineForm" class="event-form" hidden>
@@ -354,6 +374,64 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
      timelineMessage(err.message||"Could not save timeline post.");
    }finally{btn.disabled=false;btn.textContent=document.getElementById("timelineEditId").value?"Save Changes":"Save Timeline Post";}
  });
+ 
+ const participantHost=document.getElementById("participantRecords");
+ let participantRows=[];
+ function participantText(value){return value==null?"":String(value)}
+ function participantDate(value){const d=new Date(value);return Number.isNaN(d.getTime())?"—":d.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"});}
+ function participantFiltered(){
+  const q=(document.getElementById("participantSearch").value||"").trim().toLowerCase();
+  const ev=document.getElementById("participantEventFilter").value,st=document.getElementById("participantStatusFilter").value;
+  return participantRows.filter(p=>(!ev||p.event_id===ev)&&(!st||p.status===st)&&(!q||[p.full_name,p.mobile,p.email,p.participant_code,p.event_title].some(v=>participantText(v).toLowerCase().includes(q))));
+ }
+ function renderParticipants(){
+  const counts={total:participantRows.length,pending:0,approved:0,rejected:0};participantRows.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
+  document.getElementById("participantTotal").textContent="Total: "+counts.total;
+  document.getElementById("participantPending").textContent="Pending: "+counts.pending;
+  document.getElementById("participantApproved").textContent="Approved: "+counts.approved;
+  document.getElementById("participantRejected").textContent="Rejected: "+counts.rejected;
+  const events=document.getElementById("participantEventFilter"),previous=events.value;
+  const names=new Map(participantRows.map(p=>[p.event_id,p.event_title]));
+  events.replaceChildren(new Option("All Events",""));
+  [...names].forEach(([id,name])=>events.add(new Option(name,id)));
+  events.value=previous;
+  const rows=participantFiltered();participantHost.replaceChildren();
+  if(!rows.length){participantHost.className="empty";participantHost.textContent=participantRows.length?"No participants match these filters.":"No event registrations have been received yet.";return;}
+  participantHost.className="table-scroll";
+  const table=document.createElement("table");table.className="participant-table";
+  const head=document.createElement("thead"),trh=document.createElement("tr");
+  ["Registration ID","Participant","Mobile / Email","Event","Registered On","Status","Actions"].forEach(v=>{const th=document.createElement("th");th.textContent=v;trh.appendChild(th)});head.appendChild(trh);table.appendChild(head);
+  const body=document.createElement("tbody");
+  rows.forEach(p=>{
+   const tr=document.createElement("tr");
+   const cell=(value)=>{const td=document.createElement("td");td.textContent=participantText(value)||"—";tr.appendChild(td);return td};
+   cell(p.participant_code);cell(p.full_name);
+   const contact=cell(p.mobile);if(p.email){const small=document.createElement("div");small.className="muted";small.textContent=p.email;contact.appendChild(small)}
+   cell(p.event_title);cell(participantDate(p.created_at));
+   const st=cell("");const badge=document.createElement("span");badge.className="participant-status "+p.status;badge.textContent=p.status;st.appendChild(badge);
+   const actions=cell("");
+   const select=document.createElement("select");select.className="participant-action";["pending","approved","rejected"].forEach(s=>select.add(new Option(s[0].toUpperCase()+s.slice(1),s)));select.value=p.status;select.setAttribute("aria-label","Change status for "+p.full_name);
+   select.addEventListener("change",async()=>{select.disabled=true;const {data,error}=await client.functions.invoke("admin-participants",{body:{action:"status",id:p.id,status:select.value}});if(error||!data?.success){alert(data?.error||error?.message||"Could not update status");select.value=p.status;}else p.status=select.value;select.disabled=false;renderParticipants();});
+   const del=document.createElement("button");del.type="button";del.className="participant-action danger";del.textContent="Delete";del.addEventListener("click",async()=>{if(!confirm("Delete registration "+p.participant_code+"?"))return;del.disabled=true;const {data,error}=await client.functions.invoke("admin-participants",{body:{action:"delete",id:p.id}});if(error||!data?.success){alert(data?.error||error?.message||"Could not delete registration");del.disabled=false;return;}participantRows=participantRows.filter(x=>x.id!==p.id);renderParticipants();});
+   actions.append(select,del);body.appendChild(tr);
+  });
+  table.appendChild(body);participantHost.appendChild(table);
+ }
+ async function loadParticipantRecords(){
+  participantHost.className="empty";participantHost.textContent="Loading participant registrations…";
+  const {data,error}=await client.functions.invoke("admin-participants",{body:{action:"list"}});
+  if(error||!data?.success){participantHost.textContent=data?.error||error?.message||"Could not load participants. Please sign in again.";return;}
+  participantRows=data.participants||[];renderParticipants();
+ }
+ ["participantSearch","participantEventFilter","participantStatusFilter"].forEach(id=>document.getElementById(id).addEventListener(id==="participantSearch"?"input":"change",renderParticipants));
+ document.getElementById("refreshParticipants").addEventListener("click",loadParticipantRecords);
+ document.getElementById("exportParticipants").addEventListener("click",()=>{
+  const rows=participantFiltered(),cols=["participant_code","full_name","mobile","email","event_title","created_at","status"];
+  const csv=[cols.join(","),...rows.map(r=>cols.map(k=>'"'+participantText(r[k]).replace(/"/g,'""')+'"').join(","))].join("\r\n");
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="JAPSF-participants.csv";a.click();URL.revokeObjectURL(url);
+ });
+ document.getElementById("printParticipants").addEventListener("click",()=>{const rows=participantFiltered();const w=window.open("","_blank");if(!w){alert("Please allow pop-ups to print the participant list.");return;}const safe=v=>participantText(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));w.document.write("<!doctype html><html><head><title>JAPSF Participant List</title><style>body{font:12px Arial;padding:20px}h2{color:#101d35}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:7px;text-align:left}th{background:#f3eee4}</style></head><body><h2>Jathedar Akali Phula Singh Federation — Participant List</h2><table><thead><tr><th>Registration ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Event</th><th>Date</th><th>Status</th></tr></thead><tbody>"+rows.map(p=>"<tr>"+[p.participant_code,p.full_name,p.mobile,p.email,p.event_title,participantDate(p.created_at),p.status].map(v=>"<td>"+safe(v)+"</td>").join("")+"</tr>").join("")+"</tbody></table></body></html>");w.document.close();w.focus();w.print();});
+
  async function loadDashboard(){
    const notice=document.getElementById("backendNotice");
    const {data,error}=await client.functions.invoke("admin-dashboard",{body:{}});
@@ -423,7 +501,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
    if((user.email||"").toLowerCase()!==allowedEmail){await client.auth.signOut();showGate();message("This email is not authorized for the administrator panel.");return false}
    const {data,error}=await client.functions.invoke("admin-authorize",{body:{}});
    if(error||!data||data.authorized!==true){await client.auth.signOut();showGate();message("Administrator authorization failed. Contact the project owner.");return false}
-   showApp();await loadDashboard();return true
+   showApp();await loadDashboard();await loadParticipantRecords();return true
  }
  form.addEventListener("submit",async e=>{
    e.preventDefault();message("Signing in securely...");
