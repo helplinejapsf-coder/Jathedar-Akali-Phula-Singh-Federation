@@ -152,7 +152,7 @@ footer{padding:38px 18px}
 <script>
 const menuButton=document.getElementById('menuButton'),menuPanel=document.getElementById('menuPanel');
 if(menuButton&&menuPanel){
- menuButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();const open=menuPanel.classList.toggle('open');menuButton.setAttribute('aria-expanded',open?'true':'false');});
+ // The inline button handler is the single source of truth; do not toggle twice.
  menuPanel.addEventListener('click',e=>e.stopPropagation());
  document.addEventListener('click',e=>{if(!e.target.closest('.menu-wrap')){menuPanel.classList.remove('open');menuButton.setAttribute('aria-expanded','false');}});
 }
