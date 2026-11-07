@@ -107,6 +107,19 @@ footer{padding:38px 18px}
 .auth-logout{background:#f1eee8;color:#5d4520;border:1px solid #dfd1b7;border-radius:24px;padding:11px 17px;font-weight:bold;cursor:pointer}
 @media(max-width:600px){.auth-page{margin:12px auto;padding:20px}.public-auth-form .button{width:100%}}
 
+
+/* FINAL mobile navigation override: keep the hamburger visible and menu above all content */
+@media(max-width:850px){
+ body header .header-inner{display:flex!important;flex-wrap:nowrap!important;justify-content:space-between!important;align-items:center!important;position:relative!important;gap:8px!important}
+ body header .header-inner>nav{display:none!important}
+ body header .translate-wrap{display:none!important}
+ body header .brand{display:flex!important;flex:1 1 auto!important;min-width:0!important;max-width:calc(100% - 58px)!important;font-size:12px!important}
+ body header .menu-wrap{display:block!important;flex:0 0 44px!important;margin-left:auto!important;position:relative!important;z-index:9999!important}
+ body header .menu-button{display:flex!important;width:44px!important;height:44px!important;min-width:44px!important;position:relative!important;z-index:10000!important;pointer-events:auto!important;touch-action:manipulation!important}
+ body header .menu-panel{display:none!important;position:absolute!important;top:48px!important;right:0!important;left:auto!important;width:min(290px,calc(100vw - 24px))!important;max-height:70vh!important;overflow-y:auto!important;z-index:10001!important;background:var(--navy)!important}
+ body header .menu-panel.open{display:block!important}
+}
+@media(max-width:600px){body header .header-inner{min-height:70px!important;padding:8px 0!important}body header .brand .logo{width:42px!important;height:42px!important}}
 </style>
 </head>
 <body>
@@ -138,9 +151,11 @@ footer{padding:38px 18px}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const menuButton=document.getElementById('menuButton'),menuPanel=document.getElementById('menuPanel');
-menuButton.addEventListener('click',e=>{e.stopPropagation();const open=menuPanel.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));});
-menuPanel.addEventListener('click',e=>e.stopPropagation());
-document.addEventListener('click',e=>{if(!e.target.closest('.menu-wrap')){menuPanel.classList.remove('open');menuButton.setAttribute('aria-expanded','false');}});
+if(menuButton&&menuPanel){
+ menuButton.onclick=function(e){e.preventDefault();e.stopPropagation();const open=menuPanel.classList.toggle('open');menuButton.setAttribute('aria-expanded',open?'true':'false');};
+ menuPanel.addEventListener('click',e=>e.stopPropagation());
+ document.addEventListener('click',e=>{if(!e.target.closest('.menu-wrap')){menuPanel.classList.remove('open');menuButton.setAttribute('aria-expanded','false');}});
+}
 
 /* Complete Punjabi-English text translation layer for static and dynamically rendered pages */
 const translationPairs = {
