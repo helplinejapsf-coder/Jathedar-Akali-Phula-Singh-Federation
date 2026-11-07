@@ -30,4 +30,17 @@ footer p{margin:6px}
 <p>A Section 8 Company under the Companies Act, 2013 – Non-Profit Organization (NGO)</p>
 <p><a href="terms-and-conditions.html">Terms &amp; Conditions</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="disclaimer.html">Disclaimer</a> · <a href="refund-policy.html">Refund Policy</a></p>
 <p>© 2021 All rights reserved. Jathedar Akali Phula Singh Federation</p>
-<p style="color:#d8ad55;font-weight:bold">Designed By New Granthi Singh Federation</p></footer></body></html>
+<p style="color:#d8ad55;font-weight:bold">Designed By New Granthi Singh Federation</p></footer><script>
+(async function(){try{
+ const url="https://urghiemtxhwhvoaivwge.supabase.co/rest/v1/company_profile?id=eq.1&select=profile";
+ const key="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ const r=await fetch(url,{headers:{apikey:key,Authorization:"Bearer "+key}});
+ if(!r.ok)return;const rows=await r.json(),p=rows&&rows[0]&&rows[0].profile;
+ if(p&&typeof p["privacy_policy"]==="string"&&p["privacy_policy"].trim()){
+ const main=document.querySelector("main");if(!main)return;
+ const h=document.createElement("h1");h.textContent="Privacy Policy";
+ const body=document.createElement("div");body.style.whiteSpace="pre-wrap";body.textContent=p["privacy_policy"];
+ main.replaceChildren(h,body);
+ }
+ }catch(e){/* Keep the approved static policy visible if the live profile is unavailable. */}})();
+ </script></body></html>
