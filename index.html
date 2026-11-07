@@ -554,7 +554,7 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
   const call=document.querySelector(".call-btn");if(call&&p.phone_primary)call.href="tel:"+p.phone_primary;
   const slug=new URLSearchParams(location.search).get("page");
   const policyMap={"privacy-policy":"privacy_policy","terms-and-conditions":"terms_conditions","disclaimer":"disclaimer","refund-policy":"refund_policy"};
-  if(slug==="about-us"&&p.about_us){const host=document.getElementById("pageContent");if(host)host.innerHTML='<div class="page-card"><h2>About Us</h2><div id="adminAboutContent"></div></div>';const node=document.getElementById("adminAboutContent");if(node)node.textContent=p.about_us;}
+  if(slug==="about-us"&&(p.about_us||p.about_us_image_url)){const host=document.getElementById("pageContent");if(host){host.innerHTML='<div class="page-card"><h2>About Us</h2><div id="adminAboutContent"></div><img id="adminAboutImage" alt="About the Federation" style="display:none;max-width:100%;height:auto;border-radius:12px;margin-top:16px"></div>';const node=document.getElementById("adminAboutContent");if(node)node.textContent=p.about_us||"";const img=document.getElementById("adminAboutImage");if(img&&p.about_us_image_url){img.src=p.about_us_image_url;img.style.display="block";}}}
   if(slug&&policyMap[slug]&&p[policyMap[slug]]){const host=document.getElementById("pageContent");if(host)host.innerHTML='<div class="page-card"><h2>'+slug.replaceAll("-"," ").replace(/\b\w/g,c=>c.toUpperCase())+'</h2><div id="adminPolicyContent"></div></div>';const node=document.getElementById("adminPolicyContent");if(node)node.textContent=p[policyMap[slug]];}
  }catch(error){/* Keep the public site usable if profile data is unavailable. */}
 })();
