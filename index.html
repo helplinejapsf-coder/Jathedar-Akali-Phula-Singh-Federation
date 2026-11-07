@@ -432,13 +432,27 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
    if(logout)logout.addEventListener("click",async()=>{logout.disabled=true;const {error}=await authClient.auth.signOut();if(error){logout.disabled=false;alert(error.message);return;}location.reload();});
  }
  async function restoreSession(){
-   if(!document.getElementById("publicAuthMount"))return;
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   if(location.hash.includes("type=recovery")){
+     mount.innerHTML='<form id="publicResetForm" class="public-auth-form"><h3>Choose a New Password</h3><div class="form-group"><label for="resetNewPassword">New Password</label><input id="resetNewPassword" name="password" type="password" minlength="8" autocomplete="new-password" required></div><div class="form-group"><label for="resetConfirmPassword">Confirm New Password</label><input id="resetConfirmPassword" name="confirm_password" type="password" minlength="8" autocomplete="new-password" required></div><button class="button" type="submit">Update Password</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form>';
+     return;
+   }
    const {data,error}=await authClient.auth.getSession();
    if(error){setMessage(error.message);return;}
    if(data.session)showSignedIn(data.session.user);
  }
  document.addEventListener("submit",async function(event){
    const form=event.target;
+   if(form.id==="publicResetForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');const password=form.elements.password.value,confirm=form.elements.confirm_password.value;
+     if(password.length<8||password!==confirm){setMessage(password!==confirm?"Passwords do not match.":"Password must contain at least 8 characters.");return;}
+     button.disabled=true;button.textContent="Updating password…";
+     const {data,error}=await authClient.auth.updateUser({password});
+     button.disabled=false;button.textContent="Update Password";
+     if(error){setMessage(error.message);return;}
+     history.replaceState(null,"",location.pathname+"?page=user-login");setMessage("Password updated successfully. You can now sign in with your new password.");
+     form.reset();
+   }
    if(form.id==="publicLoginForm"){
      event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Signing in…";setMessage("");
      const email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value;
