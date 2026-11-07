@@ -62,8 +62,8 @@
    document.getElementById("rDate").textContent=date(r.donation_date);
    document.getElementById("rVerified").textContent=date(r.verified_at||r.issued_at);
    const base=location.origin+location.pathname;
-   const qrUrl=body.token?base+"?token="+encodeURIComponent(body.token):base+"?receipt="+encodeURIComponent(r.receipt_no);
-   const barcodeUrl=base+"?receipt="+encodeURIComponent(r.receipt_no);
+   const qrUrl=body.token?base+"?token="+encodeURIComponent(body.token):base+"?receipt="+encodeURIComponent(r.receipt_no)+"&last4="+encodeURIComponent(body.mobile_last4);
+   const barcodeUrl=qrUrl;
    const qr=document.getElementById("qrCode");qr.replaceChildren();
    if(window.QRCode)new QRCode(qr,{text:qrUrl,width:145,height:145,colorDark:"#101d35",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.H});
    const barcode=document.getElementById("barcode");
