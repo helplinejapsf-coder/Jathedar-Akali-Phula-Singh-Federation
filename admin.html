@@ -538,15 +538,15 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
  const money=v=>"₹"+Number(v||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2});
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  async function call(body){const {data,error}=await api.functions.invoke("admin-donations",{body});if(error)throw new Error(data?.error||error.message||"Donation service unavailable");if(data?.error)throw new Error(data.error);return data;}
- function statusClass(r){if(r.receipt_status==="revoked")return "bad";if(r.payment_status==="successful"&&r.receipt_status==="issued")return "good";return "wait";}
- function statusText(r){if(r.receipt_status==="revoked")return "Cancelled";if(r.payment_status==="successful"&&r.receipt_status==="issued")return "Verified";return "Pending";}
+ function statusClass(r){if(r.receipt_status==="revoked")return "bad";if(r.payment_status==="verified"&&r.receipt_status==="issued")return "good";return "wait";}
+ function statusText(r){if(r.receipt_status==="revoked")return "Cancelled";if(r.payment_status==="verified"&&r.receipt_status==="issued")return "Verified";return "Pending";}
  function render(){
   const term=$("donorSearch").value.trim().toLowerCase(),filter=$("donorStatusFilter").value;
   const list=rows.filter(r=>{
    const hay=[r.donor_name,r.email,r.mobile,r.receipt_no,r.payment_reference,r.campaign_name,r.payment_method].join(" ").toLowerCase();
    if(term&&!hay.includes(term))return false;
    if(filter==="pending"&&r.payment_status!=="pending")return false;
-   if(filter==="successful"&&!(r.payment_status==="successful"&&r.receipt_status==="issued"))return false;
+   if(filter==="successful"&&!(r.payment_status==="verified"&&r.receipt_status==="issued"))return false;
    if(filter==="revoked"&&r.receipt_status!=="revoked")return false;
    return true;
   });
@@ -557,7 +557,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
   const tbody=document.createElement("tbody");
   list.forEach(r=>{
    const tr=document.createElement("tr");
-   const verified=r.payment_status==="successful"&&r.receipt_status==="issued";
+   const verified=r.payment_status==="verified"&&r.receipt_status==="issued";
    const actions=[];
    if(!verified&&r.receipt_status!=="revoked")actions.push('<button class="verify" data-action="verify" data-id="'+esc(r.id)+'">Verify & Issue</button>');
    if(verified)actions.push('<button data-action="print" data-token="'+esc(r.verification_token||"")+'">Receipt / PDF</button>');
