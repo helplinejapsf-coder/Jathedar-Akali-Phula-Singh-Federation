@@ -88,6 +88,25 @@ footer{padding:38px 18px}
 .visitor-stat span{display:block;color:#f7f2e8;font-size:11px;letter-spacing:.7px;text-transform:uppercase;margin-top:5px}
 .visitor-live-dot{display:inline-block;width:7px;height:7px;background:#48d597;border-radius:50%;margin-right:5px;box-shadow:0 0 0 4px #48d59722}
 @media(max-width:500px){.visitor-counter{gap:4px;padding:10px}.visitor-stat{min-width:90px;padding:8px;border-right:0}.visitor-stat strong{font-size:21px}.visitor-stat span{font-size:9px}}
+
+/* Secure public member login and signup */
+.auth-page{max-width:650px;margin:28px auto;padding:clamp(22px,4vw,38px);border:1px solid #eadfc9}
+.auth-kicker{color:#9b742f;font-size:11px;font-weight:800;letter-spacing:2px;margin-bottom:8px}
+.auth-page h2{font-size:clamp(24px,4vw,32px)}
+.public-auth-form{margin-top:20px}
+.public-auth-form .form-group{margin:15px 0}
+.public-auth-form .form-group small{display:block;color:#788294;font-size:12px;margin-top:5px}
+.public-auth-form .button{min-width:190px;margin-top:5px}
+.auth-switch{margin-top:20px;color:#5e6878}
+.auth-switch a,.auth-link-button{color:#8a6427;font-weight:800;text-decoration:underline}
+.auth-link-button{display:inline-block;background:transparent;border:0;padding:12px;cursor:pointer}
+.public-auth-form .form-message{min-height:22px;margin-top:12px;overflow-wrap:anywhere}
+.auth-dashboard{max-width:650px;margin:25px auto;padding:26px;background:#fff;border:1px solid #e8dfcf;border-top:5px solid var(--gold);border-radius:13px}
+.auth-dashboard h3{color:var(--navy);margin-bottom:8px}
+.auth-dashboard .button{margin:12px 8px 0 0}
+.auth-logout{background:#f1eee8;color:#5d4520;border:1px solid #dfd1b7;border-radius:24px;padding:11px 17px;font-weight:bold;cursor:pointer}
+@media(max-width:600px){.auth-page{margin:12px auto;padding:20px}.public-auth-form .button{width:100%}}
+
 </style>
 </head>
 <body>
@@ -337,8 +356,8 @@ const forms={
 'donation':()=>donationPage(),
 'crowdfunding':()=>formPage('Crowdfunding','ਸੇਵਾ ਪ੍ਰੋਜੈਕਟ ਲਈ ਸਹਾਇਤਾ ਦੀ ਬੇਨਤੀ ਭੇਜੋ।',field('Your Name')+field('Mobile Number','tel')+field('Project Name')+field('Required Amount','number')+field('Project Details','textarea'),'Submit Campaign'),
 'contact-us':()=>formPage('Contact Us','ਸਾਨੂੰ ਆਪਣਾ ਸੁਨੇਹਾ ਭੇਜੋ।',field('Your Name')+field('Mobile Number','tel')+field('Email Address','email',false)+field('Your Message','textarea'),'Send Message'),
-'user-signup':()=>`<div class="page-card"><h2>User Signup</h2><p>ਨਵਾਂ ਖਾਤਾ ਬਣਾਉਣ ਦੀ ਸਹੂਲਤ ਸੁਰੱਖਿਅਤ Backend Authentication ਤਿਆਰ ਹੋਣ ਤੋਂ ਬਾਅਦ ਚਾਲੂ ਕੀਤੀ ਜਾਵੇਗੀ।</p><div class="notice">ਸੁਰੱਖਿਆ ਲਈ ਇਸ Demo Website ਉੱਤੇ Password ਨਾ ਭਰੋ। ਕੋਈ Password ਇਕੱਠਾ ਜਾਂ ਸੰਭਾਲਿਆ ਨਹੀਂ ਜਾ ਰਿਹਾ।</div><a class="button" href="?page=contact-us">Contact Federation</a></div>`, 
-'user-login':()=>`<div class="page-card"><h2>User Login</h2><p>Member Login ਸੁਰੱਖਿਅਤ Authentication ਸਿਸਟਮ ਜੋੜਨ ਤੋਂ ਬਾਅਦ ਉਪਲਬਧ ਹੋਵੇਗਾ।</p><div class="notice">ਇਸ ਵੇਲੇ Password ਨਾ ਭਰੋ। ਇਹ ਪੇਜ Login ਜਾਂ Password verification ਨਹੀਂ ਕਰਦਾ।</div><a class="button" href="?page=contact-us">Contact Federation</a></div>`, 
+'user-signup':()=>\`<div class="page-card auth-page"><div class="auth-kicker">FEDERATION MEMBER ACCESS</div><h2>Create Your User Account</h2><p>Register with your email address to access the Federation member area.</p><div id="publicAuthMount"><form id="publicSignupForm" class="public-auth-form"><div class="form-group"><label for="signupName">Full Name</label><input id="signupName" name="full_name" type="text" autocomplete="name" required maxlength="100"></div><div class="form-group"><label for="signupEmail">Email Address</label><input id="signupEmail" name="email" type="email" autocomplete="email" required></div><div class="form-group"><label for="signupPassword">Create Password</label><input id="signupPassword" name="password" type="password" autocomplete="new-password" minlength="8" required><small>Use at least 8 characters.</small></div><div class="form-group"><label for="signupConfirm">Confirm Password</label><input id="signupConfirm" name="confirm_password" type="password" autocomplete="new-password" minlength="8" required></div><button class="button" type="submit">Create Account</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">Already have an account? <a href="?page=user-login">User Login</a></p></div></div>\`, 
+'user-login':()=>\`<div class="page-card auth-page"><div class="auth-kicker">SECURE MEMBER ACCESS</div><h2>User Login</h2><p>Sign in to your Jathedar Akali Phula Singh Federation account.</p><div id="publicAuthMount"><form id="publicLoginForm" class="public-auth-form"><div class="form-group"><label for="loginEmail">Email Address</label><input id="loginEmail" name="email" type="email" autocomplete="username" required></div><div class="form-group"><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required></div><button class="button" type="submit">Sign In Securely</button><button class="auth-link-button" id="publicForgotPassword" type="button">Forgot Password?</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">New user? <a href="?page=user-signup">Create an Account</a></p></div></div>\`, 
 'coordinator-login':()=>`<div class="page-card"><h2>Coordinator Login</h2><p>Coordinator Login server-side authentication ਅਤੇ permission controls ਲਾਗੂ ਹੋਣ ਤੋਂ ਬਾਅਦ ਹੀ ਚਾਲੂ ਕੀਤਾ ਜਾਵੇਗਾ।</p><div class="notice">ਇਸ Demo ਪੇਜ ਉੱਤੇ ਆਪਣਾ Coordinator ID ਜਾਂ Password ਨਾ ਭਰੋ।</div><a class="button" href="?page=contact-us">Contact Federation</a></div>`};
 const pages={
 'latest-event':`<div class="page-card"><h2>Latest Events</h2><p>Federation ਦੇ ਤਾਜ਼ਾ ਸਮਾਗਮਾਂ ਅਤੇ ਸੇਵਾ ਕਾਰਜਾਂ ਦੀ ਜਾਣਕਾਰੀ ਇੱਥੇ ਪਾਈ ਜਾਵੇਗੀ।</p><div class="notice">ਅਜੇ ਕੋਈ Event Upload ਨਹੀਂ ਕੀਤਾ ਗਿਆ।</div></div>`,
@@ -394,6 +413,62 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
  });
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+/* Public member authentication. The publishable key is intended for browser use;
+   authorization to private records must still be enforced by Supabase RLS/server functions. */
+(function(){
+ const SUPABASE_URL="https://urghiemtxhwhvoaivwge.supabase.co";
+ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ if(!window.supabase||!window.supabase.createClient)return;
+ const authClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ const redirectUrl=location.origin+location.pathname+"?page=user-login";
+ const setMessage=(message)=>{const el=document.getElementById("publicAuthMessage");if(el)el.textContent=message;};
+ function showSignedIn(user){
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   mount.innerHTML='<div class="auth-dashboard"><h3>You are signed in</h3><p class="muted">Your account: <strong id="signedInEmail"></strong></p><p class="muted">Your secure member session is active. Membership application records and ID card services will appear here when those services are connected to your account.</p><a class="button" href="?page=member-registration">Member Registration</a> <button class="auth-logout" id="publicLogout" type="button">Sign Out</button></div>';
+   const email=document.getElementById("signedInEmail");if(email)email.textContent=user.email||"";
+   const logout=document.getElementById("publicLogout");
+   if(logout)logout.addEventListener("click",async()=>{logout.disabled=true;const {error}=await authClient.auth.signOut();if(error){logout.disabled=false;alert(error.message);return;}location.reload();});
+ }
+ async function restoreSession(){
+   if(!document.getElementById("publicAuthMount"))return;
+   const {data,error}=await authClient.auth.getSession();
+   if(error){setMessage(error.message);return;}
+   if(data.session)showSignedIn(data.session.user);
+ }
+ document.addEventListener("submit",async function(event){
+   const form=event.target;
+   if(form.id==="publicLoginForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Signing in…";setMessage("");
+     const email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value;
+     const {data,error}=await authClient.auth.signInWithPassword({email,password});
+     button.disabled=false;button.textContent="Sign In Securely";
+     if(error){setMessage(error.message);return;}showSignedIn(data.user);
+   }
+   if(form.id==="publicSignupForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Creating account…";setMessage("");
+     const name=form.elements.full_name.value.trim(),email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value,confirm=form.elements.confirm_password.value;
+     if(password.length<8||password!==confirm){button.disabled=false;button.textContent="Create Account";setMessage(password!==confirm?"Passwords do not match.":"Password must contain at least 8 characters.");return;}
+     const {data,error}=await authClient.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:redirectUrl}});
+     button.disabled=false;button.textContent="Create Account";
+     if(error){setMessage(error.message);return;}
+     if(data.session){showSignedIn(data.user);}else{setMessage("Account request received. Please check your email and confirm your address before signing in.");}
+   }
+ },true);
+ document.addEventListener("click",async function(event){
+   if(event.target&&event.target.id==="publicForgotPassword"){
+     const email=document.getElementById("loginEmail")?.value.trim().toLowerCase();
+     if(!email){setMessage("Enter your email address first, then select Forgot Password.");return;}
+     event.target.disabled=true;setMessage("Sending password reset email…");
+     const {error}=await authClient.auth.resetPasswordForEmail(email,{redirectTo:redirectUrl});
+     event.target.disabled=false;setMessage(error?error.message:"If an account exists for this email, a password reset link has been sent.");
+   }
+ });
+ restoreSession();
+})();
+</script>
+
 <script>
 /* Privacy-friendly Federation visitor counter: random browser ID only; no names, emails or IP addresses stored. */
 (function(){
