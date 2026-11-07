@@ -671,7 +671,7 @@ document.addEventListener("submit",async function(event){
   const button=form.querySelector('button[type="submit"]'),feedback=form.querySelector(".form-message");
   button.disabled=true;button.textContent="Submitting…";feedback.textContent="Sending your registration securely…";
   try{
-   const response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json","apikey":key},body:JSON.stringify({event_id:form.dataset.eventId,full_name:form.elements.full_name.value,mobile:form.elements.mobile.value,email:form.elements.email.value,notes:form.elements.notes.value,website:form.elements.website.value})});
+   const response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({event_id:form.dataset.eventId,full_name:form.elements.full_name.value,mobile:form.elements.mobile.value,email:form.elements.email.value,notes:form.elements.notes.value,website:form.elements.website.value})});
    const result=await response.json();if(!response.ok||!result.success)throw new Error(result.error||"Registration could not be submitted.");
    feedback.textContent="Registration received. Your Registration ID is "+result.participant_code+". Status: Pending approval.";
    form.reset();button.textContent="Registration Submitted";
