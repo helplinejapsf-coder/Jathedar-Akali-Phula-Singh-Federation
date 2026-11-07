@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101d35"><meta name="robots" content="noindex,nofollow">
+<title>Company Profile | JAPSF Admin</title>
+<style>
+:root{--navy:#101d35;--deep:#091326;--gold:#d8ad55;--cream:#f7f2e8;--ink:#202532;--muted:#718096;--line:#e7e3da}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(120deg,#e9edf4,#eaf5f4);color:var(--ink);font:14px/1.55 Arial,sans-serif}.top{background:linear-gradient(110deg,#4b2c20,#70452d);color:#fff;padding:13px 18px;border-bottom:2px solid var(--gold);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:5}.top strong{font-size:16px}.top a{color:#fff;text-decoration:none;background:#ffffff20;padding:8px 12px;border-radius:8px}.wrap{max-width:1040px;margin:24px auto;padding:0 14px}.intro{background:linear-gradient(115deg,var(--navy),#233d62);color:#fff;border-radius:15px;padding:24px;margin-bottom:18px}.intro h1{color:var(--gold);margin:0 0 5px;font-size:26px}.intro p{margin:0;color:#e1e7ef}.notice{padding:12px 15px;border-radius:9px;background:#fff6df;border-left:4px solid var(--gold);margin:12px 0 18px;color:#66532c}.panel{background:#fff;border:1px solid var(--line);border-radius:13px;padding:clamp(16px,3vw,26px);margin-bottom:17px;box-shadow:0 7px 20px #18263b12}.panel h2{margin:0 0 15px;color:var(--navy);font-size:18px;border-bottom:2px solid var(--gold);padding-bottom:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 16px}.field{min-width:0}.field.full{grid-column:1/-1}label{display:block;font-weight:700;font-size:12px;color:#344258;margin-bottom:5px}input,textarea{width:100%;border:1px solid #d8dce4;border-radius:7px;padding:11px 12px;font:inherit;background:#fff;color:#202532}input:focus,textarea:focus{outline:2px solid #d8ad5555;border-color:#b78d43}textarea{min-height:120px;resize:vertical}.help{font-size:11px;color:var(--muted);margin-top:4px}.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.save{background:var(--navy);color:#fff;border:0;border-radius:9px;padding:12px 20px;font-weight:700;cursor:pointer}.save:disabled{opacity:.55;cursor:wait}.secondary{background:#f0f2f6;color:var(--navy);border:1px solid #dce2eb;border-radius:9px;padding:11px 15px;text-decoration:none;font-weight:700}.status{font-weight:700;color:#276c43;min-height:22px}.preview{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.preview img{width:72px;height:72px;object-fit:contain;border:1px solid var(--line);border-radius:50%;background:var(--cream);padding:5px}.footer{text-align:center;color:#8792a3;font-size:11px;padding:12px}@media(max-width:650px){.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.intro h1{font-size:22px}}
+</style></head>
+<body>
+<header class="top"><strong>✦ JAPSF · Company Profile</strong><div><a href="./admin.html">← Admin Dashboard</a></div></header>
+<main class="wrap">
+<section class="intro"><h1>Company Profile Settings</h1><p>Update the Federation's official details, social links, public policies and payment information.</p></section>
+<div class="notice"><b>Public website sync:</b> When you save, the information below is saved to Supabase and the public website reads the latest saved profile automatically. Only enter details intended to be publicly displayed. Never enter payment gateway Secret Keys, passwords, OTPs or private credentials here.</div>
+<div id="authStatus" class="notice">Checking secure administrator access…</div>
+<form id="profileForm">
+<section class="panel"><h2>Company & Website Details</h2><div class="grid">
+<div class="field"><label for="company_name">Company / Organization Name</label><input id="company_name" name="company_name" required></div>
+<div class="field"><label for="website_name">Website Name</label><input id="website_name" name="website_name"></div>
+<div class="field"><label for="website_url">Website URL</label><input id="website_url" name="website_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="cin">CIN / Registration Number</label><input id="cin" name="cin"></div>
+<div class="field full"><label for="registered_address">Registered Address</label><textarea id="registered_address" name="registered_address"></textarea></div>
+<div class="field"><label for="email">Official Email</label><input id="email" name="email" type="email"></div>
+<div class="field"><label for="helpline_email">Helpline Email</label><input id="helpline_email" name="helpline_email" type="email"></div>
+<div class="field"><label for="phone_primary">Primary Helpline</label><input id="phone_primary" name="phone_primary" type="tel"></div>
+<div class="field"><label for="phone_secondary">Secondary Helpline</label><input id="phone_secondary" name="phone_secondary" type="tel"></div>
+</div></section>
+<section class="panel"><h2>Social Media Links</h2><div class="grid">
+<div class="field"><label for="facebook_url">Facebook URL</label><input id="facebook_url" name="facebook_url" type="url" placeholder="https://facebook.com/"></div>
+<div class="field"><label for="instagram_url">Instagram URL</label><input id="instagram_url" name="instagram_url" type="url" placeholder="https://instagram.com/"></div>
+<div class="field"><label for="telegram_url">Telegram URL</label><input id="telegram_url" name="telegram_url" type="url" placeholder="https://t.me/"></div>
+<div class="field"><label for="x_url">X (Twitter) URL</label><input id="x_url" name="x_url" type="url" placeholder="https://x.com/"></div>
+<div class="field"><label for="youtube_url">YouTube URL</label><input id="youtube_url" name="youtube_url" type="url" placeholder="https://youtube.com/"></div>
+<div class="field"><label for="whatsapp_url">WhatsApp URL</label><input id="whatsapp_url" name="whatsapp_url" type="url" placeholder="https://wa.me/"></div>
+</div></section>
+<section class="panel"><h2>About Us</h2><div class="field"><label for="about_us">Public About Us Content</label><textarea id="about_us" name="about_us" style="min-height:180px"></textarea></div></section>
+<section class="panel"><h2>Legal Policies</h2><div class="grid">
+<div class="field"><label for="privacy_policy">Privacy Policy</label><textarea id="privacy_policy" name="privacy_policy"></textarea></div>
+<div class="field"><label for="terms_conditions">Terms & Conditions</label><textarea id="terms_conditions" name="terms_conditions"></textarea></div>
+<div class="field"><label for="disclaimer">Disclaimer</label><textarea id="disclaimer" name="disclaimer"></textarea></div>
+<div class="field"><label for="refund_policy">Refund Policy</label><textarea id="refund_policy" name="refund_policy"></textarea></div>
+</div></section>
+<section class="panel"><h2>Logo, Signature & Documents</h2><p class="help">Paste public image URLs below. Upload controls can be connected to a private/public Storage bucket in a later step; do not paste private document links.</p><div class="grid">
+<div class="field"><label for="logo_url">Website Logo URL</label><input id="logo_url" name="logo_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="signature_url">Authorized Signature Image URL</label><input id="signature_url" name="signature_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="certificate_url">Certificate / Registration Image URL</label><input id="certificate_url" name="certificate_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="id_card_front_url">ID Card Front Design URL</label><input id="id_card_front_url" name="id_card_front_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="id_card_back_url">ID Card Back Design URL</label><input id="id_card_back_url" name="id_card_back_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="about_us_image_url">About Us Image URL</label><input id="about_us_image_url" name="about_us_image_url" type="url" placeholder="https://"></div>
+<div class="field"><label for="seal_url">Official Seal Image URL</label><input id="seal_url" name="seal_url" type="url" placeholder="https://"></div>
+</div><div class="preview" style="margin-top:14px"><img id="logoPreview" alt="Logo preview" hidden><span class="help">Logo preview</span></div></section>
+<section class="panel"><h2>Public Payment Information</h2><div class="notice">Only public donation instructions and payment links belong here. Never store Razorpay Key Secret, UPI PIN, bank login, card data or any private API credential.</div><div class="grid">
+<div class="field"><label for="payment_amount">Suggested Donation Amount (₹)</label><input id="payment_amount" name="payment_amount" inputmode="numeric"></div>
+<div class="field"><label for="payment_app_url">Payment App / Play Store URL</label><input id="payment_app_url" name="payment_app_url" type="url"></div>
+<div class="field"><label for="payment_gateway_url">Public Payment Gateway Link</label><input id="payment_gateway_url" name="payment_gateway_url" type="url"></div>
+<div class="field"><label for="upi_qr_url">UPI QR Image URL</label><input id="upi_qr_url" name="upi_qr_url" type="url"></div>
+<div class="field"><label for="payment_qr_url">Other Payment QR Image URL</label><input id="payment_qr_url" name="payment_qr_url" type="url"></div>
+<div class="field full"><label for="payment_details_public">Public Donation / Bank Instructions</label><textarea id="payment_details_public" name="payment_details_public"></textarea></div>
+</div></section>
+<section class="panel"><div class="actions"><button class="save" id="saveBtn" type="submit">Save & Update Public Website</button><a class="secondary" href="./admin.html">Back to Dashboard</a><span class="status" id="saveStatus" role="status" aria-live="polite"></span></div><p class="help">Last saved: <span id="updatedAt">Not loaded</span></p></section>
+</form>
+<div class="footer">Website Designed by New Granthi Singh Federation</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.min.js"></script>
+<script>
+(async function(){
+ const URL="https://urghiemtxhwhvoaivwge.supabase.co",KEY="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ const db=window.supabase.createClient(URL,KEY),form=document.getElementById("profileForm"),authStatus=document.getElementById("authStatus"),saveBtn=document.getElementById("saveBtn"),status=document.getElementById("saveStatus");
+ const fields=[...form.querySelectorAll("[name]")];
+ const setStatus=t=>status.textContent=t;
+ const {data:{user},error:userError}=await db.auth.getUser();
+ if(userError||!user||String(user.email||"").toLowerCase()!=="helpline.japsf@gmail.com"){authStatus.textContent="Administrator login required. Please sign in through the Admin Dashboard first.";form.hidden=true;return;}
+ const {data:auth,error:authError}=await db.functions.invoke("admin-authorize",{body:{}});
+ if(authError||!auth||auth.authorized!==true){authStatus.textContent="Secure administrator verification failed. Return to Admin Dashboard and sign in again.";form.hidden=true;return;}
+ authStatus.textContent="Secure administrator access verified.";
+ const {data:row,error}=await db.from("company_profile").select("profile,updated_at").eq("id",1).single();
+ if(error){authStatus.textContent="Profile could not be loaded: "+error.message;form.hidden=true;return;}
+ const profile=row.profile||{};
+ fields.forEach(el=>{if(Object.prototype.hasOwnProperty.call(profile,el.name))el.value=profile[el.name]??"";});
+ document.getElementById("updatedAt").textContent=row.updated_at?new Date(row.updated_at).toLocaleString():"Not saved yet";
+ const logo=document.getElementById("logoPreview");
+ const updatePreview=()=>{const url=document.getElementById("logo_url").value.trim();logo.hidden=!url;if(url)logo.src=url;};
+ document.getElementById("logo_url").addEventListener("input",updatePreview);updatePreview();
+ form.addEventListener("submit",async e=>{
+  e.preventDefault();setStatus("");saveBtn.disabled=true;saveBtn.textContent="Saving securely…";
+  const next={};fields.forEach(el=>next[el.name]=el.value.trim());
+  const {data:updated,error:updateError}=await db.from("company_profile").update({profile:next,updated_at:new Date().toISOString(),updated_by:user.email}).eq("id",1).select("updated_at").single();
+  saveBtn.disabled=false;saveBtn.textContent="Save & Update Public Website";
+  if(updateError){setStatus("Save failed: "+updateError.message);return;}
+  document.getElementById("updatedAt").textContent=new Date(updated.updated_at).toLocaleString();
+  setStatus("Saved successfully. Public website will show the latest profile automatically.");
+ });
+})();
+</script></body></html>
