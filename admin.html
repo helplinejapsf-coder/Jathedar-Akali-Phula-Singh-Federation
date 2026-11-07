@@ -44,6 +44,14 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 .event-state.live{background:#e8f7ee;color:#168447}
 .event-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:560px){.event-fields{grid-template-columns:1fr}.event-field.full{grid-column:auto}.event-row{grid-template-columns:60px minmax(0,1fr)}.event-row img{width:60px;height:58px}.event-actions{grid-column:1/-1;justify-content:flex-start}}
+.timeline-list{display:grid;gap:11px;margin-top:12px}
+.timeline-row{display:grid;grid-template-columns:82px minmax(0,1fr) auto;gap:13px;align-items:start;padding:12px;border:1px solid #e8ebf1;border-radius:11px;background:#fff}
+.timeline-row img{width:82px;height:76px;object-fit:cover;border-radius:8px;background:#f1f3f6}
+.timeline-row h4{font-size:13px;margin:0 0 4px;color:#101d35;overflow-wrap:anywhere}
+.timeline-row p{font-size:11px;color:#778499;margin:3px 0;overflow-wrap:anywhere;white-space:pre-wrap}
+.timeline-row .timeline-excerpt{color:#4d596b;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media(max-width:560px){.timeline-row{grid-template-columns:60px minmax(0,1fr)}.timeline-row img{width:60px;height:58px}.timeline-row .event-actions{grid-column:1/-1;justify-content:flex-start}}
+
 </style></head>
 <body>
 <header class="top"><div class="top-left"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">☰</button><div class="brand"><div class="brand-mark"><img src="./logo.png" alt="Jathedar Akali Phula Singh Federation logo"></div><div><h1>Jathedar Akali Phula Singh Federation</h1><p>Administration Workspace</p></div></div></div><div class="top-right"><span class="secure">✦ SECURE ADMIN ACCESS</span><span class="admin-mail">helpline.japsf@gmail.com</span><button class="logout" id="logoutBtn" hidden>Sign out</button></div></header>
@@ -52,7 +60,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <main class="wrap" id="adminApp" hidden>
 <div class="notice" id="backendNotice"><span>◆</span><div><b>Secure database:</b> Administrator sign-in is protected by server-side authorization. Live records load only after the approved administrator session is verified.</div></div>
 <div class="layout">
-<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donations & Crowdfunding</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
+<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#timeline"><span>◷</span>Timeline Posts</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donations & Crowdfunding</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
 <div class="main">
 <section id="dashboard" class="welcome"><div><div class="eyebrow">Federation control centre</div><h2>Dashboard Overview</h2><p>Welcome to your administration workspace.</p></div><div class="date-chip">✦ &nbsp; JAPSF ADMINISTRATOR</div></section>
 <section class="panel" style="background:linear-gradient(115deg,#e8eaff,#f2e8ff);border:0"><div class="panel-head"><h3>Federation Quick Access</h3><span class="pill">ADMIN TOOLS</span></div><p class="muted">Manage the Federation website, review requests and keep public information up to date from one secure workspace.</p><div class="two-col"><div class="mini-card"><h4>Website Administration</h4><p class="muted">Review content, events and public announcements.</p></div><div class="mini-card"><h4>Member Services</h4><p class="muted">Membership and ID card modules will appear here once database integration is complete.</p></div></div></section>
@@ -78,6 +86,21 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <div id="eventFeedback" class="event-feedback" role="status" aria-live="polite"></div>
 </form>
 <div id="eventRecords" class="empty">Loading events…</div></section>
+<section id="timeline" class="panel"><div class="panel-head"><div><h3>Timeline Post List</h3><p class="muted" style="margin:4px 0 0">Create and manage Federation timeline updates, photos and announcements.</p></div><span class="pill">TIMELINE</span></div>
+<div class="event-toolbar"><span class="muted">Upload JPG, PNG or WebP images up to 5 MB. Drafts stay private.</span><button class="event-primary" id="showTimelineForm" type="button">＋ Create Timeline Post</button></div>
+<form id="timelineForm" class="event-form" hidden>
+<input type="hidden" id="timelineEditId">
+<div class="event-fields">
+<div class="event-field"><label for="timelineImage">Post Image (optional)</label><input id="timelineImage" type="file" accept="image/jpeg,image/png,image/webp"><div class="event-preview"><img id="timelineImagePreview" alt="Timeline image preview" hidden><span id="timelineImageHint">Choose a JPG, PNG or WebP image (up to 5 MB).</span></div></div>
+<div class="event-field"><label for="timelineTitle">Post Title *</label><input id="timelineTitle" type="text" maxlength="180" placeholder="Timeline post title" required></div>
+<div class="event-field full"><label for="timelineContent">Post Content *</label><textarea id="timelineContent" maxlength="10000" placeholder="Write your Federation update…" required></textarea></div>
+<div class="event-field"><label for="timelineDate">Post Date &amp; Time *</label><input id="timelineDate" type="datetime-local" required></div>
+</div>
+<div class="event-form-actions"><label class="event-publish"><input id="timelinePublish" type="checkbox"> Publish on public website</label></div>
+<div class="event-form-actions"><button class="event-primary" id="saveTimelineBtn" type="submit">Save Timeline Post</button><button class="event-secondary" id="cancelTimelineBtn" type="button">Cancel</button></div>
+<div id="timelineFeedback" class="event-feedback" role="status" aria-live="polite"></div>
+</form>
+<div id="timelineRecords" class="empty">Loading timeline posts…</div></section>
 <section id="requests" class="panel"><h3>Help Requests</h3><p class="muted">Review community help requests. Private case details remain restricted to authorized staff only.</p><div id="helpRecords" class="empty">Loading requests…</div></section>
 <section id="funds" class="panel"><h3>Donations & Crowdfunding</h3><p class="muted">Donation entries are shown as pending until the payment provider's server-side verification is implemented.</p><div id="donationRecords" class="empty">Loading donations…</div></section>
 <section id="team" class="panel"><h3>Team Members</h3><p class="muted">Current public team profiles from the secure database.</p><div id="teamRecords" class="empty">Loading team…</div></section>
@@ -173,6 +196,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
    if(error){alert("Could not delete event: "+error.message);return;}
    if(ev.image_path)await client.storage.from("federation-public-assets").remove([ev.image_path]);
    await loadEventRecords();
+   await loadTimelineRecords();
  }
  eventForm.addEventListener("submit",async e=>{
    e.preventDefault();
@@ -206,6 +230,112 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
      eventMessage("Event saved successfully.");eventForm.hidden=true;resetEventForm();await loadEventRecords();
    }catch(err){eventMessage(err.message||"Could not save event.");}
    finally{btn.disabled=false;btn.textContent=document.getElementById("eventEditId").value?"Save Changes":"Create Event";}
+ });
+
+ const timelineForm=document.getElementById("timelineForm");
+ const timelineFeedback=document.getElementById("timelineFeedback");
+ let timelineCurrentImagePath="";
+ let timelinePreviewObjectUrl="";
+ function timelineMessage(text){timelineFeedback.textContent=text;}
+ function resetTimelineForm(){
+   timelineForm.reset();document.getElementById("timelineEditId").value="";
+   timelineCurrentImagePath="";
+   const preview=document.getElementById("timelineImagePreview");preview.hidden=true;preview.removeAttribute("src");
+   document.getElementById("timelineImageHint").textContent="Choose a JPG, PNG or WebP image (up to 5 MB).";
+   document.getElementById("saveTimelineBtn").textContent="Save Timeline Post";
+   if(timelinePreviewObjectUrl){URL.revokeObjectURL(timelinePreviewObjectUrl);timelinePreviewObjectUrl="";}
+   timelineMessage("");
+ }
+ function showTimelineForm(){timelineForm.hidden=false;document.getElementById("timelineTitle").focus();timelineForm.scrollIntoView({behavior:"smooth",block:"start"});}
+ document.getElementById("showTimelineForm").addEventListener("click",()=>{resetTimelineForm();showTimelineForm();});
+ document.getElementById("cancelTimelineBtn").addEventListener("click",()=>{timelineForm.hidden=true;resetTimelineForm();});
+ document.getElementById("timelineImage").addEventListener("change",()=>{
+   const file=document.getElementById("timelineImage").files[0];if(!file)return;
+   if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){
+     document.getElementById("timelineImage").value="";timelineMessage("Please choose a JPG, PNG or WebP image up to 5 MB.");return;
+   }
+   if(timelinePreviewObjectUrl)URL.revokeObjectURL(timelinePreviewObjectUrl);
+   timelinePreviewObjectUrl=URL.createObjectURL(file);
+   const img=document.getElementById("timelineImagePreview");img.src=timelinePreviewObjectUrl;img.hidden=false;
+   document.getElementById("timelineImageHint").textContent=file.name;
+ });
+ async function loadTimelineRecords(){
+   const host=document.getElementById("timelineRecords");host.className="empty";host.textContent="Loading timeline posts…";
+   const {data,error}=await client.from("timeline_posts").select("id,title,content,image_path,post_date,is_published,created_at").order("post_date",{ascending:false});
+   if(error){host.textContent="Could not load timeline posts: "+error.message;return;}
+   host.replaceChildren();
+   if(!data||!data.length){host.className="empty";host.textContent="No timeline posts yet. Select “Create Timeline Post” to add the first update.";return;}
+   host.className="timeline-list";
+   data.forEach(post=>{
+     const row=document.createElement("article");row.className="timeline-row";
+     const img=document.createElement("img");img.alt="";img.src=post.image_path?client.storage.from("federation-public-assets").getPublicUrl(post.image_path).data.publicUrl:"";if(!post.image_path)img.style.visibility="hidden";
+     const info=document.createElement("div");const title=document.createElement("h4");title.textContent=post.title||"Untitled post";
+     const date=document.createElement("p");date.textContent=eventDateLabel(post.post_date);
+     const excerpt=document.createElement("p");excerpt.className="timeline-excerpt";excerpt.textContent=post.content||"";
+     const status=document.createElement("span");status.className="event-state"+(post.is_published?" live":"");status.textContent=post.is_published?"PUBLISHED":"DRAFT";
+     info.append(title,date,excerpt,status);
+     const actions=document.createElement("div");actions.className="event-actions";
+     const edit=document.createElement("button");edit.type="button";edit.className="event-secondary";edit.textContent="Edit";edit.addEventListener("click",()=>editTimelinePost(post));
+     const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=post.is_published?"Unpublish":"Publish";toggle.addEventListener("click",()=>toggleTimelinePublish(post));
+     const del=document.createElement("button");del.type="button";del.className="event-danger";del.textContent="Delete";del.addEventListener("click",()=>deleteTimelinePost(post));
+     actions.append(edit,toggle,del);row.append(img,info,actions);host.appendChild(row);
+   });
+ }
+ function editTimelinePost(post){
+   resetTimelineForm();document.getElementById("timelineEditId").value=post.id;
+   document.getElementById("timelineTitle").value=post.title||"";
+   document.getElementById("timelineContent").value=post.content||"";
+   if(post.post_date){const d=new Date(post.post_date);const local=new Date(d.getTime()-d.getTimezoneOffset()*60000);document.getElementById("timelineDate").value=local.toISOString().slice(0,16);}
+   document.getElementById("timelinePublish").checked=!!post.is_published;
+   timelineCurrentImagePath=post.image_path||"";
+   if(timelineCurrentImagePath){const url=client.storage.from("federation-public-assets").getPublicUrl(timelineCurrentImagePath).data.publicUrl;const img=document.getElementById("timelineImagePreview");img.src=url;img.hidden=false;document.getElementById("timelineImageHint").textContent="Current image (choose a new file to replace it).";}
+   document.getElementById("saveTimelineBtn").textContent="Save Changes";showTimelineForm();
+ }
+ async function toggleTimelinePublish(post){
+   const {error}=await client.from("timeline_posts").update({is_published:!post.is_published,updated_at:new Date().toISOString()}).eq("id",post.id);
+   if(error){alert("Could not update timeline post: "+error.message);return;}await loadTimelineRecords();
+ }
+ async function deleteTimelinePost(post){
+   if(!confirm("Delete “"+post.title+"”? This cannot be undone."))return;
+   const {error}=await client.from("timeline_posts").delete().eq("id",post.id);
+   if(error){alert("Could not delete timeline post: "+error.message);return;}
+   if(post.image_path)await client.storage.from("federation-public-assets").remove([post.image_path]);
+   await loadTimelineRecords();
+ }
+ timelineForm.addEventListener("submit",async e=>{
+   e.preventDefault();
+   const btn=document.getElementById("saveTimelineBtn");btn.disabled=true;btn.textContent="Saving…";timelineMessage("Saving timeline post securely…");
+   let uploadedPath="";
+   try{
+     const id=document.getElementById("timelineEditId").value;
+     const file=document.getElementById("timelineImage").files[0];
+     let imagePath=timelineCurrentImagePath;
+     if(file){
+       const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+       imagePath="timeline/"+crypto.randomUUID()+"."+ext;
+       const {error:uploadError}=await client.storage.from("federation-public-assets").upload(imagePath,file,{contentType:file.type,cacheControl:"3600",upsert:false});
+       if(uploadError)throw uploadError;uploadedPath=imagePath;
+     }
+     const localDate=document.getElementById("timelineDate").value;
+     const payload={
+       title:document.getElementById("timelineTitle").value.trim(),
+       content:document.getElementById("timelineContent").value.trim(),
+       post_date:new Date(localDate).toISOString(),
+       image_path:imagePath||null,
+       is_published:document.getElementById("timelinePublish").checked,
+       updated_at:new Date().toISOString()
+     };
+     if(id){
+       const {error}=await client.from("timeline_posts").update(payload).eq("id",id);if(error)throw error;
+       if(file&&timelineCurrentImagePath)await client.storage.from("federation-public-assets").remove([timelineCurrentImagePath]);
+     }else{
+       const {error}=await client.from("timeline_posts").insert(payload);if(error)throw error;
+     }
+     timelineMessage("Timeline post saved successfully.");timelineForm.hidden=true;resetTimelineForm();await loadTimelineRecords();
+   }catch(err){
+     if(uploadedPath)await client.storage.from("federation-public-assets").remove([uploadedPath]);
+     timelineMessage(err.message||"Could not save timeline post.");
+   }finally{btn.disabled=false;btn.textContent=document.getElementById("timelineEditId").value?"Save Changes":"Save Timeline Post";}
  });
  async function loadDashboard(){
    const notice=document.getElementById("backendNotice");
