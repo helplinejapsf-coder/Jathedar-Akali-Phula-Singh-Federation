@@ -79,6 +79,15 @@ footer{padding:38px 18px}
 .membership-form .form-message{margin:11px 0 0;text-align:center;color:#7a8494;font-size:12px}
 @media(max-width:680px){.page-card:has(.membership-form){margin:16px 10px;padding:22px 16px;border-radius:18px}.membership-form{grid-template-columns:1fr;gap:0}.membership-form .full,.membership-form .section-label{grid-column:auto}.membership-form .plan-list{grid-template-columns:1fr;gap:9px}.membership-form .plan-option{min-height:0;padding:14px 15px}.membership-form .plan-option strong{font-size:23px}.page-card:has(.membership-form)>h2{font-size:27px}}
 
+
+/* Live visitor counter */
+.visitor-counter{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:20px auto;padding:15px;max-width:760px;border:1px solid #d8ad55;border-radius:14px;background:linear-gradient(135deg,#142541,#091326);box-shadow:0 8px 24px #0003}
+.visitor-stat{min-width:145px;padding:8px 16px;text-align:center;border-right:1px solid #d8ad5555}
+.visitor-stat:last-child{border-right:0}
+.visitor-stat strong{display:block;color:#f0c66f;font-size:25px;line-height:1.2;font-variant-numeric:tabular-nums}
+.visitor-stat span{display:block;color:#f7f2e8;font-size:11px;letter-spacing:.7px;text-transform:uppercase;margin-top:5px}
+.visitor-live-dot{display:inline-block;width:7px;height:7px;background:#48d597;border-radius:50%;margin-right:5px;box-shadow:0 0 0 4px #48d59722}
+@media(max-width:500px){.visitor-counter{gap:4px;padding:10px}.visitor-stat{min-width:90px;padding:8px;border-right:0}.visitor-stat strong{font-size:21px}.visitor-stat span{font-size:9px}}
 </style>
 </head>
 <body>
@@ -98,7 +107,11 @@ footer{padding:38px 18px}
 <section class="dark-section"><div class="container center"><h2 class="section-heading">Jathedar Akali Phula Singh Ji</h2><div class="history-panel">Akali Phula Singh Ji (1761–1823) was a renowned Nihang figure in Sikh history and a great Jathedar of Buddha Dal. His life inspires fearlessness, faith and dedication to the Panth.</div></div></section>
 <section><div class="container center"><h2 class="section-heading">Seva and Community</h2><p class="section-intro">Contributing to society through seva, cooperation and respect for humanity.</p><div class="grid"><article class="card"><h3>Community Support</h3><p>Social welfare and mutual support.</p></article><article class="card"><h3>Education and Awareness</h3><p>Awareness of history and heritage.</p></article><article class="card"><h3>Unity and Togetherness</h3><p>Strengthening mutual respect and unity.</p></article></div></div></section>
 </div><section class="page-section" id="separatePage" hidden><div class="container" id="pageContent"></div></section></main>
-<footer><img src="logo.png" class="footer-logo" alt="Federation Logo"><h3>Jathedar Akali Phula Singh Federation</h3><p>Seva • Faith • Fearlessness • Chardi Kala</p><p>Helpline: <a href="tel:+919501503080">+91 9501503080</a></p><p>Helpline: <a href="tel:+919779257727">+91 9779257727</a></p><p><a href="mailto:jathedarakaliphulasingh@gmail.com">jathedarakaliphulasingh@gmail.com</a></p><p><a href="mailto:helpline.japsf@gmail.com">helpline.japsf@gmail.com</a></p><p>House No. 269, Village Timmowal, Jandiala, Amritsar, Punjab, 143149, India</p><div class="footer-policies"><a href="terms-and-conditions.html">Terms & Conditions</a><a href="privacy-policy.html">Privacy Policy</a><a href="disclaimer.html">Disclaimer</a><a href="refund-policy.html">Refund Policy</a><a href="?page=csr-policy">CSR Policy</a></div><p>CIN: U88900PB2025NPL066430</p><p>© 2026 Jathedar Akali Phula Singh Federation</p><div class="design-credit">Designed By New Granthi Singh Federation</div></footer>
+<footer><img src="logo.png" class="footer-logo" alt="Federation Logo"><h3>Jathedar Akali Phula Singh Federation</h3><p>Seva • Faith • Fearlessness • Chardi Kala</p><p>Helpline: <a href="tel:+919501503080">+91 9501503080</a></p><p>Helpline: <a href="tel:+919779257727">+91 9779257727</a></p><p><a href="mailto:jathedarakaliphulasingh@gmail.com">jathedarakaliphulasingh@gmail.com</a></p><p><a href="mailto:helpline.japsf@gmail.com">helpline.japsf@gmail.com</a></p><p>House No. 269, Village Timmowal, Jandiala, Amritsar, Punjab, 143149, India</p><div class="footer-policies"><a href="terms-and-conditions.html">Terms & Conditions</a><a href="privacy-policy.html">Privacy Policy</a><a href="disclaimer.html">Disclaimer</a><a href="refund-policy.html">Refund Policy</a><a href="?page=csr-policy">CSR Policy</a></div><div class="visitor-counter" id="visitorCounter" aria-label="Website visitor statistics">
+<div class="visitor-stat"><strong id="visitorTotal">—</strong><span>Total Visitors</span></div>
+<div class="visitor-stat"><strong id="visitorToday">—</strong><span>Today's Visitors</span></div>
+<div class="visitor-stat"><strong id="visitorLive"><i class="visitor-live-dot"></i>—</strong><span>Live Visitors</span></div>
+</div><p>CIN: U88900PB2025NPL066430</p><p>© 2026 Jathedar Akali Phula Singh Federation</p><div class="design-credit">Designed By New Granthi Singh Federation</div></footer>
 <div class="floating-buttons"><a class="float-btn whatsapp-btn" href="https://wa.me/919501503080?text=Sat%20Sri%20Akal%20Ji" target="_blank" rel="noopener">WhatsApp</a><a class="float-btn call-btn" href="tel:+919501503080">Call Now</a><button class="float-btn chat-btn" id="openChat" type="button">AI Chat</button></div>
 <div class="chat-box" id="chatBox"><div class="chat-header"><strong>Federation Help Assistant</strong><button class="chat-close" id="closeChat" type="button">×</button></div><div class="chat-messages" id="chatMessages"><div class="message bot-message">Sat Sri Akal! 🙏 What would you like to know about the Federation?</div></div><form class="chat-input-area" id="chatForm"><input class="chat-input" id="chatInput" placeholder="Type your question..." required><button class="chat-send">Send</button></form></div>
 <script>function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'af,sq,am,ar,hy,az,eu,be,bn,bs,bg,my,ca,zh-CN,zh-TW,hr,cs,da,nl,en,et,tl,fi,fr,gl,ka,de,el,gu,ht,ha,he,hi,hu,is,id,ga,it,ja,jv,kn,kk,km,ko,lo,la,lv,lt,mk,ms,ml,mt,mr,mn,ne,no,or,ps,fa,pl,pt,pa,ro,ru,sr,si,sk,sl,so,es,su,sw,sv,ta,te,th,tr,uk,ur,uz,vi,cy,yi',layout:google.translate.TranslateElement.InlineLayout.SIMPLE,autoDisplay:false},'google_translate_element');}</script>
@@ -380,4 +393,26 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
    }
  });
 })();
-</script></body></html>
+</script>
+<script>
+/* Privacy-friendly Federation visitor counter: random browser ID only; no names, emails or IP addresses stored. */
+(function(){
+ const endpoint="https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/public-visitor-analytics";
+ const apiKey="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ const headers={"Content-Type":"application/json","apikey":apiKey,"Authorization":"Bearer "+apiKey};
+ const number=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=Number(value||0).toLocaleString("en-IN")};
+ let visitorId;
+ try{visitorId=localStorage.getItem("japsf_visitor_id");if(!visitorId){visitorId=crypto.randomUUID();localStorage.setItem("japsf_visitor_id",visitorId);}}
+ catch(e){visitorId=crypto.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,ch=>{const r=Math.random()*16|0;return(ch==="x"?r:(r&3|8)).toString(16);});}
+ async function update(mode){
+  try{
+   const response=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({mode,visitor_id:visitorId,page:location.pathname+location.search})});
+   if(!response.ok)return;
+   const data=await response.json();if(!data.success)return;
+   number("visitorTotal",data.total_visitors);number("visitorToday",data.today_visitors);number("visitorLive",data.live_visitors);
+  }catch(e){/* Keep the public site usable if analytics is temporarily unavailable. */}
+ }
+ update("track");setInterval(()=>update("track"),60000);
+})();
+</script>
+</body></html>
