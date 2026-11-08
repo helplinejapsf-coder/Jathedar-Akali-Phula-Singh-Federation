@@ -130,6 +130,8 @@ footer{padding:38px 18px}
 }
 @media(max-width:600px){body header .header-inner{min-height:70px!important;padding:8px 0!important}body header .brand .logo{width:42px!important;height:42px!important}}
 .public-event-list{display:grid;gap:18px;margin-top:18px}.public-event-card{display:grid;grid-template-columns:minmax(180px,280px) minmax(0,1fr);gap:18px;padding:18px;border:1px solid #e6e1d8;border-radius:16px;background:#fff;box-shadow:0 8px 24px #101d350b}.public-event-image{width:100%;height:100%;max-height:230px;min-height:170px;object-fit:cover;border-radius:12px;background:#f4f1eb}.public-event-copy h3{margin:0 0 8px;color:#101d35}.public-event-meta{color:#82652f;font-size:13px;margin:5px 0}.public-event-registration{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid #ece7de}.public-event-registration h4,.public-event-registration .form-message{grid-column:1/-1;margin:0}.public-event-registration input,.public-event-registration textarea{width:100%;min-width:0;padding:11px 12px;border:1px solid #dce2eb;border-radius:9px;font:inherit}.public-event-registration textarea{grid-column:1/-1;min-height:65px}.public-event-registration button{justify-self:start;border:0;border-radius:9px;background:#101d35;color:#fff;padding:11px 17px;font-weight:700;cursor:pointer}.public-event-registration button:disabled{opacity:.6}.public-event-registration .form-message{font-size:12px;color:#705b32;overflow-wrap:anywhere}@media(max-width:700px){.public-event-card{grid-template-columns:1fr}.public-event-image{height:190px;min-height:0}.public-event-registration{grid-template-columns:1fr}.public-event-registration h4,.public-event-registration textarea,.public-event-registration .form-message{grid-column:auto}}
+/* Email + mobile OTP login */
+.auth-otp-panel{max-width:560px;margin:18px auto;padding:22px;background:#fff;border:1px solid #eadfc9;border-radius:16px;box-shadow:0 8px 28px #101d3512}.auth-otp-panel h3{color:#101d35;margin-bottom:8px}.auth-otp-panel p{color:#667085;margin:8px 0 14px}.auth-otp-panel input{width:100%;min-height:50px;padding:12px 14px;border:1px solid #dce2eb;border-radius:10px;font:inherit}.auth-otp-code{letter-spacing:8px;text-align:center;font-size:24px;font-weight:800}.auth-otp-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.auth-otp-actions button{flex:1;min-width:130px}.auth-link-button{display:block;background:transparent;border:0;color:#8b641e;font-weight:bold;padding:12px 4px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -395,7 +397,7 @@ const forms={
 'crowdfunding':()=>formPage('Crowdfunding','ਸੇਵਾ ਪ੍ਰੋਜੈਕਟ ਲਈ ਸਹਾਇਤਾ ਦੀ ਬੇਨਤੀ ਭੇਜੋ।',field('Your Name')+field('Mobile Number','tel')+field('Project Name')+field('Required Amount','number')+field('Project Details','textarea'),'Submit Campaign'),
 'contact-us':()=>formPage('Contact Us','ਸਾਨੂੰ ਆਪਣਾ ਸੁਨੇਹਾ ਭੇਜੋ।',field('Your Name')+field('Mobile Number','tel')+field('Email Address','email',false)+field('Your Message','textarea'),'Send Message'),
 'user-signup':()=>`<div class="page-card auth-page"><div class="auth-kicker">FEDERATION MEMBER ACCESS</div><h2>Create Your User Account</h2><p>Register with your email address to access the Federation member area.</p><div id="publicAuthMount"><form id="publicSignupForm" class="public-auth-form"><div class="form-group"><label for="signupName">Full Name</label><input id="signupName" name="full_name" type="text" autocomplete="name" required maxlength="100"></div><div class="form-group"><label for="signupEmail">Email Address</label><input id="signupEmail" name="email" type="email" autocomplete="email" required></div><div class="form-group"><label for="signupPassword">Create Password</label><input id="signupPassword" name="password" type="password" autocomplete="new-password" minlength="8" required><small>Use at least 8 characters.</small></div><div class="form-group"><label for="signupConfirm">Confirm Password</label><input id="signupConfirm" name="confirm_password" type="password" autocomplete="new-password" minlength="8" required></div><button class="button" type="submit">Create Account</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">Already have an account? <a href="?page=user-login">User Login</a></p></div></div>`, 
-'user-login':()=>`<div class="page-card auth-page"><div class="auth-kicker">SECURE MEMBER ACCESS</div><h2>User Login</h2><p>Sign in to your Jathedar Akali Phula Singh Federation account.</p><div id="publicAuthMount"><form id="publicLoginForm" class="public-auth-form"><div class="form-group"><label for="loginEmail">Email Address</label><input id="loginEmail" name="email" type="email" autocomplete="username" required></div><div class="form-group"><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required></div><button class="button" type="submit">Sign In Securely</button><button class="auth-link-button" id="publicForgotPassword" type="button">Forgot Password?</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">New user? <a href="?page=user-signup">Create an Account</a></p></div></div>`, 
+'user-login':()=>`<div class="page-card auth-page"><div class="auth-kicker">SECURE MEMBER ACCESS</div><h2>User Login – Email + Mobile OTP</h2><p>Enter your email address. Verify the email OTP first, then verify your mobile by SMS OTP.</p><div class="notice">First-time users will add and verify a mobile number. On later logins, an SMS OTP will be sent to the already verified number.</div><div id="publicAuthMount"><form id="publicOtpLoginForm" class="public-auth-form"><div class="form-group"><label for="loginEmail">Email Address</label><input id="loginEmail" name="email" type="email" autocomplete="email" maxlength="254" required></div><button class="button" type="submit">Send Email OTP</button><button class="auth-link-button" id="publicForgotPassword" type="button">Forgot Password?</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">New user? <a href="?page=user-signup">Create an Account</a></p></div></div>`, 
 'coordinator-login':()=>`<div class="page-card auth-page"><div class="auth-kicker">FEDERATION COORDINATOR ACCESS</div><h2>Coordinator Login</h2><p>Sign in using the email address invited by the Federation administrator.</p><div id="publicAuthMount"><form id="coordinatorLoginForm" class="public-auth-form"><div class="form-group"><label for="coordinatorLoginEmail">Email Address</label><input id="coordinatorLoginEmail" name="email" type="email" autocomplete="username" required></div><div class="form-group"><label for="coordinatorLoginPassword">Password</label><input id="coordinatorLoginPassword" name="password" type="password" autocomplete="current-password" required></div><button class="button" type="submit">Sign In Securely</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">Coordinator accounts are created only by the Federation administrator. <a href="?page=contact-us">Need help?</a></p></div></div>`};
 const pages={
 'timeline-posts':()=>`<div class="page-card timeline-public-card"><p class="eyebrow">FEDERATION UPDATES</p><h2>Timeline Posts</h2><p>Updates, announcements and seva activities from Jathedar Akali Phula Singh Federation.</p><div id="publicTimelineStatus" class="notice" role="status">Loading the latest Federation updates…</div><div id="publicTimelineList" class="public-timeline-list" aria-live="polite"></div></div>`,
@@ -473,6 +475,30 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
    const logout=document.getElementById("publicLogout");
    if(logout)logout.addEventListener("click",async()=>{logout.disabled=true;const {error}=await authClient.auth.signOut();if(error){logout.disabled=false;alert(error.message);return;}location.reload();});
  }
+ async function continueWithPhoneFactor(user){
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   const {data,error}=await authClient.auth.mfa.listFactors();
+   if(error){setMessage(error.message);return;}
+   const factor=(data.phone||[]).find(item=>item.status==="verified");
+   if(!factor){
+     mount.innerHTML='<div class="auth-otp-panel"><h3>Verify Your Mobile Number</h3><p>Enter your mobile number with country code, e.g. +919876543210.</p><form id="publicPhoneEnrollForm" class="public-auth-form"><div class="form-group"><label for="enrollPhone">Mobile Number</label><input id="enrollPhone" name="phone" type="tel" inputmode="tel" placeholder="+919876543210" pattern="\\+[1-9][0-9]{7,14}" required></div><button class="button" type="submit">Send Mobile OTP</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form></div>';return;
+   }
+   const {data:challenge,error:challengeError}=await authClient.auth.mfa.challenge({factorId:factor.id});
+   if(challengeError){setMessage(challengeError.message);return;}
+   showPhoneOtp(factor.id,challenge.id,factor.phone);
+ }
+ function showPhoneOtp(factorId,challengeId,phone){
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   mount.innerHTML='<div class="auth-otp-panel"><h3>Verify Mobile OTP</h3><p>Enter the SMS code sent to <strong id="otpPhoneLabel"></strong>.</p><form id="publicPhoneOtpForm" class="public-auth-form"><div class="form-group"><label for="phoneOtpCode">6-Digit SMS OTP</label><input id="phoneOtpCode" name="code" class="auth-otp-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required></div><div class="auth-otp-actions"><button class="button" type="submit">Verify Mobile OTP</button><button class="auth-link-button" id="resendPhoneOtp" type="button">Resend SMS OTP</button></div><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form></div>';
+   const f=document.getElementById("publicPhoneOtpForm");f.dataset.factorId=factorId;f.dataset.challengeId=challengeId;
+   document.getElementById("otpPhoneLabel").textContent=phone?phone.slice(0,3)+"••••"+phone.slice(-3):"your mobile number";
+ }
+ async function checkUserSession(user){
+   const {data,error}=await authClient.auth.mfa.getAuthenticatorAssuranceLevel();
+   if(error){setMessage(error.message);return;}
+   if(data.currentLevel==="aal2"){showSignedIn(user);return;}
+   await continueWithPhoneFactor(user);
+ }
  async function coordinatorProfile(){
    const {data,error}=await authClient.functions.invoke("coordinator-access",{body:{mode:"me"}});
    if(error)throw new Error(error.message||"Coordinator verification failed");
@@ -502,7 +528,7 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
      if(isCoordinatorPage){
        try{const profile=await coordinatorProfile();showCoordinator(profile);}
        catch(error){await authClient.auth.signOut();setMessage(error.message);}
-     }else showSignedIn(data.session.user);
+     }else await checkUserSession(data.session.user);
    }
  }
  document.addEventListener("submit",async function(event){
@@ -561,6 +587,58 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
      event.target.disabled=false;setMessage(error?error.message:"If an account exists for this email, a password reset link has been sent.");
    }
  });
+
+ document.addEventListener("submit",async function(event){
+   const form=event.target;
+   if(form.id==="publicOtpLoginForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Sending OTP…";
+     const email=form.elements.email.value.trim().toLowerCase();
+     const {error}=await authClient.auth.signInWithOtp({email,options:{shouldCreateUser:true}});
+     button.disabled=false;button.textContent="Send Email OTP";
+     if(error){setMessage(error.message);return;}
+     const mount=document.getElementById("publicAuthMount");
+     mount.innerHTML='<div class="auth-otp-panel"><h3>Verify Email OTP</h3><p>Enter the 6-digit code sent to <strong id="otpEmailLabel"></strong>.</p><form id="publicEmailOtpForm" class="public-auth-form"><div class="form-group"><label for="emailOtpCode">6-Digit Email OTP</label><input id="emailOtpCode" name="token" class="auth-otp-code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" minlength="6" maxlength="6" required></div><div class="auth-otp-actions"><button class="button" type="submit">Verify Email OTP</button><button class="auth-link-button" id="resendEmailOtp" type="button">Resend OTP</button></div><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form></div>';
+     document.getElementById("otpEmailLabel").textContent=email;mount.dataset.pendingEmail=email;
+   }
+   if(form.id==="publicEmailOtpForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Verifying…";
+     const email=document.getElementById("publicAuthMount").dataset.pendingEmail,token=form.elements.token.value.trim();
+     const {data,error}=await authClient.auth.verifyOtp({email,token,type:"email"});
+     button.disabled=false;button.textContent="Verify Email OTP";
+     if(error){setMessage(error.message);return;}await continueWithPhoneFactor(data.user);
+   }
+   if(form.id==="publicPhoneEnrollForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Sending SMS…";
+     const phone=form.elements.phone.value.trim();
+     if(!/^\+[1-9][0-9]{7,14}$/.test(phone)){button.disabled=false;button.textContent="Send Mobile OTP";setMessage("Enter a valid international number, e.g. +919876543210.");return;}
+     const {data,error}=await authClient.auth.mfa.enroll({factorType:"phone",friendlyName:"JAPSF Website SMS OTP",phone});
+     if(error){button.disabled=false;button.textContent="Send Mobile OTP";setMessage(error.message);return;}
+     const {data:challenge,error:challengeError}=await authClient.auth.mfa.challenge({factorId:data.id});
+     button.disabled=false;button.textContent="Send Mobile OTP";
+     if(challengeError){setMessage(challengeError.message);return;}showPhoneOtp(data.id,challenge.id,phone);
+   }
+   if(form.id==="publicPhoneOtpForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Verifying…";
+     const {data,error}=await authClient.auth.mfa.verify({factorId:form.dataset.factorId,challengeId:form.dataset.challengeId,code:form.elements.code.value.trim()});
+     button.disabled=false;button.textContent="Verify Mobile OTP";
+     if(error){setMessage(error.message);return;}const current=(await authClient.auth.getUser()).data.user;showSignedIn(current||data.user);
+   }
+ },true);
+
+
+ document.addEventListener("click",async function(event){
+   if(event.target&&event.target.id==="resendEmailOtp"){
+     const email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"";
+     event.target.disabled=true;const {error}=await authClient.auth.signInWithOtp({email,options:{shouldCreateUser:true}});event.target.disabled=false;
+     setMessage(error?error.message:"A new email OTP has been requested.");
+   }
+   if(event.target&&event.target.id==="resendPhoneOtp"){
+     const form=document.getElementById("publicPhoneOtpForm");if(!form)return;
+     event.target.disabled=true;const {data,error}=await authClient.auth.mfa.challenge({factorId:form.dataset.factorId});event.target.disabled=false;
+     if(error){setMessage(error.message);return;}form.dataset.challengeId=data.id;setMessage("A new SMS OTP has been sent.");
+   }
+ },true);
+
  restoreSession();
 })();
 </script>
