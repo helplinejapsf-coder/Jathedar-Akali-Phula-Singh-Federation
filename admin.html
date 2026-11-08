@@ -76,7 +76,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <main class="wrap" id="adminApp" hidden>
 <div class="notice" id="backendNotice"><span>◆</span><div><b>Secure database:</b> Administrator sign-in is protected by server-side authorization. Live records load only after the approved administrator session is verified.</div></div>
 <div class="layout">
-<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#participants"><span>♙</span>Participant List</a><a href="#timeline"><span>◷</span>Timeline Posts</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donors & Receipts</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
+<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#participants"><span>♙</span>Participant List</a><a href="#timeline"><span>◷</span>Timeline Posts</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donors & Receipts</a><a href="#coordinators"><span>♙</span>Coordinators</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
 <div class="main">
 <section id="dashboard" class="welcome"><div><div class="eyebrow">Federation control centre</div><h2>Dashboard Overview</h2><p>Welcome to your administration workspace.</p></div><div class="date-chip">✦ &nbsp; JAPSF ADMINISTRATOR</div></section>
 <section class="panel" style="background:linear-gradient(115deg,#e8eaff,#f2e8ff);border:0"><div class="panel-head"><h3>Federation Quick Access</h3><span class="pill">ADMIN TOOLS</span></div><p class="muted">Manage the Federation website, review requests and keep public information up to date from one secure workspace.</p><div class="two-col"><div class="mini-card"><h4>Website Administration</h4><p class="muted">Review content, events and public announcements.</p></div><div class="mini-card"><h4>Member Services</h4><p class="muted">Membership and ID card modules will appear here once database integration is complete.</p></div></div></section>
@@ -140,6 +140,18 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <div class="table-tools"><input id="donorSearch" type="search" placeholder="Search donor, receipt or transaction…"><select id="donorStatusFilter" aria-label="Filter donations"><option value="all">All donations</option><option value="pending">Pending</option><option value="successful">Verified / Successful</option><option value="revoked">Receipt cancelled</option></select><button class="event-secondary" id="donorRefresh" type="button">↻ Refresh</button></div>
 <div id="donorRecords" class="empty">Loading donors…</div><p class="muted" id="donorUpdated" style="margin-top:10px"></p>
 </section>
+<section id="coordinators" class="panel">
+<div class="panel-head"><div><h3>Coordinator Accounts</h3><p class="muted" style="margin:4px 0 0">Create coordinator accounts and control access. An invitation email is sent to each coordinator.</p></div><span class="pill">ACCESS CONTROL</span></div>
+<form id="coordinatorForm" class="event-form">
+<div class="event-fields">
+<div class="event-field"><label for="coordinatorName">Coordinator Full Name *</label><input id="coordinatorName" type="text" maxlength="100" required autocomplete="name"></div>
+<div class="event-field"><label for="coordinatorEmail">Coordinator Email *</label><input id="coordinatorEmail" type="email" required autocomplete="email"></div>
+<div class="event-field full"><label for="coordinatorArea">Assigned Area / District *</label><input id="coordinatorArea" type="text" maxlength="120" required placeholder="e.g. Amritsar District"></div>
+<div class="event-field full"><button class="event-primary" id="coordinatorCreateBtn" type="submit">＋ Create & Send Invitation</button><p class="muted" id="coordinatorFeedback" role="status" aria-live="polite"></p></div>
+</div></form>
+<div class="event-toolbar"><span class="muted">Only active, invited accounts can access the Coordinator Login page.</span><button class="event-secondary" id="coordinatorRefresh" type="button">↻ Refresh</button></div>
+<div id="coordinatorRecords" class="empty">Loading coordinator accounts…</div>
+</section>
 <section id="team" class="panel"><h3>Team Members</h3><p class="muted">Current public team profiles from the secure database.</p><div id="teamRecords" class="empty">Loading team…</div></section>
 <section id="content" class="panel"><h3>Website Content</h3><div id="messageRecords" class="empty">Loading contact messages…</div><p class="muted">Manage public pages, announcements and gallery content after the content-management backend is configured.</p></section>
 <section id="ai" class="panel"><h3>AI Assistant Policy</h3><div class="two-col"><div class="mini-card"><h4>Allowed information</h4><p class="muted">Public website pages and approved public FAQs only.</p></div><div class="mini-card"><h4>Restricted information</h4><p class="muted">Member, donor, payment and private help-request records must never be exposed.</p></div></div><p class="muted">Enforce all access restrictions on the server, not only through AI instructions.</p></section>
@@ -154,6 +166,49 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
  const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
  const gate=document.getElementById("loginGate"),app=document.getElementById("adminApp"),msg=document.getElementById("authMessage"),form=document.getElementById("authForm"),logout=document.getElementById("logoutBtn");
  const allowedEmail="helpline.japsf@gmail.com";
+ 
+ const coordinatorForm=document.getElementById("coordinatorForm");
+ const coordinatorFeedback=document.getElementById("coordinatorFeedback");
+ const coordinatorHost=document.getElementById("coordinatorRecords");
+ function coordinatorMessage(text){coordinatorFeedback.textContent=text;}
+ async function coordinatorAction(payload){
+   const {data,error}=await client.functions.invoke("coordinator-access",{body:payload});
+   if(error)throw new Error(error.message||"Coordinator service unavailable");
+   if(data&&data.error)throw new Error(data.error);
+   return data;
+ }
+ async function loadCoordinators(){
+   coordinatorHost.className="empty";coordinatorHost.textContent="Loading coordinator accounts…";
+   try{
+     const data=await coordinatorAction({mode:"list"});
+     coordinatorHost.replaceChildren();
+     if(!data.coordinators||!data.coordinators.length){coordinatorHost.className="empty";coordinatorHost.textContent="No coordinator accounts yet.";return;}
+     const table=document.createElement("table");table.className="data-table";
+     table.innerHTML="<thead><tr><th>Name</th><th>Email</th><th>Assigned Area</th><th>Status</th><th>Actions</th></tr></thead>";
+     const tbody=document.createElement("tbody");
+     data.coordinators.forEach(item=>{
+       const tr=document.createElement("tr");
+       [item.full_name,item.email,item.assigned_area,item.is_active?"Active":"Paused"].forEach(value=>{const td=document.createElement("td");td.textContent=String(value??"");tr.appendChild(td);});
+       const actions=document.createElement("td");
+       const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=item.is_active?"Pause":"Activate";
+       toggle.addEventListener("click",async()=>{toggle.disabled=true;try{await coordinatorAction({mode:"set_active",user_id:item.user_id,is_active:!item.is_active});await loadCoordinators();}catch(e){coordinatorMessage(e.message);toggle.disabled=false;}});
+       const remove=document.createElement("button");remove.type="button";remove.className="event-danger";remove.style.marginLeft="6px";remove.textContent="Remove";
+       remove.addEventListener("click",async()=>{if(!confirm("Permanently remove this coordinator account?"))return;remove.disabled=true;try{await coordinatorAction({mode:"remove",user_id:item.user_id});await loadCoordinators();}catch(e){coordinatorMessage(e.message);remove.disabled=false;}});
+       actions.append(toggle,remove);tr.appendChild(actions);tbody.appendChild(tr);
+     });
+     table.appendChild(tbody);coordinatorHost.appendChild(table);
+   }catch(error){coordinatorHost.className="empty";coordinatorHost.textContent="Could not load coordinators: "+error.message;}
+ }
+ coordinatorForm.addEventListener("submit",async event=>{
+   event.preventDefault();const button=document.getElementById("coordinatorCreateBtn");button.disabled=true;coordinatorMessage("Creating account and sending invitation…");
+   try{
+     const data=await coordinatorAction({mode:"create",full_name:document.getElementById("coordinatorName").value.trim(),email:document.getElementById("coordinatorEmail").value.trim(),assigned_area:document.getElementById("coordinatorArea").value.trim()});
+     coordinatorForm.reset();coordinatorMessage(data.message||"Invitation sent.");await loadCoordinators();
+   }catch(error){coordinatorMessage(error.message);}
+   finally{button.disabled=false;}
+ });
+ document.getElementById("coordinatorRefresh").addEventListener("click",loadCoordinators);
+
  function message(t){msg.textContent=t}
  function showApp(){gate.hidden=true;app.hidden=false;logout.hidden=false}
  function showGate(){gate.hidden=false;app.hidden=true;logout.hidden=true}
@@ -501,7 +556,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
    if((user.email||"").toLowerCase()!==allowedEmail){await client.auth.signOut();showGate();message("This email is not authorized for the administrator panel.");return false}
    const {data,error}=await client.functions.invoke("admin-authorize",{body:{}});
    if(error||!data||data.authorized!==true){await client.auth.signOut();showGate();message("Administrator authorization failed. Contact the project owner.");return false}
-   showApp();await loadDashboard();await loadParticipantRecords();return true
+   showApp();await loadDashboard();await loadParticipantRecords();await loadCoordinators();return true
  }
  form.addEventListener("submit",async e=>{
    e.preventDefault();message("Signing in securely...");
