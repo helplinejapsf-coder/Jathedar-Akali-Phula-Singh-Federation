@@ -612,10 +612,14 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
   const csv=[cols.join(","),...rows.map(r=>cols.map(k=>'"'+participantText(r[k]).replace(/"/g,'""')+'"').join(","))].join("\r\n");
   const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="JAPSF-participants.csv";a.click();URL.revokeObjectURL(url);
  });
- document.getElementById("printParticipants").addEventListener("click",()=>{const rows=participantFiltered();const w=window.open("","_blank");if(!w){alert("Please allow pop-ups to print the participant list.");return;}const safe=v=>participantText(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));w.document.write("<!doctype html><html><head><title>JAPSF Participant List</title><style>body{font:12px Arial;padding:20px}h2{color:#101d35}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:7px;text-align:left}th{background:#f3eee4}</style></head><body><h2>Jathedar Akali Phula Singh Federation — Participant List</h2><table><thead><tr><th>Registration ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Event</th><th>Date</th><th>Status</th></tr></thead><tbody>"+rows.map(p=>"<tr>"+[p.participant_code,p.full_name,p.mobile,p.email,p.event_title,participantDate(p.created_at),p.status].map(v=>"<td>"+safe(v)+"</td>").join("")+"</tr>").join("")+"</tbody></table>
-
-
-</body></html>");w.document.close();w.focus();w.print();});
+ document.getElementById("printParticipants").addEventListener("click",()=>{
+  const rows=participantFiltered(),w=window.open("","_blank");
+  if(!w){alert("Please allow pop-ups to print the participant list.");return;}
+  const safe=v=>participantText(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const body=rows.map(p=>"<tr>"+[p.participant_code,p.full_name,p.mobile,p.email,p.event_title,participantDate(p.created_at),p.status].map(v=>"<td>"+safe(v)+"</td>").join("")+"</tr>").join("");
+  const printHtml="<!doctype html><html><head><title>JAPSF Participant List</title><style>body{font:12px Arial;padding:20px}h2{color:#101d35}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:7px;text-align:left}th{background:#f3eee4}</style></head><body><h2>Jathedar Akali Phula Singh Federation — Participant List</h2><table><thead><tr><th>Registration ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Event</th><th>Date</th><th>Status</th></tr></thead><tbody>"+body+"</tbody></table></body></html>";
+  w.document.write(printHtml);w.document.close();w.focus();w.print();
+ });
 
  async function loadDashboard(){
    const notice=document.getElementById("backendNotice");
