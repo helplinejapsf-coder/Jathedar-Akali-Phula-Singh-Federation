@@ -68,6 +68,8 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 .participant-action.danger{color:#b42318}
 @media(max-width:560px){.participant-tools input,.participant-tools select{width:100%;max-width:none}}
 
+
+.team-admin-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:13px;margin-top:14px}.team-admin-card{border:1px solid #e8ebf1;border-radius:12px;padding:12px;background:#fff;display:grid;grid-template-columns:76px minmax(0,1fr);gap:11px;align-items:center}.team-admin-card img{width:76px;height:84px;object-fit:cover;border-radius:9px;background:#f3f4f6}.team-admin-card h4{font-size:12px;color:#101d35;margin:0 0 3px;overflow-wrap:anywhere}.team-admin-card p{font-size:10px;color:#778499;margin:2px 0;overflow-wrap:anywhere}.team-admin-card .event-actions{grid-column:1/-1;justify-content:flex-start}
 </style></head>
 <body>
 <header class="top"><div class="top-left"><button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation">☰</button><div class="brand"><div class="brand-mark"><img src="./logo.png" alt="Jathedar Akali Phula Singh Federation logo"></div><div><h1>Jathedar Akali Phula Singh Federation</h1><p>Administration Workspace</p></div></div></div><div class="top-right"><span class="secure">✦ SECURE ADMIN ACCESS</span><span class="admin-mail">helpline.japsf@gmail.com</span><button class="logout" id="logoutBtn" hidden>Sign out</button></div></header>
@@ -152,7 +154,23 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <div class="event-toolbar"><span class="muted">Only active, invited accounts can access the Coordinator Login page.</span><button class="event-secondary" id="coordinatorRefresh" type="button">↻ Refresh</button></div>
 <div id="coordinatorRecords" class="empty">Loading coordinator accounts…</div>
 </section>
-<section id="team" class="panel"><h3>Team Members</h3><p class="muted">Current public team profiles from the secure database.</p><div id="teamRecords" class="empty">Loading team…</div></section>
+<section id="team" class="panel">
+<div class="panel-head"><div><h3>Team Members Management</h3><p class="muted" style="margin:4px 0 0">Add, edit, publish and remove public Federation team profiles.</p></div><span class="pill">TEAM PROFILES</span></div>
+<div class="event-toolbar"><span class="muted">Profile photo: JPG, PNG or WebP · maximum 5 MB.</span><button class="event-primary" id="showTeamForm" type="button">＋ Add Team Member</button></div>
+<form id="teamForm" class="event-form" hidden>
+<input type="hidden" id="teamEditId">
+<div class="event-fields">
+<div class="event-field"><label for="teamPhoto">Profile Photo</label><input id="teamPhoto" type="file" accept="image/jpeg,image/png,image/webp"><div class="event-preview"><img id="teamPhotoPreview" alt="Profile photo preview" hidden><span id="teamPhotoHint">Choose a photo (up to 5 MB).</span></div></div>
+<div class="event-field"><label for="teamName">Full Name *</label><input id="teamName" maxlength="140" required placeholder="Member full name"></div>
+<div class="event-field"><label for="teamDesignation">Designation *</label><input id="teamDesignation" maxlength="120" required placeholder="e.g. Director"></div>
+<div class="event-field"><label for="teamLocation">Village / City / Address</label><input id="teamLocation" maxlength="240" placeholder="Village, District, Punjab, India"></div>
+<div class="event-field"><label for="teamOrder">Display Order</label><input id="teamOrder" type="number" min="0" max="999" value="0"></div>
+</div>
+<div class="event-form-actions"><label class="event-publish"><input id="teamPublish" type="checkbox" checked> Show on public website</label></div>
+<div class="event-form-actions"><button class="event-primary" id="saveTeamBtn" type="submit">Save Team Member</button><button class="event-secondary" id="cancelTeamBtn" type="button">Cancel</button></div>
+<div id="teamFeedback" class="event-feedback" role="status" aria-live="polite"></div>
+</form>
+<div id="teamRecords" class="empty">Loading team profiles…</div></section>
 <section id="content" class="panel"><h3>Website Content</h3><div id="messageRecords" class="empty">Loading contact messages…</div><p class="muted">Manage public pages, announcements and gallery content after the content-management backend is configured.</p></section>
 <section id="ai" class="panel"><h3>AI Assistant Policy</h3><div class="two-col"><div class="mini-card"><h4>Allowed information</h4><p class="muted">Public website pages and approved public FAQs only.</p></div><div class="mini-card"><h4>Restricted information</h4><p class="muted">Member, donor, payment and private help-request records must never be exposed.</p></div></div><p class="muted">Enforce all access restrictions on the server, not only through AI instructions.</p></section>
 <section id="security" class="panel"><h3>Security Settings</h3><p class="muted">Administrator contact: helpline.japsf@gmail.com</p><ul class="muted"><li>Server-side authentication and administrator allowlisting.</li><li>Role-based access control and least-privilege permissions.</li><li>Database row-level security and server-side validation.</li><li>Secrets stored only in protected server environment variables.</li><li>Session expiry and audit logging.</li></ul></section>
@@ -430,6 +448,95 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
    }finally{btn.disabled=false;btn.textContent=document.getElementById("timelineEditId").value?"Save Changes":"Save Timeline Post";}
  });
  
+ 
+ const teamForm=document.getElementById("teamForm");
+ const teamHost=document.getElementById("teamRecords");
+ let teamCurrentPhotoPath="";
+ let teamPreviewUrl="";
+ function teamMessage(text){document.getElementById("teamFeedback").textContent=text;}
+ function resetTeamForm(){
+   teamForm.reset();document.getElementById("teamEditId").value="";teamCurrentPhotoPath="";
+   document.getElementById("teamOrder").value="0";document.getElementById("teamPublish").checked=true;
+   const img=document.getElementById("teamPhotoPreview");img.hidden=true;img.removeAttribute("src");
+   document.getElementById("teamPhotoHint").textContent="Choose a photo (up to 5 MB).";
+   document.getElementById("saveTeamBtn").textContent="Save Team Member";
+   if(teamPreviewUrl){URL.revokeObjectURL(teamPreviewUrl);teamPreviewUrl="";}
+   teamMessage("");
+ }
+ function showTeamForm(){teamForm.hidden=false;teamForm.scrollIntoView({behavior:"smooth",block:"start"});document.getElementById("teamName").focus();}
+ document.getElementById("showTeamForm").addEventListener("click",()=>{resetTeamForm();showTeamForm();});
+ document.getElementById("cancelTeamBtn").addEventListener("click",()=>{teamForm.hidden=true;resetTeamForm();});
+ document.getElementById("teamPhoto").addEventListener("change",()=>{
+   const file=document.getElementById("teamPhoto").files[0];if(!file)return;
+   if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){document.getElementById("teamPhoto").value="";teamMessage("Choose JPG, PNG or WebP up to 5 MB.");return;}
+   if(teamPreviewUrl)URL.revokeObjectURL(teamPreviewUrl);teamPreviewUrl=URL.createObjectURL(file);
+   const img=document.getElementById("teamPhotoPreview");img.src=teamPreviewUrl;img.hidden=false;document.getElementById("teamPhotoHint").textContent=file.name;
+ });
+ function teamPhotoUrl(path){return path?client.storage.from("federation-public-assets").getPublicUrl(path).data.publicUrl:"";}
+ async function loadTeamRecords(){
+   teamHost.className="empty";teamHost.textContent="Loading team profiles…";
+   const {data,error}=await client.from("team_members").select("id,full_name,designation,location,photo_path,display_order,is_published,created_at").order("display_order",{ascending:true}).order("created_at",{ascending:true});
+   if(error){teamHost.textContent="Could not load team profiles: "+error.message;return;}
+   teamHost.replaceChildren();
+   if(!data||!data.length){teamHost.className="empty";teamHost.textContent="No team profiles yet. Select Add Team Member to begin.";return;}
+   teamHost.className="team-admin-list";
+   data.forEach(member=>{
+     const card=document.createElement("article");card.className="team-admin-card";
+     const img=document.createElement("img");img.alt=member.full_name||"Team member";if(member.photo_path)img.src=teamPhotoUrl(member.photo_path);else img.style.visibility="hidden";
+     const info=document.createElement("div");const name=document.createElement("h4");name.textContent=member.full_name;
+     const role=document.createElement("p");role.textContent=member.designation||"";
+     const place=document.createElement("p");place.textContent=member.location||"";
+     const state=document.createElement("p");state.textContent=member.is_published?"PUBLISHED":"HIDDEN";
+     info.append(name,role,place,state);
+     const actions=document.createElement("div");actions.className="event-actions";
+     const edit=document.createElement("button");edit.type="button";edit.className="event-secondary";edit.textContent="Edit";edit.addEventListener("click",()=>editTeamMember(member));
+     const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=member.is_published?"Hide":"Publish";toggle.addEventListener("click",()=>toggleTeamPublish(member));
+     const del=document.createElement("button");del.type="button";del.className="event-danger";del.textContent="Delete";del.addEventListener("click",()=>deleteTeamMember(member));
+     actions.append(edit,toggle,del);card.append(img,info,actions);teamHost.append(card);
+   });
+ }
+ function editTeamMember(member){
+   resetTeamForm();document.getElementById("teamEditId").value=member.id;
+   document.getElementById("teamName").value=member.full_name||"";
+   document.getElementById("teamDesignation").value=member.designation||"";
+   document.getElementById("teamLocation").value=member.location||"";
+   document.getElementById("teamOrder").value=member.display_order??0;
+   document.getElementById("teamPublish").checked=!!member.is_published;
+   teamCurrentPhotoPath=member.photo_path||"";
+   if(teamCurrentPhotoPath){const img=document.getElementById("teamPhotoPreview");img.src=teamPhotoUrl(teamCurrentPhotoPath);img.hidden=false;document.getElementById("teamPhotoHint").textContent="Current photo (upload another to replace).";}
+   document.getElementById("saveTeamBtn").textContent="Save Changes";showTeamForm();
+ }
+ async function toggleTeamPublish(member){
+   const {error}=await client.from("team_members").update({is_published:!member.is_published,updated_at:new Date().toISOString()}).eq("id",member.id);
+   if(error){alert("Could not update profile: "+error.message);return;}await loadTeamRecords();
+ }
+ async function deleteTeamMember(member){
+   if(!confirm("Delete "+member.full_name+"? This cannot be undone."))return;
+   const {error}=await client.from("team_members").delete().eq("id",member.id);
+   if(error){alert("Could not delete profile: "+error.message);return;}
+   if(member.photo_path)await client.storage.from("federation-public-assets").remove([member.photo_path]);
+   await loadTeamRecords();
+ }
+ teamForm.addEventListener("submit",async e=>{
+   e.preventDefault();const btn=document.getElementById("saveTeamBtn");btn.disabled=true;btn.textContent="Saving…";teamMessage("Saving team profile securely…");
+   let uploadedPath="";
+   try{
+     const id=document.getElementById("teamEditId").value,file=document.getElementById("teamPhoto").files[0];
+     let photoPath=teamCurrentPhotoPath;
+     if(file){
+       const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+       photoPath="team/"+crypto.randomUUID()+"."+ext;
+       const {error:uploadError}=await client.storage.from("federation-public-assets").upload(photoPath,file,{contentType:file.type,cacheControl:"3600",upsert:false});
+       if(uploadError)throw uploadError;uploadedPath=photoPath;
+     }
+     const payload={full_name:document.getElementById("teamName").value.trim(),designation:document.getElementById("teamDesignation").value.trim(),location:document.getElementById("teamLocation").value.trim()||null,photo_path:photoPath||null,display_order:Number(document.getElementById("teamOrder").value)||0,is_published:document.getElementById("teamPublish").checked,updated_at:new Date().toISOString()};
+     if(id){const {error}=await client.from("team_members").update(payload).eq("id",id);if(error)throw error;if(file&&teamCurrentPhotoPath)await client.storage.from("federation-public-assets").remove([teamCurrentPhotoPath]);}
+     else{const {error}=await client.from("team_members").insert(payload);if(error)throw error;}
+     teamMessage("Team profile saved successfully.");teamForm.hidden=true;resetTeamForm();await loadTeamRecords();
+   }catch(err){if(uploadedPath)await client.storage.from("federation-public-assets").remove([uploadedPath]);teamMessage(err.message||"Could not save team profile.");}
+   finally{btn.disabled=false;btn.textContent=document.getElementById("teamEditId").value?"Save Changes":"Save Team Member";}
+ });
+
  const participantHost=document.getElementById("participantRecords");
  let participantRows=[];
  function participantText(value){return value==null?"":String(value)}
@@ -544,7 +651,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
    renderList("helpRecords",r.helpRequests,[["Name","full_name"],["Subject","subject"],["Category","category"],["Status","status"]],"No help requests received yet.");
    renderList("donationRecords",r.donations,[["Donor","donor_name"],["Amount (₹)","amount"],["Campaign","campaign_name"],["Payment status","payment_status"]],"No donation records received yet.");
    renderList("messageRecords",r.messages,[["Name","full_name"],["Subject","subject"],["Email","email"],["Status","status"]],"No contact messages received yet.");
-   renderList("teamRecords",[],[],"Team profiles are stored securely; public profile editing will be added separately.");
+   await loadTeamRecords();
    await loadEventRecords();
    const latest=document.getElementById("latestActivity");
    if(latest){latest.className="muted";latest.textContent="Dashboard updated "+new Date(data.generatedAt||Date.now()).toLocaleString();}
