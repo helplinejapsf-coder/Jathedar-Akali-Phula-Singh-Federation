@@ -779,3 +779,61 @@ document.addEventListener("submit",async function(event){
 </script>
 
 <script>
+/* Public bilingual CMS pages: only published rows are returned by the database RLS policy. */
+(function(){
+ const SUPABASE_URL="https://urghiemtxhwhvoaivwge.supabase.co";
+ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ if(!window.supabase||!window.supabase.createClient)return;
+ const cmsClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ const escText=value=>String(value??"");
+ function addBilingualText(parent,tag,pa,en,className){
+  const a=document.createElement(tag);a.className=(className||"")+" pa";a.textContent=escText(pa);
+  const b=document.createElement(tag);b.className=(className||"")+" en";b.textContent=escText(en);
+  parent.append(a,b);
+ }
+ function renderCmsPage(page){
+  const home=document.getElementById("homePage"),separate=document.getElementById("separatePage"),content=document.getElementById("pageContent");
+  if(!home||!separate||!content)return;
+  home.hidden=true;separate.hidden=false;content.replaceChildren();
+  const card=document.createElement("article");card.className="page-card";
+  addBilingualText(card,"h2",page.title_pa,page.title_en);
+  if(page.image_path){
+   const image=document.createElement("img");image.src=cmsClient.storage.from("federation-public-assets").getPublicUrl(page.image_path).data.publicUrl;
+   image.alt=page.title_en||page.title_pa||"Federation page image";image.loading="lazy";
+   image.style.cssText="display:block;width:100%;max-height:420px;object-fit:contain;background:#f7f2e8;border-radius:10px;margin:15px 0";
+   card.appendChild(image);
+  }
+  const pa=String(page.content_pa||"").split(/\n\s*\n/).filter(Boolean);
+  const en=String(page.content_en||"").split(/\n\s*\n/).filter(Boolean);
+  const count=Math.max(pa.length,en.length);
+  for(let i=0;i<count;i++){
+   const p1=document.createElement("p");p1.className="pa";p1.style.whiteSpace="pre-wrap";p1.textContent=pa[i]||"";
+   const p2=document.createElement("p");p2.className="en";p2.style.whiteSpace="pre-wrap";p2.textContent=en[i]||"";
+   card.append(p1,p2);
+  }
+  content.appendChild(card);
+  document.title=(page.title_en||page.title_pa)+" | Jathedar Akali Phula Singh Federation";
+  const menu=document.getElementById("menuPanel");
+  if(menu)menu.querySelectorAll("a[data-page]").forEach(a=>a.classList.toggle("active",a.dataset.page===page.slug));
+ }
+ async function loadCmsPages(){
+  const {data,error}=await cmsClient.from("website_pages").select("slug,title_pa,title_en,content_pa,content_en,image_path,display_order").eq("is_published",true).order("display_order",{ascending:true}).order("updated_at",{ascending:false});
+  if(error){console.warn("Federation CMS pages unavailable:",error.message);return;}
+  const pages=data||[],menu=document.getElementById("menuPanel");
+  if(menu){
+   const known=new Set(Array.from(menu.querySelectorAll("a[data-page]")).map(a=>a.dataset.page));
+   pages.forEach(page=>{
+    if(page.slug==="home"||known.has(page.slug))return;
+    const link=document.createElement("a");link.href="?page="+encodeURIComponent(page.slug);link.dataset.page=page.slug;
+    link.textContent=(page.title_pa||page.title_en||page.slug)+" / "+(page.title_en||page.title_pa||page.slug);
+    menu.appendChild(link);known.add(page.slug);
+   });
+  }
+  const slug=new URLSearchParams(location.search).get("page")||"home";
+  const page=pages.find(item=>item.slug===slug);if(page)renderCmsPage(page);
+ }
+ loadCmsPages();
+})();
+</script>
+</body>
+</html>
