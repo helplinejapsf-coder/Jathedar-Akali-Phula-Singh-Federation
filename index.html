@@ -720,6 +720,8 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
      info.append(name,role,place);card.append(img,info);host.append(card);
    });
  };
+ const initialPage=new URLSearchParams(location.search).get("page");
+ if(initialPage==="team-members"||initialPage==="management-team")window.loadPublicTeam();
 })();
 
 /* Public timeline: only posts published through the protected admin panel are readable. */
