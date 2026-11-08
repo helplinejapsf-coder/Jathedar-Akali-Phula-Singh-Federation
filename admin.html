@@ -78,7 +78,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <main class="wrap" id="adminApp" hidden>
 <div class="notice" id="backendNotice"><span>◆</span><div><b>Secure database:</b> Administrator sign-in is protected by server-side authorization. Live records load only after the approved administrator session is verified.</div></div>
 <div class="layout">
-<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#participants"><span>♙</span>Participant List</a><a href="#timeline"><span>◷</span>Timeline Posts</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donors & Receipts</a><a href="#coordinators"><span>♙</span>Coordinators</a><a href="#team"><span>♧</span>Team Members</a><a href="#content"><span>▤</span>Website Content</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
+<nav class="side"><div class="side-label">Workspace menu</div><a class="active" href="#dashboard"><span>⌂</span>Dashboard</a><a href="#members"><span>♙</span>Members & Applications</a><a href="#idcards"><span>▣</span>ID Cards</a><a href="#events"><span>◇</span>Events</a><a href="#participants"><span>♙</span>Participant List</a><a href="#timeline"><span>◷</span>Timeline Posts</a><a href="#requests"><span>✉</span>Help Requests</a><a href="#funds"><span>₹</span>Donors & Receipts</a><a href="#coordinators"><span>♙</span>Coordinators</a><a href="#team"><span>♧</span>Team Members</a><a href="./company-profile.html"><span>▣</span>Company Profile</a><a href="#ai"><span>✧</span>AI Assistant Policy</a><a href="#security"><span>⚙</span>Security Settings</a></nav>
 <div class="main">
 <section id="dashboard" class="welcome"><div><div class="eyebrow">Federation control centre</div><h2>Dashboard Overview</h2><p>Welcome to your administration workspace.</p></div><div class="date-chip">✦ &nbsp; JAPSF ADMINISTRATOR</div></section>
 <section class="panel" style="background:linear-gradient(115deg,#e8eaff,#f2e8ff);border:0"><div class="panel-head"><h3>Federation Quick Access</h3><span class="pill">ADMIN TOOLS</span></div><p class="muted">Manage the Federation website, review requests and keep public information up to date from one secure workspace.</p><div class="two-col"><div class="mini-card"><h4>Website Administration</h4><p class="muted">Review content, events and public announcements.</p></div><div class="mini-card"><h4>Member Services</h4><p class="muted">Membership and ID card modules will appear here once database integration is complete.</p></div></div></section>
@@ -171,26 +171,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 <div id="teamFeedback" class="event-feedback" role="status" aria-live="polite"></div>
 </form>
 <div id="teamRecords" class="empty">Loading team profiles…</div></section>
-<section id="content" class="panel">
-<div class="panel-head"><div><h3>Website Content Manager</h3><p class="muted" style="margin:4px 0 0">Create, edit, publish or remove public pages in Punjabi and English.</p></div><span class="pill">CONTENT CMS</span></div>
-<div class="event-toolbar"><span class="muted">Public pages appear on the website after you publish them. Images: JPG, PNG or WebP, maximum 5 MB.</span><button class="event-primary" id="cmsNewPage" type="button">＋ Add New Page</button></div>
-<form id="cmsPageForm" class="event-form" hidden>
-<input type="hidden" id="cmsEditId">
-<div class="event-fields">
-<div class="event-field"><label for="cmsSlug">Page URL Slug *</label><input id="cmsSlug" type="text" maxlength="80" placeholder="e.g. about-us or sikh-history" pattern="[a-z0-9]+(-[a-z0-9]+)*" required><small class="muted">Use lowercase English letters, numbers and hyphens. URL: ?page=your-slug</small></div>
-<div class="event-field"><label for="cmsOrder">Display Order</label><input id="cmsOrder" type="number" min="0" max="9999" value="0"></div>
-<div class="event-field"><label for="cmsTitlePa">Page Title · ਪੰਜਾਬੀ *</label><input id="cmsTitlePa" type="text" maxlength="180" required placeholder="ਪੰਨੇ ਦਾ ਸਿਰਲੇਖ"></div>
-<div class="event-field"><label for="cmsTitleEn">Page Title · English *</label><input id="cmsTitleEn" type="text" maxlength="180" required placeholder="Page title"></div>
-<div class="event-field full"><label for="cmsContentPa">Page Content · ਪੰਜਾਬੀ *</label><textarea id="cmsContentPa" maxlength="30000" rows="7" required placeholder="ਪੰਜਾਬੀ ਵਿੱਚ ਜਾਣਕਾਰੀ ਲਿਖੋ…"></textarea></div>
-<div class="event-field full"><label for="cmsContentEn">Page Content · English *</label><textarea id="cmsContentEn" maxlength="30000" rows="7" required placeholder="Write the page content in English…"></textarea></div>
-<div class="event-field"><label for="cmsImage">Page Image (optional)</label><input id="cmsImage" type="file" accept="image/jpeg,image/png,image/webp"><div class="event-preview"><img id="cmsImagePreview" alt="Page image preview" hidden><span id="cmsImageHint">Choose an image up to 5 MB.</span></div></div>
-</div>
-<div class="event-form-actions"><label class="event-publish"><input id="cmsPublish" type="checkbox"> Publish on public website</label></div>
-<div class="event-form-actions"><button class="event-primary" id="cmsSaveBtn" type="submit">Save Page</button><button class="event-secondary" id="cmsCancelBtn" type="button">Cancel</button></div>
-<div id="cmsFeedback" class="event-feedback" role="status" aria-live="polite"></div>
-</form>
-<div id="cmsPageRecords" class="empty">Website content will load after administrator sign-in.</div>
-</section>
+
 <section id="ai" class="panel"><h3>AI Assistant Policy</h3><div class="two-col"><div class="mini-card"><h4>Allowed information</h4><p class="muted">Public website pages and approved public FAQs only.</p></div><div class="mini-card"><h4>Restricted information</h4><p class="muted">Member, donor, payment and private help-request records must never be exposed.</p></div></div><p class="muted">Enforce all access restrictions on the server, not only through AI instructions.</p></section>
 <section id="security" class="panel"><h3>Security Settings</h3><p class="muted">Administrator contact: helpline.japsf@gmail.com</p><ul class="muted"><li>Server-side authentication and administrator allowlisting.</li><li>Role-based access control and least-privilege permissions.</li><li>Database row-level security and server-side validation.</li><li>Secrets stored only in protected server environment variables.</li><li>Session expiry and audit logging.</li></ul></section>
 <footer class="footer">© 2026 Jathedar Akali Phula Singh Federation · Website Designed by New Granthi Singh Federation</footer>
@@ -805,110 +786,6 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
 })();
 </script>
 
-<script>
-(function(){
- const client=window.__japsfAdminClient;
- const $=id=>document.getElementById(id);
- const form=$("cmsPageForm"),host=$("cmsPageRecords");
- if(!client||!form||!host)return;
- let currentImagePath="",previewUrl="";
- const feedback=text=>{$("cmsFeedback").textContent=text;};
- function resetForm(){
-  form.reset();$("cmsEditId").value="";currentImagePath="";
-  $("cmsOrder").value="0";$("cmsSaveBtn").textContent="Save Page";
-  $("cmsImagePreview").hidden=true;$("cmsImagePreview").removeAttribute("src");
-  $("cmsImageHint").textContent="Choose an image up to 5 MB.";
-  if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl="";}
-  feedback("");
- }
- function showForm(){form.hidden=false;form.scrollIntoView({behavior:"smooth",block:"start"});$("cmsSlug").focus();}
- $("cmsNewPage").addEventListener("click",()=>{resetForm();showForm();});
- $("cmsCancelBtn").addEventListener("click",()=>{form.hidden=true;resetForm();});
- $("cmsImage").addEventListener("change",()=>{
-  const file=$("cmsImage").files[0];if(!file)return;
-  if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){
-   $("cmsImage").value="";feedback("Please choose a JPG, PNG or WebP image up to 5 MB.");return;
-  }
-  if(previewUrl)URL.revokeObjectURL(previewUrl);
-  previewUrl=URL.createObjectURL(file);$("cmsImagePreview").src=previewUrl;$("cmsImagePreview").hidden=false;$("cmsImageHint").textContent=file.name;
- });
- function publicUrl(path){return path?client.storage.from("federation-public-assets").getPublicUrl(path).data.publicUrl:"";}
- async function loadPages(){
-  host.className="empty";host.textContent="Loading website pages…";
-  const {data,error}=await client.from("website_pages").select("id,slug,title_pa,title_en,content_pa,content_en,image_path,display_order,is_published,updated_at").order("display_order",{ascending:true}).order("updated_at",{ascending:false});
-  if(error){host.textContent="Could not load website pages: "+error.message;return;}
-  host.replaceChildren();
-  if(!data||!data.length){host.className="empty";host.textContent="No CMS pages yet. Select “Add New Page” to create the first page.";return;}
-  host.className="timeline-list";
-  data.forEach(page=>{
-   const row=document.createElement("article");row.className="timeline-row";
-   const img=document.createElement("img");img.alt="";img.src=publicUrl(page.image_path);if(!page.image_path)img.style.visibility="hidden";
-   const info=document.createElement("div");
-   const title=document.createElement("h4");title.textContent=page.title_pa||page.title_en||page.slug;
-   const slug=document.createElement("p");slug.textContent="?page="+page.slug;
-   const state=document.createElement("span");state.className="event-state"+(page.is_published?" live":"");state.textContent=page.is_published?"PUBLISHED":"DRAFT";
-   const summary=document.createElement("p");summary.className="timeline-excerpt";summary.textContent=(page.title_en||"")+" · Updated "+new Date(page.updated_at).toLocaleDateString("en-IN");
-   info.append(title,slug,summary,state);
-   const actions=document.createElement("div");actions.className="event-actions";
-   const edit=document.createElement("button");edit.type="button";edit.className="event-secondary";edit.textContent="Edit";edit.addEventListener("click",()=>editPage(page));
-   const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=page.is_published?"Unpublish":"Publish";toggle.addEventListener("click",()=>togglePage(page));
-   const del=document.createElement("button");del.type="button";del.className="event-danger";del.textContent="Delete";del.addEventListener("click",()=>deletePage(page));
-   const open=document.createElement("a");open.className="event-secondary";open.textContent="View";open.href="./?page="+encodeURIComponent(page.slug);open.target="_blank";open.rel="noopener";
-   actions.append(edit,toggle,del,open);row.append(img,info,actions);host.appendChild(row);
-  });
- }
- function editPage(page){
-  resetForm();$("cmsEditId").value=page.id;$("cmsSlug").value=page.slug;
-  $("cmsTitlePa").value=page.title_pa||"";$("cmsTitleEn").value=page.title_en||"";
-  $("cmsContentPa").value=page.content_pa||"";$("cmsContentEn").value=page.content_en||"";
-  $("cmsOrder").value=page.display_order??0;$("cmsPublish").checked=!!page.is_published;
-  currentImagePath=page.image_path||"";
-  if(currentImagePath){$("cmsImagePreview").src=publicUrl(currentImagePath);$("cmsImagePreview").hidden=false;$("cmsImageHint").textContent="Current image is saved. Choose a new file to replace it.";}
-  $("cmsSaveBtn").textContent="Save Changes";showForm();
- }
- async function togglePage(page){
-  const {error}=await client.from("website_pages").update({is_published:!page.is_published,updated_at:new Date().toISOString()}).eq("id",page.id);
-  if(error){alert("Could not update page: "+error.message);return;}await loadPages();
- }
- async function deletePage(page){
-  if(!confirm("Delete the page “"+(page.title_en||page.slug)+"”? This cannot be undone."))return;
-  const {error}=await client.from("website_pages").delete().eq("id",page.id);
-  if(error){alert("Could not delete page: "+error.message);return;}
-  if(page.image_path)await client.storage.from("federation-public-assets").remove([page.image_path]);
-  await loadPages();
- }
- form.addEventListener("submit",async e=>{
-  e.preventDefault();const btn=$("cmsSaveBtn");btn.disabled=true;btn.textContent="Saving…";
-  try{
-   const slug=$("cmsSlug").value.trim().toLowerCase();
-   if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)||slug.length<2)throw new Error("Use a valid URL slug, for example about-us.");
-   let imagePath=currentImagePath;const file=$("cmsImage").files[0];
-   if(file){
-    const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
-    imagePath="pages/"+crypto.randomUUID()+"."+ext;
-    const {error:uploadError}=await client.storage.from("federation-public-assets").upload(imagePath,file,{contentType:file.type,cacheControl:"3600",upsert:false});
-    if(uploadError)throw uploadError;
-   }
-   const payload={slug,title_pa:$("cmsTitlePa").value.trim(),title_en:$("cmsTitleEn").value.trim(),content_pa:$("cmsContentPa").value.trim(),content_en:$("cmsContentEn").value.trim(),image_path:imagePath||null,display_order:Number($("cmsOrder").value)||0,is_published:$("cmsPublish").checked,updated_at:new Date().toISOString()};
-   const id=$("cmsEditId").value;
-   const result=id?await client.from("website_pages").update(payload).eq("id",id):await client.from("website_pages").insert(payload);
-   if(result.error)throw result.error;
-   if(file&&currentImagePath&&currentImagePath!==imagePath)await client.storage.from("federation-public-assets").remove([currentImagePath]);
-   feedback("Page saved successfully. "+(payload.is_published?"It is published on the public website.":"It is saved as a draft."));
-   form.hidden=true;resetForm();await loadPages();
-  }catch(err){feedback(err.message||"Could not save page.");}
-  finally{btn.disabled=false;btn.textContent=$("cmsEditId").value?"Save Changes":"Save Page";}
- });
- let started=false;
- async function init(){
-  if(started||$("adminApp").hidden)return;started=true;
-  const {data}=await client.auth.getSession();
-  if(data.session){await loadPages();}else{started=false;}
- }
- const observer=new MutationObserver(()=>{if(!$("adminApp").hidden)init();});
- observer.observe($("adminApp"),{attributes:true,attributeFilter:["hidden"]});
- init();
-})();
-</script>
+
 
 </body></html>
