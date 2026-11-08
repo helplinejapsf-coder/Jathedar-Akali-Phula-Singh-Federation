@@ -613,113 +613,7 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
   const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="JAPSF-participants.csv";a.click();URL.revokeObjectURL(url);
  });
  document.getElementById("printParticipants").addEventListener("click",()=>{const rows=participantFiltered();const w=window.open("","_blank");if(!w){alert("Please allow pop-ups to print the participant list.");return;}const safe=v=>participantText(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));w.document.write("<!doctype html><html><head><title>JAPSF Participant List</title><style>body{font:12px Arial;padding:20px}h2{color:#101d35}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:7px;text-align:left}th{background:#f3eee4}</style></head><body><h2>Jathedar Akali Phula Singh Federation — Participant List</h2><table><thead><tr><th>Registration ID</th><th>Name</th><th>Mobile</th><th>Email</th><th>Event</th><th>Date</th><th>Status</th></tr></thead><tbody>"+rows.map(p=>"<tr>"+[p.participant_code,p.full_name,p.mobile,p.email,p.event_title,participantDate(p.created_at),p.status].map(v=>"<td>"+safe(v)+"</td>").join("")+"</tr>").join("")+"</tbody></table>
-<script>
-(function(){
- const client=window.__japsfAdminClient;
- const $=id=>document.getElementById(id);
- const form=$("cmsPageForm"),host=$("cmsPageRecords");
- if(!client||!form||!host)return;
- let currentImagePath="",previewUrl="";
- const feedback=text=>{$("cmsFeedback").textContent=text;};
- function resetForm(){
-  form.reset();$("cmsEditId").value="";currentImagePath="";
-  $("cmsOrder").value="0";$("cmsSaveBtn").textContent="Save Page";
-  $("cmsImagePreview").hidden=true;$("cmsImagePreview").removeAttribute("src");
-  $("cmsImageHint").textContent="Choose an image up to 5 MB.";
-  if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl="";}
-  feedback("");
- }
- function showForm(){form.hidden=false;form.scrollIntoView({behavior:"smooth",block:"start"});$("cmsSlug").focus();}
- $("cmsNewPage").addEventListener("click",()=>{resetForm();showForm();});
- $("cmsCancelBtn").addEventListener("click",()=>{form.hidden=true;resetForm();});
- $("cmsImage").addEventListener("change",()=>{
-  const file=$("cmsImage").files[0];if(!file)return;
-  if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){
-   $("cmsImage").value="";feedback("Please choose a JPG, PNG or WebP image up to 5 MB.");return;
-  }
-  if(previewUrl)URL.revokeObjectURL(previewUrl);
-  previewUrl=URL.createObjectURL(file);$("cmsImagePreview").src=previewUrl;$("cmsImagePreview").hidden=false;$("cmsImageHint").textContent=file.name;
- });
- function publicUrl(path){return path?client.storage.from("federation-public-assets").getPublicUrl(path).data.publicUrl:"";}
- async function loadPages(){
-  host.className="empty";host.textContent="Loading website pages…";
-  const {data,error}=await client.from("website_pages").select("id,slug,title_pa,title_en,content_pa,content_en,image_path,display_order,is_published,updated_at").order("display_order",{ascending:true}).order("updated_at",{ascending:false});
-  if(error){host.textContent="Could not load website pages: "+error.message;return;}
-  host.replaceChildren();
-  if(!data||!data.length){host.className="empty";host.textContent="No CMS pages yet. Select “Add New Page” to create the first page.";return;}
-  host.className="timeline-list";
-  data.forEach(page=>{
-   const row=document.createElement("article");row.className="timeline-row";
-   const img=document.createElement("img");img.alt="";img.src=publicUrl(page.image_path);if(!page.image_path)img.style.visibility="hidden";
-   const info=document.createElement("div");
-   const title=document.createElement("h4");title.textContent=page.title_pa||page.title_en||page.slug;
-   const slug=document.createElement("p");slug.textContent="?page="+page.slug;
-   const state=document.createElement("span");state.className="event-state"+(page.is_published?" live":"");state.textContent=page.is_published?"PUBLISHED":"DRAFT";
-   const summary=document.createElement("p");summary.className="timeline-excerpt";summary.textContent=(page.title_en||"")+" · Updated "+new Date(page.updated_at).toLocaleDateString("en-IN");
-   info.append(title,slug,summary,state);
-   const actions=document.createElement("div");actions.className="event-actions";
-   const edit=document.createElement("button");edit.type="button";edit.className="event-secondary";edit.textContent="Edit";edit.addEventListener("click",()=>editPage(page));
-   const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=page.is_published?"Unpublish":"Publish";toggle.addEventListener("click",()=>togglePage(page));
-   const del=document.createElement("button");del.type="button";del.className="event-danger";del.textContent="Delete";del.addEventListener("click",()=>deletePage(page));
-   const open=document.createElement("a");open.className="event-secondary";open.textContent="View";open.href="./?page="+encodeURIComponent(page.slug);open.target="_blank";open.rel="noopener";
-   actions.append(edit,toggle,del,open);row.append(img,info,actions);host.appendChild(row);
-  });
- }
- function editPage(page){
-  resetForm();$("cmsEditId").value=page.id;$("cmsSlug").value=page.slug;
-  $("cmsTitlePa").value=page.title_pa||"";$("cmsTitleEn").value=page.title_en||"";
-  $("cmsContentPa").value=page.content_pa||"";$("cmsContentEn").value=page.content_en||"";
-  $("cmsOrder").value=page.display_order??0;$("cmsPublish").checked=!!page.is_published;
-  currentImagePath=page.image_path||"";
-  if(currentImagePath){$("cmsImagePreview").src=publicUrl(currentImagePath);$("cmsImagePreview").hidden=false;$("cmsImageHint").textContent="Current image is saved. Choose a new file to replace it.";}
-  $("cmsSaveBtn").textContent="Save Changes";showForm();
- }
- async function togglePage(page){
-  const {error}=await client.from("website_pages").update({is_published:!page.is_published,updated_at:new Date().toISOString()}).eq("id",page.id);
-  if(error){alert("Could not update page: "+error.message);return;}await loadPages();
- }
- async function deletePage(page){
-  if(!confirm("Delete the page “"+(page.title_en||page.slug)+"”? This cannot be undone."))return;
-  const {error}=await client.from("website_pages").delete().eq("id",page.id);
-  if(error){alert("Could not delete page: "+error.message);return;}
-  if(page.image_path)await client.storage.from("federation-public-assets").remove([page.image_path]);
-  await loadPages();
- }
- form.addEventListener("submit",async e=>{
-  e.preventDefault();const btn=$("cmsSaveBtn");btn.disabled=true;btn.textContent="Saving…";
-  try{
-   const slug=$("cmsSlug").value.trim().toLowerCase();
-   if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)||slug.length<2)throw new Error("Use a valid URL slug, for example about-us.");
-   let imagePath=currentImagePath;const file=$("cmsImage").files[0];
-   if(file){
-    const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
-    imagePath="pages/"+crypto.randomUUID()+"."+ext;
-    const {error:uploadError}=await client.storage.from("federation-public-assets").upload(imagePath,file,{contentType:file.type,cacheControl:"3600",upsert:false});
-    if(uploadError)throw uploadError;
-   }
-   const payload={slug,title_pa:$("cmsTitlePa").value.trim(),title_en:$("cmsTitleEn").value.trim(),content_pa:$("cmsContentPa").value.trim(),content_en:$("cmsContentEn").value.trim(),image_path:imagePath||null,display_order:Number($("cmsOrder").value)||0,is_published:$("cmsPublish").checked,updated_at:new Date().toISOString()};
-   const id=$("cmsEditId").value;
-   let result;
-   if(id)result=await client.from("website_pages").update(payload).eq("id",id);
-   else result=await client.from("website_pages").insert(payload);
-   if(result.error)throw result.error;
-   if(file&&currentImagePath&&currentImagePath!==imagePath)await client.storage.from("federation-public-assets").remove([currentImagePath]);
-   feedback("Page saved successfully. "+(payload.is_published?"It is published on the public website.":"It is saved as a draft."));
-   form.hidden=true;resetForm();await loadPages();
-  }catch(err){feedback(err.message||"Could not save page.");}
-  finally{btn.disabled=false;btn.textContent=$("cmsEditId").value?"Save Changes":"Save Page";}
- });
- let started=false;
- async function init(){
-  if(started||$("adminApp").hidden)return;started=true;
-  const {data}=await client.auth.getSession();
-  if(data.session){await loadPages();}else{started=false;}
- }
- const observer=new MutationObserver(()=>{if(!$("adminApp").hidden)init();});
- observer.observe($("adminApp"),{attributes:true,attributeFilter:["hidden"]});
- init();
-})();
-</script>
+
 
 </body></html>");w.document.close();w.focus();w.print();});
 
@@ -906,4 +800,111 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
  init();
 })();
 </script>
+
+<script>
+(function(){
+ const client=window.__japsfAdminClient;
+ const $=id=>document.getElementById(id);
+ const form=$("cmsPageForm"),host=$("cmsPageRecords");
+ if(!client||!form||!host)return;
+ let currentImagePath="",previewUrl="";
+ const feedback=text=>{$("cmsFeedback").textContent=text;};
+ function resetForm(){
+  form.reset();$("cmsEditId").value="";currentImagePath="";
+  $("cmsOrder").value="0";$("cmsSaveBtn").textContent="Save Page";
+  $("cmsImagePreview").hidden=true;$("cmsImagePreview").removeAttribute("src");
+  $("cmsImageHint").textContent="Choose an image up to 5 MB.";
+  if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl="";}
+  feedback("");
+ }
+ function showForm(){form.hidden=false;form.scrollIntoView({behavior:"smooth",block:"start"});$("cmsSlug").focus();}
+ $("cmsNewPage").addEventListener("click",()=>{resetForm();showForm();});
+ $("cmsCancelBtn").addEventListener("click",()=>{form.hidden=true;resetForm();});
+ $("cmsImage").addEventListener("change",()=>{
+  const file=$("cmsImage").files[0];if(!file)return;
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){
+   $("cmsImage").value="";feedback("Please choose a JPG, PNG or WebP image up to 5 MB.");return;
+  }
+  if(previewUrl)URL.revokeObjectURL(previewUrl);
+  previewUrl=URL.createObjectURL(file);$("cmsImagePreview").src=previewUrl;$("cmsImagePreview").hidden=false;$("cmsImageHint").textContent=file.name;
+ });
+ function publicUrl(path){return path?client.storage.from("federation-public-assets").getPublicUrl(path).data.publicUrl:"";}
+ async function loadPages(){
+  host.className="empty";host.textContent="Loading website pages…";
+  const {data,error}=await client.from("website_pages").select("id,slug,title_pa,title_en,content_pa,content_en,image_path,display_order,is_published,updated_at").order("display_order",{ascending:true}).order("updated_at",{ascending:false});
+  if(error){host.textContent="Could not load website pages: "+error.message;return;}
+  host.replaceChildren();
+  if(!data||!data.length){host.className="empty";host.textContent="No CMS pages yet. Select “Add New Page” to create the first page.";return;}
+  host.className="timeline-list";
+  data.forEach(page=>{
+   const row=document.createElement("article");row.className="timeline-row";
+   const img=document.createElement("img");img.alt="";img.src=publicUrl(page.image_path);if(!page.image_path)img.style.visibility="hidden";
+   const info=document.createElement("div");
+   const title=document.createElement("h4");title.textContent=page.title_pa||page.title_en||page.slug;
+   const slug=document.createElement("p");slug.textContent="?page="+page.slug;
+   const state=document.createElement("span");state.className="event-state"+(page.is_published?" live":"");state.textContent=page.is_published?"PUBLISHED":"DRAFT";
+   const summary=document.createElement("p");summary.className="timeline-excerpt";summary.textContent=(page.title_en||"")+" · Updated "+new Date(page.updated_at).toLocaleDateString("en-IN");
+   info.append(title,slug,summary,state);
+   const actions=document.createElement("div");actions.className="event-actions";
+   const edit=document.createElement("button");edit.type="button";edit.className="event-secondary";edit.textContent="Edit";edit.addEventListener("click",()=>editPage(page));
+   const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=page.is_published?"Unpublish":"Publish";toggle.addEventListener("click",()=>togglePage(page));
+   const del=document.createElement("button");del.type="button";del.className="event-danger";del.textContent="Delete";del.addEventListener("click",()=>deletePage(page));
+   const open=document.createElement("a");open.className="event-secondary";open.textContent="View";open.href="./?page="+encodeURIComponent(page.slug);open.target="_blank";open.rel="noopener";
+   actions.append(edit,toggle,del,open);row.append(img,info,actions);host.appendChild(row);
+  });
+ }
+ function editPage(page){
+  resetForm();$("cmsEditId").value=page.id;$("cmsSlug").value=page.slug;
+  $("cmsTitlePa").value=page.title_pa||"";$("cmsTitleEn").value=page.title_en||"";
+  $("cmsContentPa").value=page.content_pa||"";$("cmsContentEn").value=page.content_en||"";
+  $("cmsOrder").value=page.display_order??0;$("cmsPublish").checked=!!page.is_published;
+  currentImagePath=page.image_path||"";
+  if(currentImagePath){$("cmsImagePreview").src=publicUrl(currentImagePath);$("cmsImagePreview").hidden=false;$("cmsImageHint").textContent="Current image is saved. Choose a new file to replace it.";}
+  $("cmsSaveBtn").textContent="Save Changes";showForm();
+ }
+ async function togglePage(page){
+  const {error}=await client.from("website_pages").update({is_published:!page.is_published,updated_at:new Date().toISOString()}).eq("id",page.id);
+  if(error){alert("Could not update page: "+error.message);return;}await loadPages();
+ }
+ async function deletePage(page){
+  if(!confirm("Delete the page “"+(page.title_en||page.slug)+"”? This cannot be undone."))return;
+  const {error}=await client.from("website_pages").delete().eq("id",page.id);
+  if(error){alert("Could not delete page: "+error.message);return;}
+  if(page.image_path)await client.storage.from("federation-public-assets").remove([page.image_path]);
+  await loadPages();
+ }
+ form.addEventListener("submit",async e=>{
+  e.preventDefault();const btn=$("cmsSaveBtn");btn.disabled=true;btn.textContent="Saving…";
+  try{
+   const slug=$("cmsSlug").value.trim().toLowerCase();
+   if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)||slug.length<2)throw new Error("Use a valid URL slug, for example about-us.");
+   let imagePath=currentImagePath;const file=$("cmsImage").files[0];
+   if(file){
+    const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+    imagePath="pages/"+crypto.randomUUID()+"."+ext;
+    const {error:uploadError}=await client.storage.from("federation-public-assets").upload(imagePath,file,{contentType:file.type,cacheControl:"3600",upsert:false});
+    if(uploadError)throw uploadError;
+   }
+   const payload={slug,title_pa:$("cmsTitlePa").value.trim(),title_en:$("cmsTitleEn").value.trim(),content_pa:$("cmsContentPa").value.trim(),content_en:$("cmsContentEn").value.trim(),image_path:imagePath||null,display_order:Number($("cmsOrder").value)||0,is_published:$("cmsPublish").checked,updated_at:new Date().toISOString()};
+   const id=$("cmsEditId").value;
+   const result=id?await client.from("website_pages").update(payload).eq("id",id):await client.from("website_pages").insert(payload);
+   if(result.error)throw result.error;
+   if(file&&currentImagePath&&currentImagePath!==imagePath)await client.storage.from("federation-public-assets").remove([currentImagePath]);
+   feedback("Page saved successfully. "+(payload.is_published?"It is published on the public website.":"It is saved as a draft."));
+   form.hidden=true;resetForm();await loadPages();
+  }catch(err){feedback(err.message||"Could not save page.");}
+  finally{btn.disabled=false;btn.textContent=$("cmsEditId").value?"Save Changes":"Save Page";}
+ });
+ let started=false;
+ async function init(){
+  if(started||$("adminApp").hidden)return;started=true;
+  const {data}=await client.auth.getSession();
+  if(data.session){await loadPages();}else{started=false;}
+ }
+ const observer=new MutationObserver(()=>{if(!$("adminApp").hidden)init();});
+ observer.observe($("adminApp"),{attributes:true,attributeFilter:["hidden"]});
+ init();
+})();
+</script>
+
 </body></html>
