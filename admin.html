@@ -183,13 +183,13 @@ button,input{font:inherit}.top{height:62px;background:linear-gradient(110deg,#4b
      const data=await coordinatorAction({mode:"list"});
      coordinatorHost.replaceChildren();
      if(!data.coordinators||!data.coordinators.length){coordinatorHost.className="empty";coordinatorHost.textContent="No coordinator accounts yet.";return;}
-     const table=document.createElement("table");table.className="data-table";
-     table.innerHTML="<thead><tr><th>Name</th><th>Email</th><th>Assigned Area</th><th>Status</th><th>Actions</th></tr></thead>";
+     const table=document.createElement("table");table.className="data-table";table.style.cssText="width:100%;border-collapse:collapse;min-width:620px;font-size:13px";
+     table.innerHTML="<thead><tr><th style=\"padding:10px;text-align:left\">Name</th><th style=\"padding:10px;text-align:left\">Email</th><th style=\"padding:10px;text-align:left\">Assigned Area</th><th style=\"padding:10px;text-align:left\">Status</th><th style=\"padding:10px;text-align:left\">Actions</th></tr></thead>";
      const tbody=document.createElement("tbody");
      data.coordinators.forEach(item=>{
        const tr=document.createElement("tr");
-       [item.full_name,item.email,item.assigned_area,item.is_active?"Active":"Paused"].forEach(value=>{const td=document.createElement("td");td.textContent=String(value??"");tr.appendChild(td);});
-       const actions=document.createElement("td");
+       [item.full_name,item.email,item.assigned_area,item.is_active?"Active":"Paused"].forEach(value=>{const td=document.createElement("td");td.textContent=String(value??"");td.style.cssText="padding:11px 9px;border-bottom:1px solid #e7eaf0;text-align:left;";tr.appendChild(td);});
+       const actions=document.createElement("td");actions.style.cssText="padding:9px;border-bottom:1px solid #e7eaf0;white-space:nowrap";
        const toggle=document.createElement("button");toggle.type="button";toggle.className="event-secondary";toggle.textContent=item.is_active?"Pause":"Activate";
        toggle.addEventListener("click",async()=>{toggle.disabled=true;try{await coordinatorAction({mode:"set_active",user_id:item.user_id,is_active:!item.is_active});await loadCoordinators();}catch(e){coordinatorMessage(e.message);toggle.disabled=false;}});
        const remove=document.createElement("button");remove.type="button";remove.className="event-danger";remove.style.marginLeft="6px";remove.textContent="Remove";
