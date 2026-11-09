@@ -152,6 +152,11 @@ footer{padding:38px 18px}
 @media(max-width:850px){.portal-columns{grid-template-columns:1fr 2fr}.portal-join{grid-column:1/-1}.portal-objective-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.portal-hero{padding:30px 16px}.portal-hero-inner{flex-direction:column;text-align:center;gap:15px}.portal-hero-inner>img{width:105px;height:105px}.portal-actions{justify-content:center}.portal-columns{grid-template-columns:1fr}.portal-side{order:2}.portal-activity{order:1}.portal-join{order:3;grid-column:auto}.portal-objective-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.portal-objective{padding:16px 9px}.portal-history-inner,.portal-gallery-inner{align-items:flex-start;flex-direction:column}.portal-activity .public-timeline-item{grid-template-columns:95px minmax(0,1fr)}.portal-activity .public-timeline-item img{min-height:95px}}
 
+
+/* Keep Google Translate inside the hamburger menu */
+body header .menu-panel .translate-wrap{display:flex!important;position:static!important;left:auto!important;top:auto!important;z-index:auto!important;width:100%!important;max-width:none!important;min-width:0!important;box-sizing:border-box!important;margin:10px 0 4px!important;padding:9px 10px!important;justify-content:space-between!important;flex-wrap:wrap!important;background:#fff!important;border:1px solid var(--gold)!important;border-radius:9px!important;box-shadow:none!important;color:var(--navy)!important}
+body header .menu-panel .translate-wrap #google_translate_element{max-width:100%!important;overflow:visible!important}
+body header .menu-panel .translate-wrap .goog-te-combo{width:auto!important;max-width:100%!important}
 </style>
 </head>
 <body>
@@ -159,9 +164,9 @@ footer{padding:38px 18px}
 <a class="brand" href="./"><img src="logo.png" alt="Federation Logo" class="logo"><span>Jathedar Akali Phula Singh Federation</span></a>
 <nav><a href="./">Home</a><a href="?page=about-us">About</a><a href="?page=team-members">Team</a><a href="?page=contact-us">Contact</a></nav>
 
-<div class="translate-wrap"><label for="google_translate_element">Translate:</label><div id="google_translate_element"></div></div>
 <div class="menu-wrap"><button class="menu-button" id="menuButton" aria-label="Open menu" aria-expanded="false" type="button" onclick="event.stopPropagation();var panel=document.getElementById('menuPanel');var opened=panel.classList.toggle('open');this.setAttribute('aria-expanded',opened?'true':'false');"><span></span><span></span><span></span></button>
 <nav class="menu-panel" id="menuPanel"><div class="menu-label">FEDERATION MENU</div>
+<div class="translate-wrap menu-translate"><label for="google_translate_element">🌐 Language / ਭਾਸ਼ਾ:</label><div id="google_translate_element"></div></div>
 <a href="./" data-page="home">Home</a>
 <a href="?page=member-registration" data-page="member-registration">Member Registration</a><a href="?page=latest-event" data-page="latest-event">Latest Event</a><a href="?page=timeline-posts" data-page="timeline-posts">Timeline Posts</a><a href="?page=your-problem" data-page="your-problem">Your Problem</a><a href="?page=our-solutions" data-page="our-solutions">Our Solutions</a><a href="?page=donation" data-page="donation">Donation</a><a href="?page=crowdfunding" data-page="crowdfunding">Crowdfunding</a><a href="?page=id-card-print" data-page="id-card-print">ID Card Print</a><a href="?page=coordinator-login" data-page="coordinator-login">Coordinator Login</a><a href="?page=team-members" data-page="team-members">Team Members</a><a href="?page=management-team" data-page="management-team">Management Team</a><a href="?page=gallery" data-page="gallery">Gallery</a><a href="?page=list-donors" data-page="list-donors">List Donors</a><a href="?page=contact-us" data-page="contact-us">Contact Us</a><a href="?page=about-us" data-page="about-us">About Us</a><a href="?page=user-signup" data-page="user-signup">User Signup</a><a href="?page=user-login" data-page="user-login">User Login</a><a href="csr-policy.html">CSR Policy</a>
 </nav></div></div></header>
