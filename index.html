@@ -185,7 +185,7 @@ body #homePage > .portal-hero{
 <nav class="menu-panel" id="menuPanel"><div class="menu-label">FEDERATION MENU</div>
 <div class="translate-wrap menu-translate"><label for="google_translate_element">🌐 Language / ਭਾਸ਼ਾ:</label><div id="google_translate_element"></div></div>
 <a href="./" data-page="home">Home</a>
-<a href="?page=member-registration" data-page="member-registration">Member Registration</a><a href="?page=latest-event" data-page="latest-event">Latest Event</a><a href="?page=timeline-posts" data-page="timeline-posts">Timeline Posts</a><a href="?page=your-problem" data-page="your-problem">Your Problem</a><a href="?page=our-solutions" data-page="our-solutions">Our Solutions</a><a href="?page=donation" data-page="donation">Donation</a><a href="?page=crowdfunding" data-page="crowdfunding">Crowdfunding</a><a href="?page=id-card-print" data-page="id-card-print">ID Card Print</a><a href="?page=coordinator-login" data-page="coordinator-login">Coordinator Login</a><a href="?page=team-members" data-page="team-members">Team Members</a><a href="?page=management-team" data-page="management-team">Management Team</a><a href="?page=gallery" data-page="gallery">Gallery</a><a href="?page=list-donors" data-page="list-donors">List Donors</a><a href="?page=contact-us" data-page="contact-us">Contact Us</a><a href="?page=about-us" data-page="about-us">About Us</a><a href="?page=user-signup" data-page="user-signup">User Signup</a><a href="?page=user-login" data-page="user-login">User Login</a><a href="csr-policy.html">CSR Policy</a>
+<a href="?page=nanakshahi-calendar" data-page="nanakshahi-calendar">ਨਾਨਕਸ਼ਾਹੀ ਕੈਲੰਡਰ / Nanakshahi Calendar</a><a href="?page=member-registration" data-page="member-registration">Member Registration</a><a href="?page=latest-event" data-page="latest-event">Latest Event</a><a href="?page=timeline-posts" data-page="timeline-posts">Timeline Posts</a><a href="?page=your-problem" data-page="your-problem">Your Problem</a><a href="?page=our-solutions" data-page="our-solutions">Our Solutions</a><a href="?page=donation" data-page="donation">Donation</a><a href="?page=crowdfunding" data-page="crowdfunding">Crowdfunding</a><a href="?page=id-card-print" data-page="id-card-print">ID Card Print</a><a href="?page=coordinator-login" data-page="coordinator-login">Coordinator Login</a><a href="?page=team-members" data-page="team-members">Team Members</a><a href="?page=management-team" data-page="management-team">Management Team</a><a href="?page=gallery" data-page="gallery">Gallery</a><a href="?page=list-donors" data-page="list-donors">List Donors</a><a href="?page=contact-us" data-page="contact-us">Contact Us</a><a href="?page=about-us" data-page="about-us">About Us</a><a href="?page=user-signup" data-page="user-signup">User Signup</a><a href="?page=user-login" data-page="user-login">User Login</a><a href="csr-policy.html">CSR Policy</a>
 </nav></div></div></header>
 <main><div id="homePage">
 <section class="portal-hero"><div class="portal-hero-inner"><img src="logo.png" id="publicHeroLogo" alt="Federation Logo"><div><p class="portal-kicker">SEVA • SIKH HERITAGE • HUMANITY</p><h1 id="publicHeroName">Jathedar Akali Phula Singh Federation</h1><p>ਸਿੱਖ ਵਿਰਸੇ ਦੀ ਸੰਭਾਲ, ਮਨੁੱਖਤਾ ਦੀ ਸੇਵਾ ਅਤੇ ਸਮਾਜਿਕ ਭਲਾਈ ਲਈ ਸਮਰਪਿਤ।</p><div class="portal-actions"><a class="button" href="?page=about-us">ਸਾਡੇ ਬਾਰੇ ਜਾਣੋ</a><a class="portal-outline" href="?page=member-registration">ਮੈਂਬਰ ਬਣੋ</a></div></div></div></section>
@@ -410,7 +410,7 @@ const leaders=[
 {name:'Bhai Harmanjot Singh Khalsa',role:'Director',place:'Timmowal, Sri Amritsar Sahib, Punjab, India',image:'harmanjot-singh.jpg'},
 {name:'Bhai Gurbhej Singh Khalsa',role:'Vice President',place:'Village Dhulka, Sri Amritsar Sahib, Punjab, India',image:'gurbhej-singh.jpg'},
 {name:'Bhai Harjaap Singh Khalsa',role:'Secretary',place:'Village Jabbowal, Tehsil Baba Bakala, Sri Amritsar Sahib, Punjab, India',image:'harjaap-singh.jpg'}];
-const pageNames={'member-registration':'Member Registration','latest-event':'Latest Event','timeline-posts':'Timeline Posts','your-problem':'Your Problem','our-solutions':'Our Solutions','donation':'Donation','crowdfunding':'Crowdfunding','id-card-print':'ID Card Print','coordinator-login':'Coordinator Login','team-members':'Team Members','management-team':'Management Team','gallery':'Gallery','list-donors':'List Donors','contact-us':'Contact Us','about-us':'About Us','user-signup':'User Signup','user-login':'User Login','csr-policy':'CSR Policy'};
+const pageNames={'member-registration':'Member Registration','latest-event':'Latest Event','timeline-posts':'Timeline Posts','your-problem':'Your Problem','our-solutions':'Our Solutions','donation':'Donation','crowdfunding':'Crowdfunding','id-card-print':'ID Card Print','coordinator-login':'Coordinator Login','team-members':'Team Members','management-team':'Management Team','gallery':'Gallery','list-donors':'List Donors','contact-us':'Contact Us','about-us':'About Us','user-signup':'User Signup','user-login':'User Login','csr-policy':'CSR Policy','nanakshahi-calendar':'Nanakshahi Calendar'};
 function teamHTML(){return `<div class="page-card"><h2>Federation Team Members</h2><p>Meet the team of Jathedar Akali Phula Singh Federation.</p><div id="publicTeamStatus" class="notice" role="status">Loading Federation team members…</div><div id="publicTeamGrid" class="team-grid"></div></div>`;}
 function field(label,type='text',required=true){const id='f'+Math.random().toString(36).slice(2);return `<div class="form-group"><label for="${id}">${label}${required?' *':''}</label>${type==='textarea'?`<textarea id="${id}" name="${id}" ${required?'required':''}></textarea>`:`<input id="${id}" name="${id}" type="${type}" ${required?'required':''}>`}</div>`;}
 function formPage(title,intro,fields,button='Submit'){return `<div class="page-card"><h2>${title}</h2><p>${intro}</p><div class="notice">ਇਹ ਫਾਰਮ ਇਸ ਵੇਲੇ Frontend Demo ਹੈ। ਜਾਣਕਾਰੀ ਅਜੇ ਕਿਸੇ Database ਵਿੱਚ ਸੰਭਾਲੀ ਜਾਂ Federation ਨੂੰ ਭੇਜੀ ਨਹੀਂ ਜਾਂਦੀ। Membership fee, donation ਜਾਂ crowdfunding payment ਲਈ ਸਿਰਫ਼ Federation ਵੱਲੋਂ ਅਧਿਕਾਰਤ ਅਤੇ verify ਕੀਤੇ payment details ਹੀ ਵਰਤੋ।</div><form class="demo-form">${fields}<button class="button" type="submit">${button}</button><p class="form-message" role="status"></p></form></div>`;}
@@ -476,6 +476,42 @@ const forms={
 'user-login':()=>`<div class="page-card auth-page"><div class="auth-kicker">SECURE MEMBER ACCESS</div><h2>User Login – Email OTP</h2><p>Enter your email address. We will send a 6-digit one-time password (OTP) to your email. Enter that code to sign in.</p><div id="publicAuthMount"><form id="publicOtpLoginForm" class="public-auth-form"><div class="form-group"><label for="loginEmail">Email Address</label><input id="loginEmail" name="email" type="email" autocomplete="email" maxlength="254" required></div><button class="button" type="submit">Send Email OTP</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">New user? <a href="?page=user-signup">Create an Account</a></p></div></div>`, 
 'coordinator-login':()=>`<div class="page-card auth-page"><div class="auth-kicker">FEDERATION COORDINATOR ACCESS</div><h2>Coordinator Login</h2><p>Sign in using the email address invited by the Federation administrator.</p><div id="publicAuthMount"><form id="coordinatorLoginForm" class="public-auth-form"><div class="form-group"><label for="coordinatorLoginEmail">Email Address</label><input id="coordinatorLoginEmail" name="email" type="email" autocomplete="username" required></div><div class="form-group"><label for="coordinatorLoginPassword">Password</label><input id="coordinatorLoginPassword" name="password" type="password" autocomplete="current-password" required></div><button class="button" type="submit">Sign In Securely</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form><p class="auth-switch">Coordinator accounts are created only by the Federation administrator. <a href="?page=contact-us">Need help?</a></p></div></div>`};
 const pages={
+'nanakshahi-calendar':()=>`<style>
+.ns-calendar-hero{padding:25px;border-radius:18px;background:linear-gradient(125deg,#091326,#263e63);border:1px solid #d8ad55;color:#fff;text-align:center}
+.ns-calendar-hero .eyebrow{color:#f0d38b}.ns-calendar-hero h2{color:#f0d38b;margin:8px 0}.ns-calendar-hero p{color:#f7f2e8}
+.ns-calendar-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px}
+.ns-calendar-actions a{display:inline-block;padding:12px 17px;border-radius:9px;text-decoration:none;font-weight:800}
+.ns-calendar-primary{background:#d8ad55;color:#101d35}.ns-calendar-secondary{border:1px solid #d8ad55;color:#fff}
+.ns-calendar-info{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:20px 0}
+.ns-calendar-info article{padding:17px;border:1px solid #eadfc9;border-radius:13px;background:#fff;text-align:center}
+.ns-calendar-info strong{display:block;color:#101d35;font-size:20px}.ns-calendar-info span{color:#667085;font-size:12px}
+@media(max-width:600px){.ns-calendar-info{grid-template-columns:1fr}.ns-calendar-actions{flex-direction:column}.ns-calendar-actions a{width:100%}}
+</style>
+<div class="page-card">
+ <section class="ns-calendar-hero">
+  <p class="eyebrow">SIKH HERITAGE • GURPURABS • HISTORICAL DAYS</p>
+  <h2>ਨਾਨਕਸ਼ਾਹੀ ਕੈਲੰਡਰ</h2>
+  <p>Nanakshahi Calendar • ਸੰਮਤ ੫੫੮–੫੫੯ (2026–2027)</p>
+  <div class="ns-calendar-actions">
+   <a class="ns-calendar-primary" href="https://sgpc.net/ebooks/" target="_blank" rel="noopener">SGPC Official Calendar / ਅਧਿਕਾਰਤ ਕੈਲੰਡਰ</a>
+   <a class="ns-calendar-secondary" href="https://sikhnet.com/pages/sikh-gurpurab-calendar" target="_blank" rel="noopener">Gurpurab Dates / ਗੁਰਪੁਰਬਾਂ ਦੀਆਂ ਤਾਰੀਖਾਂ</a>
+  </div>
+ </section>
+ <div class="ns-calendar-info">
+  <article><strong>੫੫੮</strong><span>ਨਾਨਕਸ਼ਾਹੀ ਸੰਮਤ / Samvat</span></article>
+  <article><strong>੧ ਚੇਤ</strong><span>ਨਾਨਕਸ਼ਾਹੀ ਨਵਾਂ ਸਾਲ / New Year</span></article>
+  <article><strong>2026–2027</strong><span>ਕੈਲੰਡਰ ਸਾਲ / Calendar Year</span></article>
+ </div>
+ <div class="notice"><strong>ਨੋਟ:</strong> ਨਾਨਕਸ਼ਾਹੀ ਕੈਲੰਡਰ ਦੀਆਂ ਤਾਰੀਖਾਂ ਅਤੇ ਗੁਰਪੁਰਬਾਂ ਲਈ SGPC ਵੱਲੋਂ ਜਾਰੀ ਅਧਿਕਾਰਤ ਕੈਲੰਡਰ ਨੂੰ ਪਹਿਲ ਦਿਓ। ਵੱਖ-ਵੱਖ ਕੈਲੰਡਰ ਪਰੰਪਰਾਵਾਂ ਵਿੱਚ ਕੁਝ ਤਾਰੀਖਾਂ ਵੱਖ ਹੋ ਸਕਦੀਆਂ ਹਨ।</div>
+ <h3 style="color:#101d35;margin:20px 0 8px">ਨਾਨਕਸ਼ਾਹੀ ਮਹੀਨੇ / Nanakshahi Months</h3>
+ <div class="page-card" style="margin:0">
+  <ol style="padding-left:22px;columns:2;column-gap:35px">
+   <li>ਚੇਤ — Chet</li><li>ਵੈਸਾਖ — Vaisakh</li><li>ਜੇਠ — Jeth</li><li>ਹਾੜ — Harh</li><li>ਸਾਵਣ — Sawan</li><li>ਭਾਦੋਂ — Bhadon</li><li>ਅੱਸੂ — Assu</li><li>ਕੱਤਕ — Katak</li><li>ਮੱਘਰ — Maghar</li><li>ਪੋਹ — Poh</li><li>ਮਾਘ — Magh</li><li>ਫੱਗਣ — Phagan</li>
+  </ol>
+ </div>
+ <p style="margin-top:16px;color:#667085;font-size:13px">Calendar references: SGPC official eBooks and SikhNet Gurpurab calendar.</p>
+</div>`,
+
 'timeline-posts':()=>`<div class="page-card timeline-public-card"><p class="eyebrow">FEDERATION UPDATES</p><h2>Timeline Posts</h2><p>Updates, announcements and seva activities from Jathedar Akali Phula Singh Federation.</p><div id="publicTimelineStatus" class="notice" role="status">Loading the latest Federation updates…</div><div id="publicTimelineList" class="public-timeline-list" aria-live="polite"></div></div>`,
 'latest-event':`<div class="page-card"><h2>Latest Events & Registration</h2><p>Choose an upcoming Federation event and complete the registration form.</p><div id="publicEventStatus" class="notice" role="status">Loading published events…</div><div id="publicEventList" class="public-event-list"></div></div>`,
 'our-solutions':`<div class="page-card"><h2>Our Solutions</h2><ul><li>ਲੋੜਵੰਦ ਲੋਕਾਂ ਦੀ ਸਹਾਇਤਾ</li><li>ਸਮਾਜਿਕ ਭਲਾਈ ਦੇ ਕਾਰਜ</li><li>ਸਿੱਖ ਇਤਿਹਾਸ ਅਤੇ ਵਿਰਸੇ ਦੀ ਜਾਗਰੂਕਤਾ</li><li>ਨੌਜਵਾਨਾਂ ਲਈ ਸੇਵਾ ਅਤੇ ਅਗਵਾਈ</li></ul></div>`,
