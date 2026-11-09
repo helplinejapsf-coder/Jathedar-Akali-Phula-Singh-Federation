@@ -596,14 +596,63 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
    '<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\\/script><script>window.onload=()=>{try{new QRCode(document.getElementById("memberQR"),{text:'+JSON.stringify(qrText)+',width:240,height:240,correctLevel:QRCode.CorrectLevel.M});setTimeout(()=>window.print(),700)}catch(e){alert("QR code could not be generated. Please check internet and retry.")}}<\\/script></body></html>');
    w.document.close();
  }
+ async function beginPublicPhoneVerification(user){
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   const status=document.getElementById("publicCardStatus");
+   const {data:levelData,error:levelError}=await authClient.auth.mfa.getAuthenticatorAssuranceLevel();
+   if(levelError){if(status)status.textContent=levelError.message;return;}
+   if(levelData?.currentLevel==="aal2"){await loadPublicMemberCard();return;}
+   const {data:factorData,error:factorError}=await authClient.auth.mfa.listFactors();
+   if(factorError){if(status)status.textContent=factorError.message;return;}
+   const phoneFactor=(factorData?.phone||[]).find(f=>f.status==="verified");
+   if(phoneFactor){
+     const {data:challenge,error:challengeError}=await authClient.auth.mfa.challenge({factorId:phoneFactor.id});
+     if(challengeError){if(status)status.textContent=challengeError.message;return;}
+     mount.querySelector("#publicMfaStep")?.remove();
+     const step=document.createElement("div");step.id="publicMfaStep";step.className="auth-otp-panel";
+     step.innerHTML='<h3>Mobile OTP Verification</h3><p>ਤੁਹਾਡੇ ਰਜਿਸਟਰਡ ਮੋਬਾਈਲ ਨੰਬਰ ਤੇ ਆਇਆ 6 ਅੰਕਾਂ ਦਾ OTP ਦਰਜ ਕਰੋ।</p><form id="publicCardMfaForm" class="public-auth-form"><div class="form-group"><label for="publicCardMfaCode">Mobile OTP</label><input id="publicCardMfaCode" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></div><button class="button" type="submit">Verify Mobile OTP</button><p class="form-message" id="publicCardMfaMessage" role="status" aria-live="polite"></p></form>';
+     const cardBox=document.getElementById("publicCardStatus")?.parentElement;if(cardBox)cardBox.appendChild(step);
+     const form=step.querySelector("form");
+     form.addEventListener("submit",async ev=>{
+       ev.preventDefault();const btn=form.querySelector("button");const msg=step.querySelector("#publicCardMfaMessage");btn.disabled=true;msg.textContent="Verifying…";
+       const {data,error}=await authClient.auth.mfa.verify({factorId:phoneFactor.id,challengeId:challenge.id,code:form.elements.code.value.trim()});
+       btn.disabled=false;
+       if(error){msg.textContent=error.message;return;}
+       step.remove();if(status)status.textContent="Mobile OTP verified. ਤੁਹਾਡਾ ID Card ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…";
+       await loadPublicMemberCard();
+     });
+     if(status)status.textContent="ID Card ਪ੍ਰਿੰਟ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ Mobile OTP verify ਕਰੋ।";
+     return;
+   }
+   const box=document.getElementById("publicCardStatus")?.parentElement;
+   if(!box)return;
+   const step=document.createElement("div");step.id="publicMfaStep";step.className="auth-otp-panel";
+   step.innerHTML='<h3>Register Mobile for OTP</h3><p>ਪਛਾਣ ਪੱਤਰ ਦੀ ਸੁਰੱਖਿਆ ਲਈ ਆਪਣਾ ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ।</p><form id="publicCardEnrollForm" class="public-auth-form"><div class="form-group"><label for="publicCardPhone">Mobile Number (+91)</label><input id="publicCardPhone" name="phone" type="tel" inputmode="tel" placeholder="+919876543210" pattern="\\+[1-9][0-9]{7,14}" required></div><button class="button" type="submit">Send Mobile OTP</button><p class="form-message" id="publicCardEnrollMessage" role="status" aria-live="polite"></p></form>';
+   box.appendChild(step);
+   step.querySelector("form").addEventListener("submit",async ev=>{
+     ev.preventDefault();const form=ev.currentTarget,btn=form.querySelector("button"),msg=step.querySelector("#publicCardEnrollMessage");btn.disabled=true;msg.textContent="Sending OTP…";
+     const {data,error}=await authClient.auth.mfa.enroll({factorType:"phone",phone:form.elements.phone.value.trim()});
+     btn.disabled=false;if(error){msg.textContent=error.message;return;}
+     const {data:challenge,error:challengeError}=await authClient.auth.mfa.challenge({factorId:data.id});
+     if(challengeError){msg.textContent=challengeError.message;return;}
+     form.innerHTML='<div class="form-group"><label for="publicCardEnrollCode">6-Digit SMS OTP</label><input id="publicCardEnrollCode" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></div><button class="button" type="submit">Verify and Continue</button>';
+     form.addEventListener("submit",async verifyEvent=>{
+       verifyEvent.preventDefault();const verifyBtn=form.querySelector("button");verifyBtn.disabled=true;
+       const {error:verifyError}=await authClient.auth.mfa.verify({factorId:data.id,challengeId:challenge.id,code:form.elements.code.value.trim()});
+       verifyBtn.disabled=false;if(verifyError){msg.textContent=verifyError.message;return;}
+       step.remove();if(status)status.textContent="Mobile OTP verified. ਤੁਹਾਡਾ ID Card ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…";await loadPublicMemberCard();
+     },{once:true});
+   });
+   if(status)status.textContent="ਪਹਿਲਾਂ ਮੋਬਾਈਲ OTP ਸੁਰੱਖਿਆ ਸੈੱਟਅੱਪ ਕਰੋ।";
+ }
  function showSignedIn(user){
    const mount=document.getElementById("publicAuthMount");if(!mount)return;
-   mount.innerHTML='<div class="auth-dashboard"><h3>You are signed in</h3><p class="muted">Your account: <strong id="signedInEmail"></strong></p><p class="muted">Email OTP verify ਹੋਣ ਤੋਂ ਬਾਅਦ ਹੀ ਤੁਹਾਡਾ ਆਪਣਾ Active ID Card ਦਿਖਾਇਆ ਜਾਵੇਗਾ।</p><div style="padding:15px;margin:14px 0;border:1px solid #d8ad55;border-radius:12px;background:#fffaf0"><h3 style="margin-top:0">ਪਛਾਣ ਪੱਤਰ ਪ੍ਰਿੰਟ</h3><p id="publicCardStatus" role="status" aria-live="polite">ਮੈਂਬਰ ਰਿਕਾਰਡ ਜਾਂਚਿਆ ਜਾ ਰਿਹਾ ਹੈ…</p><button class="button" id="publicPrintCard" type="button" disabled>Print ID Card / PDF</button></div><a class="button" href="?page=member-registration">Member Registration</a> <button class="auth-logout" id="publicLogout" type="button">Sign Out</button></div>';
+   mount.innerHTML='<div class="auth-dashboard"><h3>You are signed in</h3><p class="muted">Your account: <strong id="signedInEmail"></strong></p><p class="muted">ਆਪਣਾ ID Card ਲੈਣ ਲਈ Email login ਤੋਂ ਬਾਅਦ Mobile OTP ਵੀ verify ਕਰਨਾ ਲਾਜ਼ਮੀ ਹੈ।</p><div style="padding:15px;margin:14px 0;border:1px solid #d8ad55;border-radius:12px;background:#fffaf0"><h3 style="margin-top:0">ਪਛਾਣ ਪੱਤਰ ਪ੍ਰਿੰਟ</h3><p id="publicCardStatus" role="status" aria-live="polite">ਸੁਰੱਖਿਅਤ OTP ਜਾਂਚ ਸ਼ੁਰੂ ਹੋ ਰਹੀ ਹੈ…</p><button class="button" id="publicPrintCard" type="button" disabled>Print ID Card / PDF</button></div><a class="button" href="?page=member-registration">Member Registration</a> <button class="auth-logout" id="publicLogout" type="button">Sign Out</button></div>';
    const email=document.getElementById("signedInEmail");if(email)email.textContent=user.email||"";
    const printButton=document.getElementById("publicPrintCard");if(printButton)printButton.addEventListener("click",printPublicMemberCard);
    const logout=document.getElementById("publicLogout");
    if(logout)logout.addEventListener("click",async()=>{logout.disabled=true;const {error}=await authClient.auth.signOut();if(error){logout.disabled=false;alert(error.message);return;}location.reload();});
-   loadPublicMemberCard();
+   beginPublicPhoneVerification(user);
  }
  async function checkUserSession(user){showSignedIn(user);}
  async function coordinatorProfile(){
