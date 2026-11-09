@@ -493,14 +493,14 @@ const pages={
  <section class="public-id-hero">
   <div class="id-kicker">JAPSF • MEMBER SERVICES</div>
   <h2>ਪਛਾਣ ਪੱਤਰ ਪ੍ਰਿੰਟ</h2>
-  <p>ਮੈਂਬਰ Email OTP ਅਤੇ Mobile SMS OTP ਨਾਲ ਲਾਗਇਨ ਕਰਕੇ ਆਪਣਾ ਮਨਜ਼ੂਰਸ਼ੁਦਾ ਅਤੇ Active ਪਛਾਣ ਪੱਤਰ PDF ਵਿੱਚ ਪ੍ਰਿੰਟ ਕਰ ਸਕਦੇ ਹਨ।</p>
+  <p>ਮੈਂਬਰ Email OTP ਅਤੇ Mobile Authenticator Code ਨਾਲ ਲਾਗਇਨ ਕਰਕੇ ਆਪਣਾ ਮਨਜ਼ੂਰਸ਼ੁਦਾ ਅਤੇ Active ਪਛਾਣ ਪੱਤਰ PDF ਵਿੱਚ ਪ੍ਰਿੰਟ ਕਰ ਸਕਦੇ ਹਨ।</p>
   <div class="public-id-actions">
    <a class="public-id-primary" href="?page=user-login">ਮੈਂਬਰ ਲਾਗਇਨ / Member Login</a>
    <a class="public-id-secondary" href="?page=member-registration">ਨਵੀਂ ਮੈਂਬਰਸ਼ਿਪ</a>
   </div>
  </section>
  <div id="publicAuthMount" style="margin-top:18px">
-  <div class="public-id-note">ਆਪਣਾ ਕਾਰਡ ਪ੍ਰਿੰਟ ਕਰਨ ਲਈ ਪਹਿਲਾਂ ਮੈਂਬਰ ਲਾਗਇਨ ਕਰੋ। ਸੁਰੱਖਿਆ ਲਈ Email ਅਤੇ Mobile OTP ਦੋਵੇਂ ਦੀ ਪੁਸ਼ਟੀ ਲਾਜ਼ਮੀ ਹੈ।</div>
+  <div class="public-id-note">ਆਪਣਾ ਕਾਰਡ ਪ੍ਰਿੰਟ ਕਰਨ ਲਈ ਪਹਿਲਾਂ ਮੈਂਬਰ ਲਾਗਇਨ ਕਰੋ। ਸੁਰੱਖਿਆ ਲਈ Email OTP ਅਤੇ Authenticator Code ਦੋਵੇਂ ਦੀ ਪੁਸ਼ਟੀ ਲਾਜ਼ਮੀ ਹੈ।</div>
  </div>
  <div class="public-id-note">ਕਾਰਡ ਸਿਰਫ਼ ਉਸੇ ਲਾਗਇਨ ਈਮੇਲ ਨਾਲ ਜੁੜੇ ਮਨਜ਼ੂਰਸ਼ੁਦਾ ਅਤੇ Active ਮੈਂਬਰ ਰਿਕਾਰਡ ਲਈ ਜਾਰੀ ਹੋਵੇਗਾ। QR ਕੋਡ ਨਾਲ ਮੈਂਬਰਸ਼ਿਪ ਦੀ ਆਨਲਾਈਨ ਪੁਸ਼ਟੀ ਕੀਤੀ ਜਾ ਸਕਦੀ ਹੈ।</div>
 </div>`,
@@ -616,7 +616,7 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
      showAuthenticatorOtp(factor.id,challenge.id);return;
    }
    const pending=(data.totp||[]).find(item=>item.status==="unverified");
-   if(pending){await authClient.auth.mfa.unenroll({factorId:pending.id});}
+   if(pending){const {error:cleanupError}=await authClient.auth.mfa.unenroll({factorId:pending.id});if(cleanupError){setMessage(cleanupError.message);return;}}
    const {data:enrolled,error:enrollError}=await authClient.auth.mfa.enroll({factorType:"totp",friendlyName:"JAPSF Website Authenticator"});
    if(enrollError){setMessage(enrollError.message);return;}
    showAuthenticatorSetup(enrolled);
