@@ -403,8 +403,8 @@ function applyTranslations(){
  for(const [from,to] of entries){if(from && pageTitle.includes(from))pageTitle=pageTitle.split(from).join(to);}
  document.title=pageTitle;
 }
-function setLanguage(english){document.body.classList.toggle('en-mode',english);document.documentElement.lang='en';document.documentElement.setAttribute('data-language','en');applyTranslations();}
-setLanguage(true);
+function setLanguage(english){document.body.classList.toggle('en-mode',english);document.documentElement.lang=english?'en':'pa';document.documentElement.setAttribute('data-language',english?'en':'pa');applyTranslations();}
+setLanguage(false);
 const leaders=[
 {name:'Bhai Gurnam Singh Khalsa',role:'CEO & Founder',place:'Timmowal, Sri Amritsar Sahib, Punjab, India',image:'gurnam-singh.jpg'},
 {name:'Bhai Harmanjot Singh Khalsa',role:'Director',place:'Timmowal, Sri Amritsar Sahib, Punjab, India',image:'harmanjot-singh.jpg'},
