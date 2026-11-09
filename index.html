@@ -635,13 +635,14 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
      btn.disabled=false;if(error){msg.textContent=error.message;return;}
      const {data:challenge,error:challengeError}=await authClient.auth.mfa.challenge({factorId:data.id});
      if(challengeError){msg.textContent=challengeError.message;return;}
-     form.innerHTML='<div class="form-group"><label for="publicCardEnrollCode">6-Digit SMS OTP</label><input id="publicCardEnrollCode" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></div><button class="button" type="submit">Verify and Continue</button>';
-     form.addEventListener("submit",async verifyEvent=>{
-       verifyEvent.preventDefault();const verifyBtn=form.querySelector("button");verifyBtn.disabled=true;
-       const {error:verifyError}=await authClient.auth.mfa.verify({factorId:data.id,challengeId:challenge.id,code:form.elements.code.value.trim()});
-       verifyBtn.disabled=false;if(verifyError){msg.textContent=verifyError.message;return;}
+     const verifyForm=document.createElement("form");verifyForm.className="public-auth-form";verifyForm.innerHTML='<div class="form-group"><label for="publicCardEnrollCode">6-Digit SMS OTP</label><input id="publicCardEnrollCode" name="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required></div><button class="button" type="submit">Verify and Continue</button><p class="form-message" id="publicCardEnrollVerifyMessage" role="status" aria-live="polite"></p>';
+     form.replaceWith(verifyForm);
+     verifyForm.addEventListener("submit",async verifyEvent=>{
+       verifyEvent.preventDefault();const verifyBtn=verifyForm.querySelector("button"),verifyMsg=verifyForm.querySelector("#publicCardEnrollVerifyMessage");verifyBtn.disabled=true;
+       const {error:verifyError}=await authClient.auth.mfa.verify({factorId:data.id,challengeId:challenge.id,code:verifyForm.elements.code.value.trim()});
+       verifyBtn.disabled=false;if(verifyError){verifyMsg.textContent=verifyError.message;return;}
        step.remove();if(status)status.textContent="Mobile OTP verified. ਤੁਹਾਡਾ ID Card ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…";await loadPublicMemberCard();
-     },{once:true});
+     });
    });
    if(status)status.textContent="ਪਹਿਲਾਂ ਮੋਬਾਈਲ OTP ਸੁਰੱਖਿਆ ਸੈੱਟਅੱਪ ਕਰੋ।";
  }
