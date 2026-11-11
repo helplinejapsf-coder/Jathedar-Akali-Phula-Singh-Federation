@@ -13,6 +13,11 @@
 @media(max-width:850px){.header-inner{flex-wrap:wrap}.header-inner>nav{display:none}.team-grid{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.brand{font-size:11px;max-width:65%}.logo{width:42px;height:42px}.language-button{font-size:11px;padding:8px}.hero{min-height:420px}.hero-logo{width:130px;height:130px}section{padding:45px 0}.grid,.team-grid,.contact-grid{grid-template-columns:1fr}.team-card img{height:350px;object-fit:contain}.menu-panel{width:min(290px,calc(100vw - 25px))}.header-inner{flex-wrap:nowrap;position:relative}header .header-inner>nav,.translate-wrap{display:none!important}.brand{max-width:calc(100% - 65px);flex:1;min-width:0}.brand span{line-height:1.25}.menu-wrap{flex:0 0 auto;margin-left:auto}.menu-button{position:relative;z-index:120;touch-action:manipulation}.menu-panel{z-index:130;top:48px;right:0;max-height:70vh;overflow-y:auto}}
 
+/* Performance: defer off-screen section rendering and media downloads */
+#homePage>section:not(.portal-hero){content-visibility:auto;contain-intrinsic-size:auto 620px}
+video{max-width:100%}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
 /* Original Federation design restored: navy, gold and cream */
 :root{--navy:#101d35;--deep:#091326;--gold:#d8ad55;--cream:#f7f2e8;--text:#202532}
 html{scroll-padding-top:110px}
@@ -204,7 +209,7 @@ body #homePage > .portal-hero{
    <p style="color:#a7863e;font-weight:700">Federation Seva Video</p>
   </div>
   <div style="background:#101d35;border:3px solid #d8ad55;border-radius:20px;padding:10px;box-shadow:0 14px 35px rgba(9,19,38,.18)">
-   <video controls playsinline preload="metadata" style="display:block;width:100%;max-height:560px;background:#050b16;border-radius:12px;object-fit:contain">
+   <video controls playsinline preload="none" style="display:block;width:100%;max-height:560px;background:#050b16;border-radius:12px;object-fit:contain">
     <source src="videofederation-seva.mp4" type="video/mp4">
     ਤੁਹਾਡਾ ਬ੍ਰਾਊਜ਼ਰ ਵੀਡੀਓ ਪਲੇਅਰ ਨੂੰ ਸਹਿਯੋਗ ਨਹੀਂ ਦਿੰਦਾ।
    </video>
