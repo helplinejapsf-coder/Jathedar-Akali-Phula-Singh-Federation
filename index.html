@@ -808,35 +808,7 @@ document.addEventListener("submit", async function (event) {
 }, true);
 <\/script>
 
-<script>
-/* Gallery: display only approved Federation project cover photos. */
-(function(){
- const page=new URLSearchParams(location.search).get("page");
- if(page!=="gallery")return;
- const host=document.getElementById("projectGalleryGrid");
- const status=document.getElementById("projectGalleryStatus");
- if(!host||!status)return;
- (async function(){
-  try{
-   const response=await fetch("https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/admin-crowdfunding",{
-    method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"public_list"})
-   });
-   const result=await response.json();
-   if(!response.ok||!result.success)throw new Error(result.error||"Project photos are temporarily unavailable.");
-   const projects=(result.campaigns||[]).filter(project=>typeof project.cover_image_url==="string"&&/^https:\/\//i.test(project.cover_image_url));
-   if(!projects.length){status.textContent="ਹਾਲੇ ਕਿਸੇ ਪ੍ਰੋਜੈਕਟ ਦੀ ਤਸਵੀਰ ਪ੍ਰਕਾਸ਼ਿਤ ਨਹੀਂ ਕੀਤੀ ਗਈ। ਨਵੀਆਂ ਪ੍ਰੋਜੈਕਟ ਤਸਵੀਰਾਂ ਮਨਜ਼ੂਰ ਹੋਣ ਉਪਰੰਤ ਇੱਥੇ ਦਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।";return;}
-   host.replaceChildren();
-   projects.forEach(project=>{
-    const figure=document.createElement("figure");
-    const img=document.createElement("img");img.src=project.cover_image_url;img.alt=(project.project_name||"Federation project")+" project photo";img.loading="lazy";img.decoding="async";
-    const caption=document.createElement("figcaption");caption.textContent=project.project_name||"Federation Project";
-    figure.append(img,caption);host.appendChild(figure);
-   });
-   status.hidden=true;
-  }catch(error){status.textContent=error.message||"Project photos could not be loaded. Please try again later.";}
- })();
-})();
-</script>
+
 </body></html>');
    w.document.close();
  }
@@ -1151,6 +1123,35 @@ document.addEventListener("submit",async function(event){
  document.addEventListener("submit",e=>{if(e.target.id==="crowdfundingContributionForm"){e.preventDefault();submit(e.target,"crowdfundingContributionMessage","Submit Contribution Details");}});
  document.addEventListener("change",e=>{if(e.target.id==="crowdfundingAmount"||e.target.id==="crowdfundingCampaignSelect"){const amount=$("crowdfundingAmount")?.value||"",campaign=$("crowdfundingCampaignSelect")?.selectedOptions[0]?.textContent||"Seva Project",valid=amount&&Number(amount)>0,common=(valid?"&am="+encodeURIComponent(amount):"")+"&cu=INR&tn="+encodeURIComponent(campaign),rzLink=$("crowdfundingRazorpayPay"),ptLink=$("crowdfundingPaytmPay");if(rzLink)rzLink.href=valid?"upi://pay?pa=rzpjathedarakaliph487000.rzp%40ypbiz&pn=JathedarAkaliPhulaSinghFederation"+common:"#";if(ptLink)ptLink.href=valid?"upi://pay?pa=9501503080%40ptyes&pn=Jathedar%20Akali%20Phula%20Singh%20Federation"+common:"#";}}});
  window.loadCrowdfundingProjects=loadProjects;if(new URLSearchParams(location.search).get("page")==="crowdfunding")loadProjects();
+})();
+</script>
+<script>
+/* Gallery: display only approved Federation project cover photos. */
+(function(){
+ const page=new URLSearchParams(location.search).get("page");
+ if(page!=="gallery")return;
+ const host=document.getElementById("projectGalleryGrid");
+ const status=document.getElementById("projectGalleryStatus");
+ if(!host||!status)return;
+ (async function(){
+  try{
+   const response=await fetch("https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/admin-crowdfunding",{
+    method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"public_list"})
+   });
+   const result=await response.json();
+   if(!response.ok||!result.success)throw new Error(result.error||"Project photos are temporarily unavailable.");
+   const projects=(result.campaigns||[]).filter(project=>typeof project.cover_image_url==="string"&&/^https:\/\//i.test(project.cover_image_url));
+   if(!projects.length){status.textContent="ਹਾਲੇ ਕਿਸੇ ਪ੍ਰੋਜੈਕਟ ਦੀ ਤਸਵੀਰ ਪ੍ਰਕਾਸ਼ਿਤ ਨਹੀਂ ਕੀਤੀ ਗਈ। ਨਵੀਆਂ ਪ੍ਰੋਜੈਕਟ ਤਸਵੀਰਾਂ ਮਨਜ਼ੂਰ ਹੋਣ ਉਪਰੰਤ ਇੱਥੇ ਦਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।";return;}
+   host.replaceChildren();
+   projects.forEach(project=>{
+    const figure=document.createElement("figure");
+    const img=document.createElement("img");img.src=project.cover_image_url;img.alt=(project.project_name||"Federation project")+" project photo";img.loading="lazy";img.decoding="async";
+    const caption=document.createElement("figcaption");caption.textContent=project.project_name||"Federation Project";
+    figure.append(img,caption);host.appendChild(figure);
+   });
+   status.hidden=true;
+  }catch(error){status.textContent=error.message||"Project photos could not be loaded. Please try again later.";}
+ })();
 })();
 </script>
 </body>
