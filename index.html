@@ -676,8 +676,8 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
  const authClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
  const redirectUrl=location.origin+location.pathname+"?page=user-login";
  const setMessage=(message)=>{const el=document.getElementById("publicAuthMessage");if(el)el.textContent=message;};
- function showOtpVerification(email){
-  const mount=document.getElementById("publicAuthMount");if(!mount)return;mount.dataset.pendingEmail=email;
+ function showOtpVerification(email,shouldCreateUser){
+  const mount=document.getElementById("publicAuthMount");if(!mount)return;mount.dataset.pendingEmail=email;mount.dataset.pendingCreateUser=shouldCreateUser?"true":"false";
   mount.innerHTML='<form id="publicOtpVerifyForm" class="public-auth-form"><p>A 6-digit sign-in code has been sent to <strong></strong>.</p><div class="form-group"><label for="emailOtpCode">Email OTP</label><input id="emailOtpCode" name="token" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></div><button class="button" type="submit">Verify & Sign In</button><button class="auth-logout" id="resendEmailOtp" type="button">Resend OTP</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form>';
   const strong=mount.querySelector("strong");if(strong)strong.textContent=email;
  }
@@ -802,7 +802,8 @@ document.addEventListener("submit",async function(event){
    const mount=document.getElementById("publicAuthMount");if(!mount)return;
    const isCoordinatorPage=new URLSearchParams(location.search).get("page")==="coordinator-login";
    if(location.hash.includes("type=recovery")){
-     mount.innerHTML='<form id="publicResetForm" class="public-auth-form"><h3>Choose a New Password</h3><div class="form-group"><label for="resetNewPassword">New Password</label><input id="resetNewPassword" name="password" type="password" minlength="8" autocomplete="new-password" required></div><div class="form-group"><label for="resetConfirmPassword">Confirm New Password</label><input id="resetConfirmPassword" name="confirm_password" type="password" minlength="8" autocomplete="new-password" required></div><button class="button" type="submit">Update Password</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form>';
+     history.replaceState(null,"",location.pathname+"?page=user-login");
+     setMessage("This website uses Email OTP sign-in. Please request a new one-time code to access your account.");
      return;
    }
    const {data,error}=await authClient.auth.getSession();
@@ -816,16 +817,6 @@ document.addEventListener("submit",async function(event){
  }
  document.addEventListener("submit",async function(event){
    const form=event.target;
-   if(form.id==="publicResetForm"){
-     event.preventDefault();const button=form.querySelector('button[type="submit"]');const password=form.elements.password.value,confirm=form.elements.confirm_password.value;
-     if(password.length<8||password!==confirm){setMessage(password!==confirm?"Passwords do not match.":"Password must contain at least 8 characters.");return;}
-     button.disabled=true;button.textContent="Updating password…";
-     const {data,error}=await authClient.auth.updateUser({password});
-     button.disabled=false;button.textContent="Update Password";
-     if(error){setMessage(error.message);return;}
-     history.replaceState(null,"",location.pathname+"?page=user-login");setMessage("Password updated successfully. You can now sign in with your new password.");
-     form.reset();
-   }
    if(form.id==="coordinatorLoginForm"){
      event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Verifying…";setMessage("");
      const email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value;
@@ -854,12 +845,12 @@ document.addEventListener("submit",async function(event){
      const options={shouldCreateUser:form.id==="publicSignupForm"};if(name)options.data={full_name:name};
      const {error}=await authClient.auth.signInWithOtp({email,options});
      button.disabled=false;button.textContent="Send Email OTP";
-     if(error){setMessage(error.message);return;}showOtpVerification(email);
+     if(error){setMessage(error.message);return;}showOtpVerification(email,options.shouldCreateUser);
    }
    if(form.id==="publicOtpVerifyForm"){
      event.preventDefault();
      const button=form.querySelector('button[type="submit"]'),email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"",token=form.elements.token.value.trim();
-     if(!email||!/^\\d{6}$/.test(token)){setMessage("Enter the 6-digit code sent to your email.");return;}
+     if(!email||!/^[0-9]{6}$/.test(token)){setMessage("Enter the 6-digit code sent to your email.");return;}
      button.disabled=true;button.textContent="Verifying OTP…";setMessage("");
      const {data,error}=await authClient.auth.verifyOtp({email,token,type:"email"});
      button.disabled=false;button.textContent="Verify & Sign In";
@@ -872,7 +863,7 @@ document.addEventListener("submit",async function(event){
  document.addEventListener("click",async function(event){
    if(event.target&&event.target.id==="resendEmailOtp"){
      const email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"";
-     event.target.disabled=true;const {error}=await authClient.auth.signInWithOtp({email,options:{shouldCreateUser:true}});event.target.disabled=false;
+     event.target.disabled=true;const shouldCreateUser=document.getElementById("publicAuthMount")?.dataset.pendingCreateUser==="true";const {error}=await authClient.auth.signInWithOtp({email,options:{shouldCreateUser}});event.target.disabled=false;
      setMessage(error?error.message:"A new email OTP has been requested.");
    }
  },true);
