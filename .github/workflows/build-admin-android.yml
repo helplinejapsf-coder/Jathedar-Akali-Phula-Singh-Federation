@@ -29,7 +29,7 @@ jobs:
         uses: android-actions/setup-android@v3
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
-      - name: Create app launcher icons from Federation logo
+      - name: Generate and verify Federation launcher icons
         run: |
           python3 -m pip install --quiet pillow
           mkdir -p android-admin/app/src/main/res
