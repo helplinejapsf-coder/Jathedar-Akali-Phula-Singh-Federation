@@ -59,6 +59,7 @@ public class MainActivity extends Activity {
         view.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest request) {
                 Uri uri = request.getUrl();
+                if ("about".equalsIgnoreCase(uri.getScheme())) return false;
                 if ("https".equalsIgnoreCase(uri.getScheme()) && SITE_HOST.equalsIgnoreCase(uri.getHost())) return false;
                 try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); }
                 catch (ActivityNotFoundException e) {
