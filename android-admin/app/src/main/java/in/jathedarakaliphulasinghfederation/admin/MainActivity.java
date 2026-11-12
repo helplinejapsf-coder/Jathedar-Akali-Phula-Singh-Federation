@@ -2,53 +2,110 @@ package in.jathedarakaliphulasinghfederation.admin;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.print.PrintAttributes;
+import android.print.PrintManager;
 import android.webkit.CookieManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.view.ViewGroup;
 
 public class MainActivity extends Activity {
     private static final String ADMIN_URL = "https://jathedarakaliphulasinghfederation.in/admin.html";
     private static final String SITE_HOST = "jathedarakaliphulasinghfederation.in";
     private static final int FILE_CHOOSER_REQUEST = 4107;
+    private FrameLayout root;
     private WebView webView;
+    private WebView popupWebView;
     private ValueCallback<Uri[]> uploadCallback;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        root = new FrameLayout(this);
         webView = new WebView(this);
-        setContentView(webView);
+        root.addView(webView, new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setContentView(root);
+
         CookieManager cookies = CookieManager.getInstance();
         cookies.setAcceptCookie(true);
         cookies.setAcceptThirdPartyCookies(webView, true);
-        WebSettings settings = webView.getSettings();
+        configureWebView(webView, false);
+        if (savedInstanceState != null) webView.restoreState(savedInstanceState);
+        else webView.loadUrl(ADMIN_URL);
+    }
+
+    private void configureWebView(WebView view, boolean isPrintWindow) {
+        WebSettings settings = view.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
         settings.setAllowFileAccess(false);
         settings.setAllowContentAccess(true);
-        settings.setSupportMultipleWindows(false);
+        settings.setSupportMultipleWindows(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setSafeBrowsingEnabled(true);
-        webView.setWebViewClient(new WebViewClient() {
-            @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        view.setWebViewClient(new WebViewClient() {
+            @Override public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest request) {
                 Uri uri = request.getUrl();
                 if ("https".equalsIgnoreCase(uri.getScheme()) && SITE_HOST.equalsIgnoreCase(uri.getHost())) return false;
                 try { startActivity(new Intent(Intent.ACTION_VIEW, uri)); }
-                catch (ActivityNotFoundException e) { Toast.makeText(MainActivity.this, "Cannot open this link", Toast.LENGTH_SHORT).show(); }
+                catch (ActivityNotFoundException e) {
+                    Toast.makeText(MainActivity.this, "Cannot open this link", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             }
+
+            @Override public void onPageFinished(WebView v, String url) {
+                super.onPageFinished(v, url);
+                if (isPrintWindow) {
+                    v.evaluateJavascript(
+                        "window.print=function(){if(window.AndroidPrint){window.AndroidPrint.printPage();}};",
+                        null
+                    );
+                }
+            }
         });
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> callback, FileChooserParams params) {
+        view.setWebChromeClient(new WebChromeClient() {
+            @Override public boolean onCreateWindow(WebView source, boolean isDialog,
+                    boolean isUserGesture, android.os.Message resultMsg) {
+                if (popupWebView != null) {
+                    root.removeView(popupWebView);
+                    popupWebView.destroy();
+                }
+                WebView child = new WebView(MainActivity.this);
+                popupWebView = child;
+                configureWebView(child, true);
+                child.addJavascriptInterface(new PrintBridge(child), "AndroidPrint");
+                root.addView(child, new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(child);
+                resultMsg.sendToTarget();
+                return true;
+            }
+
+            @Override public void onCloseWindow(WebView window) {
+                if (window == popupWebView) {
+                    root.removeView(window);
+                    window.destroy();
+                    popupWebView = null;
+                }
+            }
+
+            @Override public boolean onShowFileChooser(WebView v, ValueCallback<Uri[]> callback,
+                    FileChooserParams params) {
                 if (uploadCallback != null) uploadCallback.onReceiveValue(null);
                 uploadCallback = callback;
                 try { startActivityForResult(params.createIntent(), FILE_CHOOSER_REQUEST); }
@@ -60,8 +117,27 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
-        if (savedInstanceState != null) webView.restoreState(savedInstanceState);
-        else webView.loadUrl(ADMIN_URL);
+    }
+
+    private class PrintBridge {
+        private final WebView source;
+        PrintBridge(WebView source) { this.source = source; }
+
+        @JavascriptInterface public void printPage() {
+            runOnUiThread(() -> {
+                try {
+                    PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
+                    String jobName = "JAPSF Appointment Letter";
+                    printManager.print(jobName, source.createPrintDocumentAdapter(jobName),
+                            new PrintAttributes.Builder()
+                                    .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                                    .build());
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Could not open PDF/Print. Please try again.",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -71,15 +147,24 @@ public class MainActivity extends Activity {
             uploadCallback = null;
         }
     }
+
     @Override protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         webView.saveState(outState);
     }
+
     @Override public void onBackPressed() {
-        if (webView != null && webView.canGoBack()) webView.goBack(); else super.onBackPressed();
+        if (popupWebView != null) {
+            root.removeView(popupWebView);
+            popupWebView.destroy();
+            popupWebView = null;
+        } else if (webView != null && webView.canGoBack()) webView.goBack();
+        else super.onBackPressed();
     }
+
     @Override protected void onDestroy() {
         if (uploadCallback != null) uploadCallback.onReceiveValue(null);
+        if (popupWebView != null) popupWebView.destroy();
         if (webView != null) webView.destroy();
         super.onDestroy();
     }
