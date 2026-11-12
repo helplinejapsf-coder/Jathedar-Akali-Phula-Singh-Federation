@@ -672,6 +672,11 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
  const authClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
  const redirectUrl=location.origin+location.pathname+"?page=user-login";
  const setMessage=(message)=>{const el=document.getElementById("publicAuthMessage");if(el)el.textContent=message;};
+ function showOtpVerification(email){
+  const mount=document.getElementById("publicAuthMount");if(!mount)return;mount.dataset.pendingEmail=email;
+  mount.innerHTML='<form id="publicOtpVerifyForm" class="public-auth-form"><p>A 6-digit sign-in code has been sent to <strong></strong>.</p><div class="form-group"><label for="emailOtpCode">Email OTP</label><input id="emailOtpCode" name="token" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required></div><button class="button" type="submit">Verify & Sign In</button><button class="auth-logout" id="resendEmailOtp" type="button">Resend OTP</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p></form>';
+  const strong=mount.querySelector("strong");if(strong)strong.textContent=email;
+ }
  let publicMemberCardRecord=null;
  function escapeCardText(value){return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
  async function loadPublicMemberCard(){
@@ -701,7 +706,42 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
    '</style></head><body>'+
    '<section class="idcard"><div class="head"><img src="'+logo+'"><div><b>JATHEDAR AKALI PHULA SINGH FEDERATION</b><small>OFFICIAL MEMBERSHIP ID CARD · CIN: U88900PB2025NPL066430</small></div></div><div class="goldline"></div><div class="frontbody"><div class="photo">'+photo+'</div><div class="details"><h2>'+esc(m.full_name)+'</h2><div class="role">'+esc(m.member_authority||"Member")+'</div><p><b>Member ID</b><span>'+esc(m.application_no)+'</span></p><p><b>District</b><span>'+esc(m.district||"—")+'</span></p><p><b>State</b><span>'+esc(m.state||"—")+'</span></p><p><b>Status</b><span>APPROVED · ACTIVE</span></p></div></div><div class="foot">JATHEDAR AKALI PHULA SINGH FEDERATION</div></section>'+
    '<section class="idcard back"><div class="head"><img src="'+logo+'"><div><b>MEMBER VERIFICATION</b><small>JATHEDAR AKALI PHULA SINGH FEDERATION</small></div></div><div class="backbody"><div class="qrbox"><div class="qr" id="memberQR"></div><div class="qrlabel">SCAN TO VERIFY MEMBERSHIP</div></div><div class="backdetails"><p><b>Member Name:</b> '+esc(m.full_name)+'</p><p><b>Member ID:</b> '+esc(m.application_no)+'</p><p><b>Designation:</b> '+esc(m.member_authority||"Member")+'</p><p><b>Validity:</b> '+esc(m.validity_start||"As recorded")+' to '+esc(m.validity_end||"As recorded")+'</p><div class="verify"><b>OFFICIAL ONLINE VERIFICATION</b><br>Scan the QR code to check current membership status.<br><br>Helpline: +91 9501503080 · +91 9779257727<br>helpline.japsf@gmail.com</div></div></div><div class="foot">This card is subject to online verification and Federation rules.</div></section>'+
-   '<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\\/script><script>window.onload=()=>{try{new QRCode(document.getElementById("memberQR"),{text:'+JSON.stringify(qrText)+',width:240,height:240,correctLevel:QRCode.CorrectLevel.M});setTimeout(()=>window.print(),700)}catch(e){alert("QR code could not be generated. Please check internet and retry.")}}<\\/script></body></html>');
+   '<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\\/script><script>window.onload=()=>{try{new QRCode(document.getElementById("memberQR"),{text:'+JSON.stringify(qrText)+',width:240,height:240,correctLevel:QRCode.CorrectLevel.M});setTimeout(()=>window.print(),700)}catch(e){alert("QR code could not be generated. Please check internet and retry.")}}<\\/script><script>
+document.addEventListener("submit",async function(event){
+ const form=event.target;if(!form||form.id!=="publicIntakeForm")return;event.preventDefault();
+ const status=document.getElementById("publicIntakeMessage"),button=form.querySelector('button[type="submit"]');if(!form.reportValidity())return;
+ button.disabled=true;button.textContent="Submitting securely…";status.textContent="Sending your request to the Federation…";
+ try{const response=await fetch("https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/public-intake",{method:"POST",body:new FormData(form)});const result=await response.json();if(!response.ok||!result.success)throw new Error(result.error||"Submission failed.");status.textContent=result.message||"Your request has been received.";form.reset();}
+ catch(error){status.textContent=error.message||"Unable to submit. Please contact the Federation helpline.";}
+ finally{button.disabled=false;button.textContent=form.elements.form_type.value==="help_request"?"Submit Problem":"Send Message";}
+});
+</script>
+<script>
+(function(){
+ const url="https://urghiemtxhwhvoaivwge.supabase.co",key="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";let client;
+ window.loadPublicEvents=async function(){
+  const host=document.getElementById("publicEventList"),status=document.getElementById("publicEventStatus");if(!host||!status)return;
+  if(!window.supabase?.createClient){status.textContent="Event service is temporarily unavailable. Please refresh.";return;}
+  client=client||window.supabase.createClient(url,key);status.textContent="Loading published events…";host.replaceChildren();
+  try{
+   const {data,error}=await client.from("events").select("id,title,description,event_date,venue,image_path").eq("is_published",true).order("event_date",{ascending:true}).limit(50);
+   if(error)throw error;if(!data?.length){status.textContent="No upcoming events have been published yet. Please check again soon.";return;}status.hidden=true;
+   data.forEach(ev=>{
+    const card=document.createElement("article");card.className="public-event-card";
+    if(ev.image_path){const img=document.createElement("img");img.className="public-event-image";img.loading="lazy";img.alt=ev.title||"Federation event";img.src=client.storage.from("federation-public-assets").getPublicUrl(ev.image_path).data.publicUrl;card.appendChild(img);}
+    const title=document.createElement("h3");title.textContent=ev.title||"Federation Event";card.appendChild(title);
+    const meta=document.createElement("p");meta.className="public-event-meta";const date=ev.event_date?new Date(ev.event_date):null;meta.textContent=[date&&!Number.isNaN(date.getTime())?date.toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"}):"",ev.venue||""].filter(Boolean).join(" • ");card.appendChild(meta);
+    const desc=document.createElement("p");desc.textContent=ev.description||"";card.appendChild(desc);
+    const form=document.createElement("form");form.className="public-event-registration";form.innerHTML='<h4>Register for this event</h4><input type="hidden" name="event_id"><input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px"><div class="form-group"><label>Full Name *</label><input name="full_name" maxlength="120" required></div><div class="form-group"><label>Mobile Number *</label><input name="mobile" type="tel" maxlength="25" required></div><div class="form-group"><label>Email (optional)</label><input name="email" type="email" maxlength="254"></div><div class="form-group"><label>Notes (optional)</label><textarea name="notes" maxlength="1000"></textarea></div><button type="submit">Register Now</button><p class="form-message" role="status" aria-live="polite"></p>';
+    form.elements.event_id.value=ev.id;form.addEventListener("submit",async e=>{e.preventDefault();if(!form.reportValidity())return;const button=form.querySelector("button"),msg=form.querySelector(".form-message");button.disabled=true;button.textContent="Submitting…";try{const response=await fetch(url+"/functions/v1/public-event-registration",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(form).entries()))});const result=await response.json();if(!response.ok||!result.success)throw new Error(result.error||"Registration failed.");msg.textContent=result.message+" Reference: "+result.participant_code;form.reset();}catch(err){msg.textContent=err.message||"Unable to register. Please try again.";}finally{button.disabled=false;button.textContent="Register Now";form.elements.event_id.value=ev.id;}});
+    card.appendChild(form);host.appendChild(card);
+   });
+  }catch(error){status.textContent="Published events could not be loaded. Please try again later.";console.warn("Public events load failed:",error);}
+ };
+ if(new URLSearchParams(location.search).get("page")==="latest-event")window.loadPublicEvents();
+})();
+</script>
+</body></html>');
    w.document.close();
  }
  async function beginPublicPhoneVerification(user){
@@ -784,21 +824,26 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
      setMessage(error?error.message:"Password updated successfully.");
      if(!error)form.reset();
    }
-   if(form.id==="publicLoginForm"){
-     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Signing in…";setMessage("");
-     const email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value;
-     const {data,error}=await authClient.auth.signInWithPassword({email,password});
-     button.disabled=false;button.textContent="Sign In Securely";
-     if(error){setMessage(error.message);return;}showSignedIn(data.user);
+   if(form.id==="publicLoginForm"){event.preventDefault();setMessage("Please use Email OTP to sign in.");}
+   if(form.id==="publicOtpLoginForm"||form.id==="publicSignupForm"){
+     event.preventDefault();
+     const button=form.querySelector('button[type="submit"]'),email=form.elements.email.value.trim().toLowerCase();
+     const name=form.id==="publicSignupForm"?(form.elements.full_name?.value.trim()||""):"";
+     if(!email){setMessage("Enter a valid email address.");return;}
+     button.disabled=true;button.textContent="Sending OTP…";setMessage("");
+     const options={shouldCreateUser:form.id==="publicSignupForm"};if(name)options.data={full_name:name};
+     const {error}=await authClient.auth.signInWithOtp({email,options});
+     button.disabled=false;button.textContent="Send Email OTP";
+     if(error){setMessage(error.message);return;}showOtpVerification(email);
    }
-   if(form.id==="publicSignupForm"){
-     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Creating account…";setMessage("");
-     const name=form.elements.full_name.value.trim(),email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value,confirm=form.elements.confirm_password.value;
-     if(password.length<8||password!==confirm){button.disabled=false;button.textContent="Create Account";setMessage(password!==confirm?"Passwords do not match.":"Password must contain at least 8 characters.");return;}
-     const {data,error}=await authClient.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:redirectUrl}});
-     button.disabled=false;button.textContent="Create Account";
-     if(error){setMessage(error.message);return;}
-     if(data.session){await checkUserSession(data.user);}else{setMessage("Account request received. Please check your email and confirm your address before signing in.");}
+   if(form.id==="publicOtpVerifyForm"){
+     event.preventDefault();
+     const button=form.querySelector('button[type="submit"]'),email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"",token=form.elements.token.value.trim();
+     if(!email||!/^\\d{6}$/.test(token)){setMessage("Enter the 6-digit code sent to your email.");return;}
+     button.disabled=true;button.textContent="Verifying OTP…";setMessage("");
+     const {data,error}=await authClient.auth.verifyOtp({email,token,type:"email"});
+     button.disabled=false;button.textContent="Verify & Sign In";
+     if(error){setMessage(error.message);return;}if(data.user)showSignedIn(data.user);else setMessage("OTP verified, but no account session was returned. Please sign in again.");
    }
  },true);
 
