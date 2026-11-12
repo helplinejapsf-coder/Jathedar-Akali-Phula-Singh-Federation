@@ -41,8 +41,14 @@ public class MainActivity extends Activity {
         cookies.setAcceptCookie(true);
         cookies.setAcceptThirdPartyCookies(webView, true);
         configureWebView(webView, false);
-        if (savedInstanceState != null) webView.restoreState(savedInstanceState);
-        else webView.loadUrl(ADMIN_URL);
+        if (savedInstanceState != null) {
+            webView.restoreState(savedInstanceState);
+        } else {
+            // Drop stale WebView files so the app fetches the latest website
+            // pages (including appointment letter and print-button fixes).
+            webView.clearCache(true);
+            webView.loadUrl(ADMIN_URL);
+        }
     }
 
     private void configureWebView(WebView view, boolean isPrintWindow) {
