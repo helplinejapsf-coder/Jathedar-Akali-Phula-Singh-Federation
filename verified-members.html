@@ -40,9 +40,15 @@ async function printMember(r,type){
  if(!r.id_card_active){alert("This ID Card is deactivated. Activate it before downloading.");return}
  let w=null;
  try{
+  // Open the print window immediately during the user's tap; opening it after
+  // the async member lookup is blocked by many mobile browsers and WebViews.
+  w=window.open("","_blank","width=900,height=750");
+  if(!w){alert("Please allow pop-ups to print or save as PDF.");return}
+  w.document.open();
+  w.document.write("<!doctype html><html><head><meta name='viewport' content='width=device-width,initial-scale=1'><title>Loading appointment letter…</title></head><body style='font:16px Arial;padding:24px;text-align:center'>Preparing document…</body></html>");
+  w.document.close();
   const d=(await api({action:"detail",id:r.id})).record;
-  if(!d.public_verification_token){alert("Secure QR verification link is not available. Reopen the member record and retry.");return}
-  w=window.open("","_blank","width=900,height=750");if(!w){alert("Please allow pop-ups to print or save as PDF.");return}
+  if(!d.public_verification_token){w.close();alert("Secure QR verification link is not available. Reopen the member record and retry.");return}
   const memberCode=String(d.application_no||"").replace(/[^a-zA-Z0-9-]/g,"");
   const verifyUrl="https://helplinejapsf-coder.github.io/Jathedar-Akali-Phula-Singh-Federation/verify-membership.html?token="+encodeURIComponent(d.public_verification_token);
   const logo="https://helplinejapsf-coder.github.io/Jathedar-Akali-Phula-Singh-Federation/logo.png";
