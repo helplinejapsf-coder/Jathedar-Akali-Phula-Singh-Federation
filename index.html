@@ -1205,7 +1205,23 @@ document.addEventListener("submit",async function(event){
  }
  document.addEventListener("click",e=>{const view=e.target.closest("[data-crowd-view]");if(view){const panel=$("crowdDetail"+view.dataset.crowdView);panel.classList.toggle("open");view.textContent=panel.classList.contains("open")?"Hide Details":"View Campaign";}const donate=e.target.closest("[data-crowd-donate]");if(donate){const projectSelect=$("crowdfundingCampaignSelect"),donationForm=$("crowdfundingContributionForm");if(projectSelect)projectSelect.value=donate.dataset.crowdDonate;if(donationForm)donationForm.scrollIntoView({behavior:"smooth",block:"start"});}});
  document.addEventListener("submit",e=>{if(e.target.id==="crowdfundingContributionForm"){e.preventDefault();submit(e.target,"crowdfundingContributionMessage","Submit Contribution Details");}});
- document.addEventListener("change",e=>{if(e.target.id==="crowdfundingAmount"||e.target.id==="crowdfundingCampaignSelect"){const amount=$("crowdfundingAmount")?.value||"",campaign=$("crowdfundingCampaignSelect")?.selectedOptions[0]?.textContent||"Seva Project",valid=amount&&Number(amount)>0,common=(valid?"&am="+encodeURIComponent(amount):"")+"&cu=INR&tn="+encodeURIComponent(campaign),rzLink=$("crowdfundingRazorpayPay"),ptLink=$("crowdfundingPaytmPay");if(rzLink)rzLink.href=valid?"upi://pay?pa=rzpjathedarakaliph487000.rzp%40ypbiz&pn=JathedarAkaliPhulaSinghFederation"+common:"#";if(ptLink)ptLink.href=valid?"upi://pay?pa=9501503080%40ptyes&pn=Jathedar%20Akali%20Phula%20Singh%20Federation"+common:"#";}}});
+ function updateCrowdfundingPayLinks(){
+  const amount=$("crowdfundingAmount")?.value||"",select=$("crowdfundingCampaignSelect"),campaign=select?.selectedOptions[0]?.textContent||"Seva Project",valid=Number(amount)>0&&!!select?.value,common="&am="+encodeURIComponent(amount)+"&cu=INR&tn="+encodeURIComponent(campaign),rzLink=$("crowdfundingRazorpayPay"),ptLink=$("crowdfundingPaytmPay");
+  if(rzLink)rzLink.href=valid?"upi://pay?pa=rzpjathedarakaliph487000.rzp%40ypbiz&pn=Jathedar%20Akali%20Phula%20Singh%20Federation"+common:"#";
+  if(ptLink)ptLink.href=valid?"upi://pay?pa=9501503080%40ptyes&pn=Jathedar%20Akali%20Phula%20Singh%20Federation"+common:"#";
+  return valid;
+ }
+ document.addEventListener("input",e=>{if(e.target.id==="crowdfundingAmount")updateCrowdfundingPayLinks();});
+ document.addEventListener("change",e=>{if(e.target.id==="crowdfundingAmount"||e.target.id==="crowdfundingCampaignSelect")updateCrowdfundingPayLinks();});
+ document.addEventListener("click",e=>{
+  const pay=e.target.closest("#crowdfundingRazorpayPay,#crowdfundingPaytmPay");if(!pay)return;
+  e.preventDefault();
+  const amount=$("crowdfundingAmount"),select=$("crowdfundingCampaignSelect");
+  if(!select?.value){alert("Please select a Federation project first.");select?.focus();return;}
+  if(!amount?.value||Number(amount.value)<=0){alert("Please enter a donation amount greater than ₹0.");amount?.focus();return;}
+  if(!updateCrowdfundingPayLinks()){alert("Please select a project and enter the donation amount.");return;}
+  const uri=pay.getAttribute("href");if(uri&&uri.startsWith("upi://"))window.location.href=uri;
+ });
  window.loadCrowdfundingProjects=loadProjects;/* Observe SPA/CMS page replacement and start the public project loader whenever its container enters the page. */const startCrowdfundingWhenReady=()=>{const host=$("publicFundingProjects");if(host&&!host.dataset.loadStarted)loadProjects();};startCrowdfundingWhenReady();if(document.body){new MutationObserver(startCrowdfundingWhenReady).observe(document.body,{childList:true,subtree:true});}
 })();
 </script>
