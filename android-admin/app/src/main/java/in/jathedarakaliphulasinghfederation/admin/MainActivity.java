@@ -17,6 +17,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.widget.Toast;
 import android.view.ViewGroup;
 
@@ -25,6 +26,7 @@ public class MainActivity extends Activity {
     private static final String SITE_HOST = "jathedarakaliphulasinghfederation.in";
     private static final int FILE_CHOOSER_REQUEST = 4107;
     private FrameLayout root;
+    private SwipeRefreshLayout swipeRefresh;
     private WebView webView;
     private WebView popupWebView;
     private ValueCallback<Uri[]> uploadCallback;
@@ -32,8 +34,15 @@ public class MainActivity extends Activity {
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         root = new FrameLayout(this);
+        swipeRefresh = new SwipeRefreshLayout(this);
+        swipeRefresh.setColorSchemeResources(
+                android.R.color.holo_blue_dark, android.R.color.holo_orange_dark);
         webView = new WebView(this);
-        root.addView(webView, new FrameLayout.LayoutParams(
+        swipeRefresh.addView(webView, new SwipeRefreshLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        swipeRefresh.setOnChildScrollUpCallback((parent, child) -> webView.getScrollY() > 0);
+        swipeRefresh.setOnRefreshListener(() -> webView.reload());
+        root.addView(swipeRefresh, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setContentView(root);
 
@@ -83,12 +92,19 @@ public class MainActivity extends Activity {
 
             @Override public void onPageFinished(WebView v, String url) {
                 super.onPageFinished(v, url);
+                if (v == webView && swipeRefresh != null) swipeRefresh.setRefreshing(false);
                 if (isPrintWindow) {
                     v.evaluateJavascript(
                         "window.print=function(){if(window.AndroidPrint){window.AndroidPrint.printPage();}};",
                         null
                     );
                 }
+            }
+            }
+            @Override public void onReceivedError(WebView v, WebResourceRequest request,
+                    android.webkit.WebResourceError error) {
+                super.onReceivedError(v, request, error);
+                if (v == webView && swipeRefresh != null) swipeRefresh.setRefreshing(false);
             }
         });
         view.setWebChromeClient(new WebChromeClient() {
