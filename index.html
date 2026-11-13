@@ -711,10 +711,7 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
    '</style></head><body>'+
    '<section class="idcard"><div class="head"><img src="'+logo+'"><div><b>JATHEDAR AKALI PHULA SINGH FEDERATION</b><small>OFFICIAL MEMBERSHIP ID CARD · CIN: U88900PB2025NPL066430</small></div></div><div class="goldline"></div><div class="frontbody"><div class="photo">'+photo+'</div><div class="details"><h2>'+esc(m.full_name)+'</h2><div class="role">'+esc(m.member_authority||"Member")+'</div><p><b>Member ID</b><span>'+esc(m.application_no)+'</span></p><p><b>District</b><span>'+esc(m.district||"—")+'</span></p><p><b>State</b><span>'+esc(m.state||"—")+'</span></p><p><b>Status</b><span>APPROVED · ACTIVE</span></p></div></div><div class="foot">JATHEDAR AKALI PHULA SINGH FEDERATION</div></section>'+
    '<section class="idcard back"><div class="head"><img src="'+logo+'"><div><b>MEMBER VERIFICATION</b><small>JATHEDAR AKALI PHULA SINGH FEDERATION</small></div></div><div class="backbody"><div class="qrbox"><div class="qr" id="memberQR"></div><div class="qrlabel">SCAN TO VERIFY MEMBERSHIP</div></div><div class="backdetails"><p><b>Member Name:</b> '+esc(m.full_name)+'</p><p><b>Member ID:</b> '+esc(m.application_no)+'</p><p><b>Designation:</b> '+esc(m.member_authority||"Member")+'</p><p><b>Validity:</b> '+esc(m.validity_start||"As recorded")+' to '+esc(m.validity_end||"As recorded")+'</p><div class="verify"><b>OFFICIAL ONLINE VERIFICATION</b><br>Scan the QR code to check current membership status.<br><br>Helpline: +91 9501503080 · +91 9779257727<br>helpline.japsf@gmail.com</div></div></div></section>'+
-   '<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script><script>window.onload=()=>{try{new QRCode(document.getElementById("memberQR"),{text:'+JSON.stringify(qrText)+',width:240,height:240,correctLevel:QRCode.CorrectLevel.M});setTimeout(()=>window.print(),700)}catch(e){alert("QR code could not be generated. Please check internet and retry.")}}<\/script></body></html>');
-   w.document.close();
- }
- document.addEventListener("submit",async function(event){
+   '<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script><script>window.onload=()=>{try{new QRCode(document.getElementById("memberQR"),{text:'+JSON.stringify(qrText)+',width:240,height:240,correctLevel:QRCode.CorrectLevel.M});setTimeout(()=>window.print(),700)}catch(e){alert("QR code could not be generated. Please check internet and retry.")}}<\/script> document.addEventListener("submit",async function(event){
  const form=event.target;if(!form||form.id!=="publicIntakeForm")return;event.preventDefault();
  const status=document.getElementById("publicIntakeMessage"),button=form.querySelector('button[type="submit"]');if(!form.reportValidity())return;
  button.disabled=true;button.textContent="Submitting securely…";status.textContent="Sending your request to the Federation…";
@@ -722,6 +719,112 @@ document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefau
  catch(error){status.textContent=error.message||"Unable to submit. Please contact the Federation helpline.";}
  finally{button.disabled=false;button.textContent=form.elements.form_type.value==="help_request"?"Submit Problem":"Send Message";}
 });
+ async function beginPublicPhoneVerification(user){
+   // Public ID cards use verified Email OTP only. Phone MFA is not required.
+   const status=document.getElementById("publicCardStatus");
+   const step=document.getElementById("publicMfaStep");
+   if(step)step.remove();
+   if(status)status.textContent="Email OTP verified. ਤੁਹਾਡਾ ID Card ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…";
+   await loadPublicMemberCard();
+ }
+ function showSignedIn(user){
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   mount.innerHTML='<div class="auth-dashboard"><h3>You are signed in</h3><p class="muted">Your account: <strong id="signedInEmail"></strong></p><p class="muted">ਆਪਣਾ ID Card ਲੈਣ ਲਈ Email OTP ਨਾਲ ਲਾਗਇਨ ਕਰਨਾ ਕਾਫ਼ੀ ਹੈ।</p><div style="padding:15px;margin:14px 0;border:1px solid #d8ad55;border-radius:12px;background:#fffaf0"><h3 style="margin-top:0">ਪਛਾਣ ਪੱਤਰ ਪ੍ਰਿੰਟ</h3><p id="publicCardStatus" role="status" aria-live="polite">Email OTP ਲਾਗਇਨ ਤੋਂ ਬਾਅਦ ਮੈਂਬਰ ਰਿਕਾਰਡ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ…</p><button class="button" id="publicPrintCard" type="button" disabled>Print ID Card / PDF</button></div><a class="button" href="./index.html?page=member-registration">Member Registration</a> <button class="auth-logout" id="publicLogout" type="button">Sign Out</button></div>';
+   const email=document.getElementById("signedInEmail");if(email)email.textContent=user.email||"";
+   const printButton=document.getElementById("publicPrintCard");if(printButton)printButton.addEventListener("click",printPublicMemberCard);
+   const logout=document.getElementById("publicLogout");
+   if(logout)logout.addEventListener("click",async()=>{logout.disabled=true;const {error}=await authClient.auth.signOut();if(error){logout.disabled=false;alert(error.message);return;}location.reload();});
+   beginPublicPhoneVerification(user);
+ }
+ async function checkUserSession(user){showSignedIn(user);}
+ async function coordinatorProfile(){
+   const {data,error}=await authClient.functions.invoke("coordinator-access",{body:{mode:"me"}});
+   if(error)throw new Error(error.message||"Coordinator verification failed");
+   if(!data||data.authorized!==true)throw new Error(data?.error||"This account is not an active coordinator.");
+   return data.coordinator;
+ }
+ function showCoordinator(profile){
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   const name=document.createElement("h3");name.textContent="Welcome, "+(profile.full_name||"Coordinator");
+   const area=document.createElement("p");area.className="muted";area.textContent="Assigned Area: "+(profile.assigned_area||"Not assigned");
+   const info=document.createElement("div");info.className="notice";info.textContent="Your coordinator account is active. Access is limited to the area assigned by the Federation administrator.";
+   const form=document.createElement("form");form.className="public-auth-form";form.id="coordinatorPasswordForm";
+   form.innerHTML='<div class="form-group"><label for="coordinatorNewPassword">Set / Change Password</label><input id="coordinatorNewPassword" name="password" type="password" minlength="8" autocomplete="new-password" required></div><button class="button" type="submit">Update Password</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p>';
+   const logout=document.createElement("button");logout.type="button";logout.className="auth-logout";logout.textContent="Sign Out";logout.addEventListener("click",async()=>{await authClient.auth.signOut();location.reload();});
+   mount.replaceChildren(name,area,info,form,logout);
+ }
+ async function restoreSession(){
+   const mount=document.getElementById("publicAuthMount");if(!mount)return;
+   const isCoordinatorPage=new URLSearchParams(location.search).get("page")==="coordinator-login";
+   if(location.hash.includes("type=recovery")){
+     history.replaceState(null,"",location.pathname+"?page=user-login");
+     setMessage("This website uses Email OTP sign-in. Please request a new one-time code to access your account.");
+     return;
+   }
+   const {data,error}=await authClient.auth.getSession();
+   if(error){setMessage(error.message);return;}
+   if(data.session){
+     if(isCoordinatorPage){
+       try{const profile=await coordinatorProfile();showCoordinator(profile);}
+       catch(error){await authClient.auth.signOut();setMessage(error.message);}
+     }else await checkUserSession(data.session.user);
+   }
+ }
+ document.addEventListener("submit",async function(event){
+   const form=event.target;
+   if(form.id==="coordinatorLoginForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Verifying…";setMessage("");
+     const email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value;
+     const {error}=await authClient.auth.signInWithPassword({email,password});
+     button.disabled=false;button.textContent="Sign In Securely";
+     if(error){setMessage(error.message);return;}
+     try{const profile=await coordinatorProfile();showCoordinator(profile);}
+     catch(error){await authClient.auth.signOut();setMessage(error.message);}
+   }
+   if(form.id==="coordinatorPasswordForm"){
+     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Updating…";
+     const password=form.elements.password.value;
+     if(password.length<8){button.disabled=false;button.textContent="Update Password";setMessage("Password must contain at least 8 characters.");return;}
+     const {error}=await authClient.auth.updateUser({password});
+     button.disabled=false;button.textContent="Update Password";
+     setMessage(error?error.message:"Password updated successfully.");
+     if(!error)form.reset();
+   }
+   if(form.id==="publicLoginForm"){event.preventDefault();setMessage("Please use Email OTP to sign in.");}
+   if(form.id==="publicOtpLoginForm"||form.id==="publicSignupForm"){
+     event.preventDefault();
+     const button=form.querySelector('button[type="submit"]'),email=form.elements.email.value.trim().toLowerCase();
+     const name=form.id==="publicSignupForm"?(form.elements.full_name?.value.trim()||""):"";
+     if(!email){setMessage("Enter a valid email address.");return;}
+     button.disabled=true;button.textContent="Sending OTP…";setMessage("");
+     const options={shouldCreateUser:form.id==="publicSignupForm"};if(name)options.data={full_name:name};
+     const {error}=await authClient.auth.signInWithOtp({email,options});
+     button.disabled=false;button.textContent="Send Email OTP";
+     if(error){setMessage(error.message);return;}showOtpVerification(email,options.shouldCreateUser);
+   }
+   if(form.id==="publicOtpVerifyForm"){
+     event.preventDefault();
+     const button=form.querySelector('button[type="submit"]'),email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"",token=form.elements.token.value.trim();
+     if(!email||!/^[0-9]{6}$/.test(token)){setMessage("Enter the 6-digit code sent to your email.");return;}
+     button.disabled=true;button.textContent="Verifying OTP…";setMessage("");
+     const {data,error}=await authClient.auth.verifyOtp({email,token,type:"email"});
+     button.disabled=false;button.textContent="Verify & Sign In";
+     if(error){setMessage(error.message);return;}if(data.user)showSignedIn(data.user);else setMessage("OTP verified, but no account session was returned. Please sign in again.");
+   }
+ },true);
+
+
+
+ document.addEventListener("click",async function(event){
+   if(event.target&&event.target.id==="resendEmailOtp"){
+     const email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"";
+     event.target.disabled=true;const shouldCreateUser=document.getElementById("publicAuthMount")?.dataset.pendingCreateUser==="true";const {error}=await authClient.auth.signInWithOtp({email,options:{shouldCreateUser}});event.target.disabled=false;
+     setMessage(error?error.message:"A new email OTP has been requested.");
+   }
+ },true);
+
+ restoreSession();
+})();
 </script>
 <script>
 (function(){
@@ -867,113 +970,7 @@ document.addEventListener("submit", async function (event) {
 </body></html>');
    w.document.close();
  }
- async function beginPublicPhoneVerification(user){
-   // Public ID cards use verified Email OTP only. Phone MFA is not required.
-   const status=document.getElementById("publicCardStatus");
-   const step=document.getElementById("publicMfaStep");
-   if(step)step.remove();
-   if(status)status.textContent="Email OTP verified. ਤੁਹਾਡਾ ID Card ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…";
-   await loadPublicMemberCard();
- }
- function showSignedIn(user){
-   const mount=document.getElementById("publicAuthMount");if(!mount)return;
-   mount.innerHTML='<div class="auth-dashboard"><h3>You are signed in</h3><p class="muted">Your account: <strong id="signedInEmail"></strong></p><p class="muted">ਆਪਣਾ ID Card ਲੈਣ ਲਈ Email OTP ਨਾਲ ਲਾਗਇਨ ਕਰਨਾ ਕਾਫ਼ੀ ਹੈ।</p><div style="padding:15px;margin:14px 0;border:1px solid #d8ad55;border-radius:12px;background:#fffaf0"><h3 style="margin-top:0">ਪਛਾਣ ਪੱਤਰ ਪ੍ਰਿੰਟ</h3><p id="publicCardStatus" role="status" aria-live="polite">Email OTP ਲਾਗਇਨ ਤੋਂ ਬਾਅਦ ਮੈਂਬਰ ਰਿਕਾਰਡ ਦੀ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ…</p><button class="button" id="publicPrintCard" type="button" disabled>Print ID Card / PDF</button></div><a class="button" href="./index.html?page=member-registration">Member Registration</a> <button class="auth-logout" id="publicLogout" type="button">Sign Out</button></div>';
-   const email=document.getElementById("signedInEmail");if(email)email.textContent=user.email||"";
-   const printButton=document.getElementById("publicPrintCard");if(printButton)printButton.addEventListener("click",printPublicMemberCard);
-   const logout=document.getElementById("publicLogout");
-   if(logout)logout.addEventListener("click",async()=>{logout.disabled=true;const {error}=await authClient.auth.signOut();if(error){logout.disabled=false;alert(error.message);return;}location.reload();});
-   beginPublicPhoneVerification(user);
- }
- async function checkUserSession(user){showSignedIn(user);}
- async function coordinatorProfile(){
-   const {data,error}=await authClient.functions.invoke("coordinator-access",{body:{mode:"me"}});
-   if(error)throw new Error(error.message||"Coordinator verification failed");
-   if(!data||data.authorized!==true)throw new Error(data?.error||"This account is not an active coordinator.");
-   return data.coordinator;
- }
- function showCoordinator(profile){
-   const mount=document.getElementById("publicAuthMount");if(!mount)return;
-   const name=document.createElement("h3");name.textContent="Welcome, "+(profile.full_name||"Coordinator");
-   const area=document.createElement("p");area.className="muted";area.textContent="Assigned Area: "+(profile.assigned_area||"Not assigned");
-   const info=document.createElement("div");info.className="notice";info.textContent="Your coordinator account is active. Access is limited to the area assigned by the Federation administrator.";
-   const form=document.createElement("form");form.className="public-auth-form";form.id="coordinatorPasswordForm";
-   form.innerHTML='<div class="form-group"><label for="coordinatorNewPassword">Set / Change Password</label><input id="coordinatorNewPassword" name="password" type="password" minlength="8" autocomplete="new-password" required></div><button class="button" type="submit">Update Password</button><p class="form-message" id="publicAuthMessage" role="status" aria-live="polite"></p>';
-   const logout=document.createElement("button");logout.type="button";logout.className="auth-logout";logout.textContent="Sign Out";logout.addEventListener("click",async()=>{await authClient.auth.signOut();location.reload();});
-   mount.replaceChildren(name,area,info,form,logout);
- }
- async function restoreSession(){
-   const mount=document.getElementById("publicAuthMount");if(!mount)return;
-   const isCoordinatorPage=new URLSearchParams(location.search).get("page")==="coordinator-login";
-   if(location.hash.includes("type=recovery")){
-     history.replaceState(null,"",location.pathname+"?page=user-login");
-     setMessage("This website uses Email OTP sign-in. Please request a new one-time code to access your account.");
-     return;
-   }
-   const {data,error}=await authClient.auth.getSession();
-   if(error){setMessage(error.message);return;}
-   if(data.session){
-     if(isCoordinatorPage){
-       try{const profile=await coordinatorProfile();showCoordinator(profile);}
-       catch(error){await authClient.auth.signOut();setMessage(error.message);}
-     }else await checkUserSession(data.session.user);
-   }
- }
- document.addEventListener("submit",async function(event){
-   const form=event.target;
-   if(form.id==="coordinatorLoginForm"){
-     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Verifying…";setMessage("");
-     const email=form.elements.email.value.trim().toLowerCase(),password=form.elements.password.value;
-     const {error}=await authClient.auth.signInWithPassword({email,password});
-     button.disabled=false;button.textContent="Sign In Securely";
-     if(error){setMessage(error.message);return;}
-     try{const profile=await coordinatorProfile();showCoordinator(profile);}
-     catch(error){await authClient.auth.signOut();setMessage(error.message);}
-   }
-   if(form.id==="coordinatorPasswordForm"){
-     event.preventDefault();const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Updating…";
-     const password=form.elements.password.value;
-     if(password.length<8){button.disabled=false;button.textContent="Update Password";setMessage("Password must contain at least 8 characters.");return;}
-     const {error}=await authClient.auth.updateUser({password});
-     button.disabled=false;button.textContent="Update Password";
-     setMessage(error?error.message:"Password updated successfully.");
-     if(!error)form.reset();
-   }
-   if(form.id==="publicLoginForm"){event.preventDefault();setMessage("Please use Email OTP to sign in.");}
-   if(form.id==="publicOtpLoginForm"||form.id==="publicSignupForm"){
-     event.preventDefault();
-     const button=form.querySelector('button[type="submit"]'),email=form.elements.email.value.trim().toLowerCase();
-     const name=form.id==="publicSignupForm"?(form.elements.full_name?.value.trim()||""):"";
-     if(!email){setMessage("Enter a valid email address.");return;}
-     button.disabled=true;button.textContent="Sending OTP…";setMessage("");
-     const options={shouldCreateUser:form.id==="publicSignupForm"};if(name)options.data={full_name:name};
-     const {error}=await authClient.auth.signInWithOtp({email,options});
-     button.disabled=false;button.textContent="Send Email OTP";
-     if(error){setMessage(error.message);return;}showOtpVerification(email,options.shouldCreateUser);
-   }
-   if(form.id==="publicOtpVerifyForm"){
-     event.preventDefault();
-     const button=form.querySelector('button[type="submit"]'),email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"",token=form.elements.token.value.trim();
-     if(!email||!/^[0-9]{6}$/.test(token)){setMessage("Enter the 6-digit code sent to your email.");return;}
-     button.disabled=true;button.textContent="Verifying OTP…";setMessage("");
-     const {data,error}=await authClient.auth.verifyOtp({email,token,type:"email"});
-     button.disabled=false;button.textContent="Verify & Sign In";
-     if(error){setMessage(error.message);return;}if(data.user)showSignedIn(data.user);else setMessage("OTP verified, but no account session was returned. Please sign in again.");
-   }
- },true);
 
-
-
- document.addEventListener("click",async function(event){
-   if(event.target&&event.target.id==="resendEmailOtp"){
-     const email=document.getElementById("publicAuthMount")?.dataset.pendingEmail||"";
-     event.target.disabled=true;const shouldCreateUser=document.getElementById("publicAuthMount")?.dataset.pendingCreateUser==="true";const {error}=await authClient.auth.signInWithOtp({email,options:{shouldCreateUser}});event.target.disabled=false;
-     setMessage(error?error.message:"A new email OTP has been requested.");
-   }
- },true);
-
- restoreSession();
-})();
-</script>
 
 <script>
 /* Privacy-friendly Federation visitor counter: random browser ID only; no names, emails or IP addresses stored. */
