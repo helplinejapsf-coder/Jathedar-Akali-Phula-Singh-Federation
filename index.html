@@ -1121,6 +1121,7 @@ document.addEventListener("submit",async function(event){
  async function loadProjects(){
   const host=$("publicFundingProjects"),select=$("crowdfundingCampaignSelect");
   if(!host)return;
+  host.dataset.loadStarted="1";
   if(select)select.options.length=1;
   host.className="crowd-grid";
   host.textContent="Loading Federation seva projects…";
@@ -1154,7 +1155,7 @@ document.addEventListener("submit",async function(event){
  document.addEventListener("click",e=>{const view=e.target.closest("[data-crowd-view]");if(view){const panel=$("crowdDetail"+view.dataset.crowdView);panel.classList.toggle("open");view.textContent=panel.classList.contains("open")?"Hide Details":"View Campaign";}const donate=e.target.closest("[data-crowd-donate]");if(donate){const projectSelect=$("crowdfundingCampaignSelect"),donationForm=$("crowdfundingContributionForm");if(projectSelect)projectSelect.value=donate.dataset.crowdDonate;if(donationForm)donationForm.scrollIntoView({behavior:"smooth",block:"start"});}});
  document.addEventListener("submit",e=>{if(e.target.id==="crowdfundingContributionForm"){e.preventDefault();submit(e.target,"crowdfundingContributionMessage","Submit Contribution Details");}});
  document.addEventListener("change",e=>{if(e.target.id==="crowdfundingAmount"||e.target.id==="crowdfundingCampaignSelect"){const amount=$("crowdfundingAmount")?.value||"",campaign=$("crowdfundingCampaignSelect")?.selectedOptions[0]?.textContent||"Seva Project",valid=amount&&Number(amount)>0,common=(valid?"&am="+encodeURIComponent(amount):"")+"&cu=INR&tn="+encodeURIComponent(campaign),rzLink=$("crowdfundingRazorpayPay"),ptLink=$("crowdfundingPaytmPay");if(rzLink)rzLink.href=valid?"upi://pay?pa=rzpjathedarakaliph487000.rzp%40ypbiz&pn=JathedarAkaliPhulaSinghFederation"+common:"#";if(ptLink)ptLink.href=valid?"upi://pay?pa=9501503080%40ptyes&pn=Jathedar%20Akali%20Phula%20Singh%20Federation"+common:"#";}}});
- window.loadCrowdfundingProjects=loadProjects;/* Run after dynamic page content has rendered, even when the crowdfunding view is opened through the menu without a query-string reload. */if(document.getElementById("publicFundingProjects"))loadProjects();
+ window.loadCrowdfundingProjects=loadProjects;/* Observe SPA/CMS page replacement and start the public project loader whenever its container enters the page. */const startCrowdfundingWhenReady=()=>{const host=$("publicFundingProjects");if(host&&!host.dataset.loadStarted)loadProjects();};startCrowdfundingWhenReady();if(document.body){new MutationObserver(startCrowdfundingWhenReady).observe(document.body,{childList:true,subtree:true});}
 })();
 </script>
 <script>
