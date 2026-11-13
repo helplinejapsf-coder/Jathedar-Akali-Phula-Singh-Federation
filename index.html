@@ -1108,7 +1108,7 @@ document.addEventListener("submit",async function(event){
    });
   }
   const slug=new URLSearchParams(location.search).get("page")||"home";
-  const page=pages.find(item=>item.slug===slug);if(page)renderCmsPage(page);
+  const page=pages.find(item=>item.slug===slug);if(page&&slug!=="crowdfunding")renderCmsPage(page);
  }
  loadCmsPages();
 })();
