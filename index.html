@@ -817,9 +817,9 @@ document.addEventListener("submit", async function (event) {
  const KEY="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
  const $=id=>document.getElementById(id);
  const money=n=>"₹"+Number(n||0).toLocaleString("en-IN");
- async function loadPublicFederationProjects(){
-  if(new URLSearchParams(location.search).get("page")!=="crowdfunding")return;
-  const host=$("publicFundingProjects");if(!host)return;
+ async function loadPublicFederationProjects(host){
+  host=host||$("publicFundingProjects");if(!host||host.dataset.independentLoadStarted==="1")return;
+  host.dataset.independentLoadStarted="1";
   host.textContent="Loading Federation seva projects…";
   try{
    const response=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+KEY},cache:"no-store",body:JSON.stringify({action:"public_list"})});
@@ -855,8 +855,10 @@ document.addEventListener("submit", async function (event) {
    });
   }catch(error){host.className="crowd-empty";host.textContent="Projects could not be loaded. Please refresh and try again.";console.error("Crowdfunding public loader:",error);}
  }
- if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPublicFederationProjects,{once:true});else loadPublicFederationProjects();
- window.addEventListener("pageshow",loadPublicFederationProjects);
+ const tryLoad=()=>{const host=$("publicFundingProjects");if(host)loadPublicFederationProjects(host);};
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",tryLoad,{once:true});else tryLoad();
+ window.addEventListener("pageshow",tryLoad);
+ if(document.body)new MutationObserver(tryLoad).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
 
