@@ -1125,7 +1125,7 @@ document.addEventListener("submit",async function(event){
   host.className="crowd-grid";
   host.textContent="Loading Federation seva projects…";
   try{
-   const r=await fetch(endpoint+"admin-crowdfunding",{method:"POST",headers:{"Content-Type":"application/json"},cache:"no-store",body:JSON.stringify({action:"public_list"})});
+   const r=await fetch(endpoint+"admin-crowdfunding",{method:"POST",headers:{"Content-Type":"application/json","apikey":"sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0","Authorization":"Bearer sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0"},cache:"no-store",body:JSON.stringify({action:"public_list"})});
    const d=await r.json();
    if(!r.ok||!d.success)throw new Error(d.error||"Projects are temporarily unavailable.");
    const campaigns=Array.isArray(d.campaigns)?d.campaigns:[];
