@@ -97,8 +97,9 @@ public class MainActivity extends Activity {
                 if (v == webView && swipeRefresh != null) swipeRefresh.setRefreshing(false);
                 // Reinstall native print handling after every document load.
                 v.evaluateJavascript(
-                    "window.print=function(){if(window.AndroidPrint){window.AndroidPrint.printPage();}" +
-                    "else{alert('Print service is unavailable. Please update the JAPSF Admin app.');}};",
+                    "window.print=function(){var bridge=window.AndroidPrint||(window.opener&&window.opener.AndroidPrint);" +
+                    "if(bridge){bridge.printPage();}" +
+                    "else{alert('Print service is unavailable. Please close and reopen the latest JAPSF Admin app.');}};",
                     null
                 );
             }
@@ -153,13 +154,12 @@ public class MainActivity extends Activity {
         });
     }
 
-    private class PrintBridge {
-        private final WebView source;
-        PrintBridge(WebView source) { this.source = source; }
-
+    public class PrintBridge {
         @JavascriptInterface public void printPage() {
             runOnUiThread(() -> {
                 try {
+                    // Prefer the document popup, otherwise print the main page.
+                    WebView source = popupWebView != null ? popupWebView : webView;
                     PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
                     String pageTitle = source.getTitle();
                     String jobName = (pageTitle == null || pageTitle.trim().isEmpty())
