@@ -809,6 +809,57 @@ document.addEventListener("submit", async function (event) {
 <\/script>
 
 
+
+<script>
+/* Independent public crowdfunding loader: keeps the public listing working even if another page script fails. */
+(function(){
+ const API="https://urghiemtxhwhvoaivwge.supabase.co/functions/v1/admin-crowdfunding";
+ const KEY="sb_publishable_a01UQLsq6H2aVwwnoQM1bw_etwuXUJ0";
+ const $=id=>document.getElementById(id);
+ const money=n=>"₹"+Number(n||0).toLocaleString("en-IN");
+ async function loadPublicFederationProjects(){
+  if(new URLSearchParams(location.search).get("page")!=="crowdfunding")return;
+  const host=$("publicFundingProjects");if(!host)return;
+  host.textContent="Loading Federation seva projects…";
+  try{
+   const response=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json","apikey":KEY,"Authorization":"Bearer "+KEY},cache:"no-store",body:JSON.stringify({action:"public_list"})});
+   const result=await response.json();
+   if(!response.ok||result.success!==true)throw new Error(result.error||"Unable to load approved projects.");
+   const projects=Array.isArray(result.campaigns)?result.campaigns:[];
+   const total=projects.reduce((sum,p)=>sum+Number(p.raised_amount||0),0);
+   const supporters=projects.reduce((sum,p)=>sum+Number(p.donor_count||0),0);
+   if($("crowdTotalRaised"))$("crowdTotalRaised").textContent=money(total);
+   if($("crowdActiveCount"))$("crowdActiveCount").textContent=String(projects.length);
+   if($("crowdSupporterCount"))$("crowdSupporterCount").textContent=String(supporters);
+   const select=$("crowdfundingCampaignSelect");
+   if(select)select.replaceChildren(new Option("Select a project",""));
+   if(!projects.length){host.className="crowd-empty";host.textContent="No approved Federation seva projects are available at present.";return;}
+   host.className="crowd-grid";host.replaceChildren();
+   projects.forEach((p,index)=>{
+    const card=document.createElement("article");card.className="crowd-card";
+    const cover=document.createElement("div");cover.className="crowd-cover";
+    if(typeof p.cover_image_url==="string"&&p.cover_image_url.startsWith("https://")){
+     const img=document.createElement("img");img.src=p.cover_image_url;img.alt=p.project_name||"Federation project";img.loading="lazy";img.style.cssText="width:100%;height:100%;object-fit:cover";cover.appendChild(img);
+    }else cover.textContent="ੴ";
+    const body=document.createElement("div");body.className="crowd-body";
+    const title=document.createElement("h4");title.textContent=p.project_name||"Federation Seva Project";
+    const details=document.createElement("p");details.className="crowd-desc";details.textContent=p.project_details||"Project details will be updated by the Federation.";
+    const amounts=document.createElement("p");amounts.className="crowd-money";amounts.textContent="Raised "+money(p.raised_amount)+"  |  Goal "+money(p.target_amount);
+    const bar=document.createElement("div");bar.className="crowd-track";const fill=document.createElement("span");const pct=Number(p.target_amount)>0?Math.min(100,Number(p.raised_amount||0)/Number(p.target_amount)*100):0;fill.style.width=pct+"%";bar.appendChild(fill);
+    const meta=document.createElement("div");meta.className="crowd-meta";meta.textContent=pct.toFixed(0)+"% funded · "+Number(p.donor_count||0)+" verified supporters";
+    const actions=document.createElement("div");actions.className="crowd-actions";
+    const view=document.createElement("button");view.type="button";view.className="crowd-view";view.textContent="View Campaign";view.addEventListener("click",()=>{details.hidden=!details.hidden;view.textContent=details.hidden?"View Campaign":"Hide Details";});
+    const donate=document.createElement("button");donate.type="button";donate.className="crowd-donate";donate.textContent="Donate Now";donate.addEventListener("click",()=>{if(select)select.value=p.id;$("crowdfundingContributionForm")?.scrollIntoView({behavior:"smooth",block:"start"});});
+    actions.append(view,donate);body.append(title,details,amounts,bar,meta,actions);card.append(cover,body);host.appendChild(card);
+    if(select)select.add(new Option(p.project_name||"Federation Project",p.id));
+   });
+  }catch(error){host.className="crowd-empty";host.textContent="Projects could not be loaded. Please refresh and try again.";console.error("Crowdfunding public loader:",error);}
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPublicFederationProjects,{once:true});else loadPublicFederationProjects();
+ window.addEventListener("pageshow",loadPublicFederationProjects);
+})();
+</script>
+
 </body></html>');
    w.document.close();
  }
