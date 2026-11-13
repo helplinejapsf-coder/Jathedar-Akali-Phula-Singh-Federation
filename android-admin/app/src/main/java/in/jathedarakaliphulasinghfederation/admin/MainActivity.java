@@ -78,6 +78,8 @@ public class MainActivity extends Activity {
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setSafeBrowsingEnabled(true);
+        view.addJavascriptInterface(new PrintBridge(view), "AndroidPrint");
+        view.setBackgroundColor(android.graphics.Color.WHITE);
         view.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView v, WebResourceRequest request) {
                 Uri uri = request.getUrl();
@@ -93,12 +95,12 @@ public class MainActivity extends Activity {
             @Override public void onPageFinished(WebView v, String url) {
                 super.onPageFinished(v, url);
                 if (v == webView && swipeRefresh != null) swipeRefresh.setRefreshing(false);
-                if (isPrintWindow) {
-                    v.evaluateJavascript(
-                        "window.print=function(){if(window.AndroidPrint){window.AndroidPrint.printPage();}};",
-                        null
-                    );
-                }
+                // Reinstall native print handling after every document load.
+                v.evaluateJavascript(
+                    "window.print=function(){if(window.AndroidPrint){window.AndroidPrint.printPage();}" +
+                    "else{alert('Print service is unavailable. Please update the JAPSF Admin app.');}};",
+                    null
+                );
             }
             @Override public void onReceivedError(WebView v, WebResourceRequest request,
                     android.webkit.WebResourceError error) {
@@ -116,9 +118,12 @@ public class MainActivity extends Activity {
                 WebView child = new WebView(MainActivity.this);
                 popupWebView = child;
                 configureWebView(child, true);
-                child.addJavascriptInterface(new PrintBridge(child), "AndroidPrint");
+                child.setFocusable(true);
+                child.setFocusableInTouchMode(true);
                 root.addView(child, new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                root.bringChildToFront(child);
+                child.requestFocus();
                 WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
                 transport.setWebView(child);
                 resultMsg.sendToTarget();
@@ -156,7 +161,9 @@ public class MainActivity extends Activity {
             runOnUiThread(() -> {
                 try {
                     PrintManager printManager = (PrintManager) getSystemService(Context.PRINT_SERVICE);
-                    String jobName = "JAPSF Appointment Letter";
+                    String pageTitle = source.getTitle();
+                    String jobName = (pageTitle == null || pageTitle.trim().isEmpty())
+                            ? "JAPSF Document" : pageTitle;
                     printManager.print(jobName, source.createPrintDocumentAdapter(jobName),
                             new PrintAttributes.Builder()
                                     .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
