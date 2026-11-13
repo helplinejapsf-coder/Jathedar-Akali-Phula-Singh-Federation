@@ -100,7 +100,6 @@ public class MainActivity extends Activity {
                     );
                 }
             }
-            }
             @Override public void onReceivedError(WebView v, WebResourceRequest request,
                     android.webkit.WebResourceError error) {
                 super.onReceivedError(v, request, error);
